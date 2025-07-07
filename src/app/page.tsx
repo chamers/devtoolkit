@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Resource } from "@/types";
 
 const testResource: Resource = {
@@ -7,5 +8,7 @@ const testResource: Resource = {
 };
 
 export default function LandingPage() {
-  return <div>{testResource.name}</div>;
+  return <>
+  <Button>Click me</Button>
+  {testResource.name}</>;
 }
