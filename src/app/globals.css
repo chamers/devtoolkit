@@ -140,9 +140,8 @@
 
 /* Category background and text utility classes */
 .bg-design        { background-color: var(--color-fuchsia-gem); }
+.text-design        { color: var(--color-fuchsia-gem); }
 .dark .bg-design        { background-color: var(--color-tangaroa); }
-
-
 
 .bg-uiux          { background-color: var(--color-soft-amber); }
 .text-uiux        { color: var(--color-soft-amber); }

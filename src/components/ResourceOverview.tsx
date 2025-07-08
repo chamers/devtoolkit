@@ -14,10 +14,8 @@ const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
       `}  >
         {/* Text content column */}
         <div className="flex flex-col gap-4">
-            <h1 className={`text-green-vogue`}>{title}</h1>
-            <p className={`text-[#e55506]`}>{description}</p>
-            <p className={`text-[var(--color-soft-amber)]`}>{description}</p>
-            <p className={`text-[${categoryColor}]`}>{description}</p>
+            <h1>{title}</h1>
+            <p>{description}</p>
 
         </div>
     </section>

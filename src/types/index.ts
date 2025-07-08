@@ -21,32 +21,7 @@ export type Category =
   | "Accessibility"
   | "AI/ML";
 
-  // Map categories to color names (matching your CSS variables)
-export type CategoryColorMap = {
-  [key in Category]: string;
-};
-
-// Use the actual CSS variable names here
-export const CategoryColors: CategoryColorMap = {
-  "Design": "var(--color-deep-cove)",
-  "UI/UX": "var(--color-soft-amber)",
-  "Frontend": "var(--color-tangaroa)",
-  "Backend": "var(--color-deep-cove)",
-  "Fullstack": "var(--color-tangaroa)",
-  "DevOps": "var(--color-deep-cove)",
-  "APIs": "var(--color-soft-amber)",
-  "JavaScript": "var(--color-fuchsia-gem)",
-  "TypeScript": "var(--color-deep-cove)",
-  "CSS": "var(--color-soft-amber)",
-  "HTML": "var(--color-fuchsia-gem)",
-  "Frameworks": "var(--color-tangaroa)",
-  "Version Control": "var(--color-deep-cove)",
-  "Productivity": "var(--color-soft-amber)",
-  "Testing": "var(--color-tangaroa)",
-  "Security": "var(--color-deep-cove)",
-  "Accessibility": "var(--color-soft-amber)",
-  "AI/ML": "var(--color-fuchsia-gem)",
-};
+  
 
 // Constrain rating to 0–5 (by using a branded type)
 export type Rating = number & { __ratingBrand: never };
@@ -62,7 +37,6 @@ export interface Resource {
   title: string;
   author: string;
   category: Category;
-  categoryColor: string; // Color for the category
   rating: Rating; 
   description: string;
   logoUrl: string;

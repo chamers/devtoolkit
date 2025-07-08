@@ -63,7 +63,6 @@ export const sampleResources: Resource[] = [
     description: "Collaborative interface design tool for teams.",
     websiteUrl: "https://figma.com",
     category: "Design", // Use the string directly
-    categoryColor: CategoryColors["Design"], // Use the color from CategoryColors
     tags: ["Design", "Collaboration", "UI/UX"],
     pricing: "Freemium",
     rating: 4 as Rating,
