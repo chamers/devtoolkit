@@ -44,6 +44,15 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  /* custom colours */
+  --color-green-vogue: oklch(0.292 0.0841 252.89);
+  --color-ice-berg: oklch(0.9288 0.0214 223.01);
+  --color-tiara: oklch(0.8413 0.0155 207.1);
+  --color-tiara-light: oklch(95.899% 0.00951 222.558);
+  --color-tangaroa: oklch(0.2364 0.0816 259.61);
+  --color-deep-cove:oklch(0.2004 0.0674 261.15);
+  --color-fuchsia-gem: oklch(0.5356 0.2253 335.66);
+  --color-soft-amber: oklch(0.6343 0.1924 41.18);
 }
 
 :root {
@@ -79,15 +88,7 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.795 0.184 86.047);
-   /* custom colours */
-  --green-vogue: oklch(0.292 0.0841 252.89);
-  --ice-berg: oklch(0.9288 0.0214 223.01);
-  --tiara: oklch(0.8413 0.0155 207.1);
-  --tiara-light: oklch(95.899% 0.00951 222.558);
-  --tangaroa: oklch(0.2364 0.0816 259.61);
-  --deep-cove:oklch(0.2004 0.0674 261.15);
-  --fuchsia-gem: oklch(0.5356 0.2253 335.66);
-  --soft-amber: oklch(0.6343 0.1924 41.18)
+   
 }
 
 .dark {
@@ -132,5 +133,64 @@
   body {
     @apply bg-background text-foreground;
   }
-  
+  h1 {
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif-regular;
+  }
 }
+
+/* Category background and text utility classes */
+.bg-design        { background-color: var(--color-fuchsia-gem); }
+.dark .bg-design        { background-color: var(--color-tangaroa); }
+
+
+
+.bg-uiux          { background-color: var(--color-soft-amber); }
+.text-uiux        { color: var(--color-soft-amber); }
+
+.bg-frontend      { background-color: var(--color-tangaroa); }
+.text-frontend    { color: var(--color-tangaroa); }
+
+.bg-backend       { background-color: var(--color-deep-cove); }
+.text-backend     { color: var(--color-deep-cove); }
+
+.bg-fullstack     { background-color: var(--color-tangaroa); }
+.text-fullstack   { color: var(--color-tangaroa); }
+
+.bg-devops        { background-color: var(--color-deep-cove); }
+.text-devops      { color: var(--color-deep-cove); }
+
+.bg-apis          { background-color: var(--color-soft-amber); }
+.text-apis        { color: var(--color-soft-amber); }
+
+.bg-javascript    { background-color: var(--color-fuchsia-gem); }
+.text-javascript  { color: var(--color-fuchsia-gem); }
+
+.bg-typescript    { background-color: var(--color-deep-cove); }
+.text-typescript  { color: var(--color-deep-cove); }
+
+.bg-css           { background-color: var(--color-soft-amber); }
+.text-css         { color: var(--color-soft-amber); }
+
+.bg-html          { background-color: var(--color-fuchsia-gem); }
+.text-html        { color: var(--color-fuchsia-gem); }
+
+.bg-frameworks    { background-color: var(--color-tangaroa); }
+.text-frameworks  { color: var(--color-tangaroa); }
+
+.bg-versioncontrol    { background-color: var(--color-deep-cove); }
+.text-versioncontrol  { color: var(--color-deep-cove); }
+
+.bg-productivity      { background-color: var(--color-soft-amber); }
+.text-productivity    { color: var(--color-soft-amber); }
+
+.bg-testing       { background-color: var(--color-tangaroa); }
+.text-testing     { color: var(--color-tangaroa); }
+
+.bg-security      { background-color: var(--color-deep-cove); }
+.text-security    { color: var(--color-deep-cove); }
+
+.bg-accessibility { background-color: var(--color-soft-amber); }
+.text-accessibility { color: var(--color-soft-amber); }
+
+.bg-aiml          { background-color: var(--color-fuchsia-gem); }
+.text-aiml        { color: var(--color-fuchsia-gem); }
