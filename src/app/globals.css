@@ -40,6 +40,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-dark-foreground-50:oklch(98.511% 0.00011 271.152 / 0.50);
+  --color-dark-foreground-60:oklch(98.511% 0.00011 271.152 / 0.60);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -52,7 +54,9 @@
   --color-tangaroa: oklch(0.2364 0.0816 259.61);
   --color-deep-cove:oklch(0.2004 0.0674 261.15);
   --color-fuchsia-gem: oklch(0.5356 0.2253 335.66);
+  --color-fuchsia-gem-10: oklch(0.5356 0.2253 335.66 / 0.1);
   --color-soft-amber: oklch(0.6343 0.1924 41.18);
+  --color-catalina-blue: oklch(0.3643 0.1213 256.27);
 }
 
 :root {
@@ -134,12 +138,12 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif-regular;
+    @apply sm:text-5xl md:text-6xl lg:text-7xl font-serif-regular;
   }
 }
 
 /* Category background and text utility classes */
-.bg-design        { background-color: var(--color-fuchsia-gem); }
+.bg-design        { background-color: var(--color-fuchsia-gem-10); }
 .text-design        { color: var(--color-fuchsia-gem); }
 .dark .bg-design        { background-color: var(--color-tangaroa); }
 

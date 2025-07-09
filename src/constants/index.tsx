@@ -60,7 +60,7 @@ export const sampleResources: Resource[] = [
   {
     id: 1,
     title: "Figma",
-    description: "Collaborative interface design tool for teams.",
+    description: "A Collaborative Interface Design Tool for Teams",
     websiteUrl: "https://figma.com",
     category: "Design", // Use the string directly
     tags: ["Design", "Collaboration", "UI/UX"],
