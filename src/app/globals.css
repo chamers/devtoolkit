@@ -64,6 +64,10 @@
   --color-deep-blush:oklch(0.6928 0.1512 14.24);
   --color-deep-blush-10:oklch(0.6928 0.1512 14.24 / 0.1);
   --color-deep-blush-50:oklch(0.6928 0.1512 14.24 / 0.5);
+  --color-orange-sys-light-prim:oklch(0.6943 0.2031 43.47);
+  --color-orange-sys-light-sec:oklch(0.7743 0.2031 43.47);
+  --color-pink-sys-dark-prim:oklch(0.6401 0.2305 21.96);
+  --color-pink-sys-dark-sec:oklch(0.7201 0.2305 21.96);
 }
 
 :root {
@@ -145,7 +149,7 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply sm:text-5xl md:text-6xl lg:text-7xl font-serif-regular;
+    @apply text-5xl md:text-6xl lg:text-7xl font-serif-regular;
   }
    h2 {
      @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-thin uppercase tracking-wide;
