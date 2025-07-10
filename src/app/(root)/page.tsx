@@ -11,11 +11,11 @@ import { sampleResources } from "@/constants";
 export default function LandingPage() {
   return <>
  <ResourceOverview {...sampleResources[0]} />
- {/* <ResourceList 
+ <ResourceList 
   title="Last Resources"
   resources={sampleResources}
-  containerClassName="mt-28"
- /> */}
+  containerClassName="my-10 flex flex-col "
+ />
   <Button>Click me</Button>
   <ThemeSwitch />
     <ThemeToggle />

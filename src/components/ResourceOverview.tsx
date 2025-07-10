@@ -28,25 +28,25 @@ const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
                   <p className="text-sm text-foreground">({rating})</p>
                 </div>
             </div>
-            <Button>
+            <Button className="w-fit max-w-sm">
               <SiBmcsoftware />
               View Resource
             </Button>
         </div>
 
         {/* Image column */}
-      <div className="relative flex justify-center md:justify-start md:flex-1">
+      <div className="relative flex justify-center hidden md:block md:justify-start md:flex-1">
         <div className="relative">
           <ResourceImage
             variant="regular"
             className="z-10"
             logoUrl={logoUrl}
           />
-          <div className="absolute left-16 top-10 rotate-12 opacity-40 max-sm:hidden">
+          <div className="absolute left-16 top-10 rotate-12 opacity-40">
             <ResourceImage variant="regular" logoUrl={logoUrl} />
           </div>
         </div>
-       <div>Hello World</div>
+ 
       </div>
     </section>
   );

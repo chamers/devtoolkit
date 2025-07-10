@@ -33,6 +33,7 @@ const ResourceImage = ({
         variantStyles[variant],
         className
       )}
+
     >
       <div
         className="absolute z-10"

@@ -19,7 +19,8 @@ export type Category =
   | "Testing"
   | "Security"
   | "Accessibility"
-  | "AI/ML";
+  | "AI/ML"
+  | "Development";
 
   
 

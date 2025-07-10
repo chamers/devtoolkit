@@ -140,6 +140,9 @@
   h1 {
     @apply sm:text-5xl md:text-6xl lg:text-7xl font-serif-regular;
   }
+   h2 {
+     @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-thin uppercase tracking-wide;
+  }
 }
 
 /* Category background and text utility classes */
@@ -197,3 +200,33 @@
 
 .bg-aiml          { background-color: var(--color-fuchsia-gem); }
 .text-aiml        { color: var(--color-fuchsia-gem); }
+
+/* Resource Image */
+  .resource-image_extra_small {
+    @apply w-[28.95px] h-[28.95px];
+  }
+
+  .resource-image_small {
+    @apply w-[55px] h-[55px];
+  }
+
+  /* .resource-image_medium {
+    @apply w-[144px] h-[199px];
+  } */
+  .resource-image_medium {
+    @apply w-[144px] h-[144px];
+  }
+
+  /* .resource-image_regular {
+    @apply w-[174px] h-[239px];
+  } */
+  .resource-image_regular {
+    @apply w-[174px] h-[174px];
+  }
+
+  /* .resource-image_wide {
+    @apply w-[296px] h-[404px];
+  } */
+  .resource-image_wide {
+    @apply w-[296px] h-[296px];
+  }
