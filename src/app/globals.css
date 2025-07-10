@@ -55,8 +55,15 @@
   --color-deep-cove:oklch(0.2004 0.0674 261.15);
   --color-fuchsia-gem: oklch(0.5356 0.2253 335.66);
   --color-fuchsia-gem-10: oklch(0.5356 0.2253 335.66 / 0.1);
+  --color-fuchsia-gem-50: oklch(0.5356 0.2253 335.66 / 0.5);
   --color-soft-amber: oklch(0.6343 0.1924 41.18);
+  --color-soft-amber-10: oklch(0.6343 0.1924 41.18 / 0.1);
+  --color-soft-amber-50: oklch(0.6343 0.1924 41.18 / 0.5);
   --color-catalina-blue: oklch(0.3643 0.1213 256.27);
+  --color-comet: oklch(0.5055 0.0395 270.52);
+  --color-deep-blush:oklch(0.6928 0.1512 14.24);
+  --color-deep-blush-10:oklch(0.6928 0.1512 14.24 / 0.1);
+  --color-deep-blush-50:oklch(0.6928 0.1512 14.24 / 0.5);
 }
 
 :root {
@@ -143,18 +150,26 @@
    h2 {
      @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-thin uppercase tracking-wide;
   }
+  h3 {
+    @apply text-2xl font-medium;
+  }
 }
 
 /* Category background and text utility classes */
 .bg-design        { background-color: var(--color-fuchsia-gem-10); }
+.bt-design        { background-color: var(--color-fuchsia-gem-50); }
 .text-design        { color: var(--color-fuchsia-gem); }
-.dark .bg-design        { background-color: var(--color-tangaroa); }
+/* .dark .bg-design        { background-color: var(--color-tangaroa); } */
 
-.bg-uiux          { background-color: var(--color-soft-amber); }
+.bg-uiux          { background-color: var(--color-soft-amber-10); }
+.bt-uiux          { background-color: var(--color-soft-amber-50); }
+/* .dark .bg-uiux          { background-color: var(--color-deep-cove); } */
 .text-uiux        { color: var(--color-soft-amber); }
 
-.bg-frontend      { background-color: var(--color-tangaroa); }
-.text-frontend    { color: var(--color-tangaroa); }
+.bg-frontend      { background-color: var(--color-deep-blush-10); }
+.bt-frontend      { background-color: var(--color-deep-blush-50); }
+/* .dark .bg-frontend      { background-color: var(--color-green-vogue); } */
+.text-frontend    { color: var(--color-deep-blush); }
 
 .bg-backend       { background-color: var(--color-deep-cove); }
 .text-backend     { color: var(--color-deep-cove); }

@@ -107,7 +107,7 @@ export const sampleResources: Resource[] = [
     title: "Figma",
     description: "A Collaborative Interface Design Tool for Teams",
     websiteUrl: "https://figma.com",
-    category: "Design", // Use the string directly
+    category: "UI/UX", // Use the string directly
     tags: ["Design", "Collaboration", "UI/UX"],
     pricing: "Freemium",
     rating: 4 as Rating,
@@ -145,14 +145,14 @@ export const sampleResources: Resource[] = [
       },
     ],
   
-    isFeatured: true,
+    isFeatured: false,
 },
   {
     id: 3,
     title: "Figma",
     description: "A Collaborative Interface Design Tool for Teams",
     websiteUrl: "https://figma.com",
-    category: "Design", // Use the string directly
+    category: "Frontend", // Use the string directly
     tags: ["Design", "Collaboration", "UI/UX"],
     pricing: "Freemium",
     rating: 4 as Rating,

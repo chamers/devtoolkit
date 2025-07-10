@@ -12,13 +12,11 @@ const ResourceList = ({title, resources, containerClassName }:Props) => {
   return (
     <section className={containerClassName}>
       <h2>{title}</h2>
-      <ul className="mt-10 flex flex-wrap gap-5 max-[479px]:justify-between sm:gap-10 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20">
+      <ul className="mt-5 flex flex-wrap gap-5 max-[479px]:justify-between sm:gap-10 md:gap-12 lg:gap-14 xl:gap-16 2xl:gap-20">
         {resources.map((resource) => (
-          // <ResourceCard key={resource.id} {...resource} />
-          <div key={resource.id}>hello</div>
+          <ResourceCard key={resource.id} {...resource} />
         ))}
       </ul>
-      <ResourceCard />
     </section>
   );
 };

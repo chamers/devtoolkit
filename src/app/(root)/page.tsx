@@ -12,7 +12,7 @@ export default function LandingPage() {
   return <>
  <ResourceOverview {...sampleResources[0]} />
  <ResourceList 
-  title="Last Resources"
+  title="Latest Resources"
   resources={sampleResources}
   containerClassName="my-10 flex flex-col "
  />
