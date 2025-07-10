@@ -19,7 +19,7 @@ const layout = ({children}:{children: React.ReactNode}) => {
       </section>
       <section className="auth-illustration">
         <Image
-          src="/images/bookImg1.png"
+          src="/undraw/login.svg"
           alt="auth illustration"
           height={1000}
           width={1000}
