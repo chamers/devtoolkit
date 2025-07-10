@@ -68,6 +68,8 @@
   --color-orange-sys-light-sec:oklch(0.7743 0.2031 43.47);
   --color-pink-sys-dark-prim:oklch(0.6401 0.2305 21.96);
   --color-pink-sys-dark-sec:oklch(0.7201 0.2305 21.96);
+  --color-waterloo: oklch(0.6122 0.026 264.36);
+  --color-santas-gray: oklch(0.6915 0.0252 264.4);
 }
 
 :root {
@@ -140,11 +142,30 @@
   --sidebar-ring: oklch(0.554 0.135 66.442);
 }
 
+@theme {
+   --animate-fade-in: fade-in 0.5s ease-out forwards;
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
   body {
     @apply bg-background text-foreground;
   }
