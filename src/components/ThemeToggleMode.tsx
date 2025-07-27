@@ -234,6 +234,7 @@ const mounted = useMounted(); // ✅ Prevent hydration mismatch
     <Button
       variant="outline"
       onClick={() => setTheme(`${dark ? "light" : "dark"}`)}
+      title={`Switch to ${dark ? "light" : "dark"} mode`}
     >
       {dark ? (
         <FaSun className="hover:cursor-pointer hover:text-primary" />

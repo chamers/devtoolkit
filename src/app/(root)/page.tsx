@@ -2,8 +2,6 @@
 import HeroSection from "@/components/HeroSection";
 import ResourceList from "@/components/ResourceList";
 import ResourceOverview from "@/components/ResourceOverview";
-import ThemeSwitch from "@/components/ThemeSwitch";
-import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { sampleResources } from "@/constants";
 
