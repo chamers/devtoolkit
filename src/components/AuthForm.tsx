@@ -2,7 +2,7 @@
  
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DefaultValues, FieldValues, Path, SubmitHandler, useForm, UseFormReturn } from "react-hook-form"
-import { z, ZodType } from "zod"
+import { ZodType } from "zod"
 import useMounted from "@/hooks/useMounted";
 
  
@@ -35,7 +35,7 @@ const mounted = useMounted(); // ✅ Prevent hydration mismatch
   const isSignIn = type === "SIGN_IN"
   // 1. Define your form.
 const form: UseFormReturn<T> = useForm({
-    resolver: zodResolver(schema as ZodType<any, any, any>),
+    resolver: zodResolver(schema as ZodType<T, any, any>),
     defaultValues: defaultValues as DefaultValues<T>
   })
 
@@ -92,8 +92,6 @@ return (
       </Link>
     </p>
     </div>
-
-    
   )
 }
 export default AuthForm

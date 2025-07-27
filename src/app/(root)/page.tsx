@@ -18,8 +18,7 @@ export default function LandingPage() {
   containerClassName="my-10 flex flex-col "
  />
   <Button>Click me</Button>
-  <ThemeSwitch />
-    <ThemeToggle />
+
   {sampleResources[0].title}
    <p className="font-thin">Default Poppins Light</p>
     <p className="font-extrabold">Default Poppins Extra Bold</p>

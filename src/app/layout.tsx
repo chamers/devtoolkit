@@ -72,7 +72,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} ${crimsonPro.variable} ${robotMono.variable} ${robotoCondensed.variable} ${caveat.variable} ${GaramondItalic.variable} antialiased`}>
         <Providers>
-          {children}
+         {children}
         </Providers>
       </body>
     </html>

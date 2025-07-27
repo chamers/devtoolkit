@@ -3,6 +3,7 @@ import Link from "next/link"
 import Image from "next/image";
 
 import MainNavLinks from "./MainNavLinks";
+import ThemeToggleMode from "./ThemeToggleMode";
 
 
 const Header = () => {
@@ -46,8 +47,11 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Navigation Links */}
-        <MainNavLinks />
+       {/* Navigation Links + ThemeSwitch */}
+        <div className="hidden lg:flex lg:items-center lg:gap-x-6">
+          <MainNavLinks />
+          <ThemeToggleMode />
+        </div>
        
       </nav>
     </header>
