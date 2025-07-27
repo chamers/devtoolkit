@@ -1,4 +1,5 @@
 
+import HeroSection from "@/components/HeroSection";
 import ResourceList from "@/components/ResourceList";
 import ResourceOverview from "@/components/ResourceOverview";
 import ThemeSwitch from "@/components/ThemeSwitch";
@@ -28,6 +29,7 @@ export default function LandingPage() {
     <p className="font-mono">Roboto Mono </p>
     <p className="font-condensed">Roboto Condensed</p>
     <p className="font-handwriting">Caveat Handwriting</p>
+    <HeroSection />
   </>;
   
 }
