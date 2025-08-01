@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Image } from '@imagekit/next';
+import { Toaster, toast } from 'sonner';
 
 export default function ImageUpload() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -20,51 +21,51 @@ export default function ImageUpload() {
   const [progress, setProgress] = useState(0);
 
   const handleUpload = async () => {
-    const fileInput = fileInputRef.current;
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      alert('Please select a file first');
-      return;
+  const fileInput = fileInputRef.current;
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+    toast.error('Please select a file first');
+    return;
+  }
+
+  const file = fileInput.files[0];
+  setUploading(true);
+  setProgress(0);
+
+  try {
+    const res = await fetch('/api/auth/imagekit');
+    const auth = await res.json();
+
+    const result = await upload({
+      file,
+      fileName: file.name,
+      publicKey: auth.publicKey,
+      signature: auth.signature,
+      expire: auth.expire,
+      token: auth.token,
+      useUniqueFileName: true,
+      onProgress: (evt) => {
+        setProgress((evt.loaded / evt.total) * 100);
+      },
+    });
+
+    setUploadedUrl(result.url ?? null);
+    toast.success('Image uploaded successfully!');
+  } catch (error) {
+    if (error instanceof ImageKitUploadNetworkError) {
+      toast.error('Network error');
+    } else if (error instanceof ImageKitInvalidRequestError) {
+      toast.error('Invalid request');
+    } else if (error instanceof ImageKitAbortError) {
+      toast.warning('Upload aborted');
+    } else if (error instanceof ImageKitServerError) {
+      toast.error('Server error');
+    } else {
+      toast.error('Unknown upload error');
     }
-
-    const file = fileInput.files[0];
-    setUploading(true);
-    setProgress(0);
-
-    try {
-      // Get auth params from API route
-      const res = await fetch('/api/auth/imagekit');
-      const auth = await res.json();
-
-      const result = await upload({
-        file,
-        fileName: file.name,
-        publicKey: auth.publicKey,
-        signature: auth.signature,
-        expire: auth.expire,
-        token: auth.token,
-        useUniqueFileName: true,
-        onProgress: (evt) => {
-          setProgress((evt.loaded / evt.total) * 100);
-        },
-      });
-
-      setUploadedUrl(result.url ?? null);
-    } catch (error) {
-      if (error instanceof ImageKitUploadNetworkError) {
-        console.error('Network error:', error.message);
-      } else if (error instanceof ImageKitInvalidRequestError) {
-        console.error('Invalid request:', error.message);
-      } else if (error instanceof ImageKitAbortError) {
-        console.error('Upload aborted:', error.message);
-      } else if (error instanceof ImageKitServerError) {
-        console.error('Server error:', error.message);
-      } else {
-        console.error('Unknown error:', error);
-      }
-    } finally {
-      setUploading(false);
-    }
-  };
+  } finally {
+    setUploading(false);
+  }
+};
 
   return (
     <div className="space-y-4 max-w-md mx-auto">
