@@ -1,3 +1,36 @@
+"use client";
+
+import { useTheme } from "next-themes";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { Button } from "./ui/button";
+import useMounted from "@/hooks/useMounted";
+
+const ThemeToggleMode = () => {
+  const { resolvedTheme, theme, setTheme } = useTheme();
+  const mounted = useMounted();
+
+  if (!mounted)
+    return <Button variant="outline" disabled={true}></Button>;
+
+  const isDark = resolvedTheme === "dark";
+
+  return (
+    <Button
+      variant="outline"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      title={`Switch to ${isDark ? "light" : "dark"} mode`}
+    >
+      {isDark ? (
+        <FaSun className="hover:cursor-pointer hover:text-primary" />
+      ) : (
+        <FaMoon className="hover:cursor-pointer hover:text-primary" />
+      )}
+    </Button>
+  );
+};
+
+export default ThemeToggleMode;
+
 // "use client";
 
 // import { useTheme } from "next-themes";
@@ -216,36 +249,36 @@
 
 // export default ThemeToggleMode;
 
-"use client";
+// "use client";
 
-import { useTheme } from "next-themes";
-import { FaMoon, FaSun } from "react-icons/fa";
-import { Button } from "./ui/button";
-import useMounted from "@/hooks/useMounted";
+// import { useTheme } from "next-themes";
+// import { FaMoon, FaSun } from "react-icons/fa";
+// import { Button } from "./ui/button";
+// import useMounted from "@/hooks/useMounted";
 
-const ThemeToggleMode = () => {
-  const { theme, setTheme } = useTheme();
+// const ThemeToggleMode = () => {
+//   const { theme, setTheme } = useTheme();
 
-const mounted = useMounted(); // ✅ Prevent hydration mismatch
-  if (!mounted)
-    return <Button variant="outline" disabled={true}></Button>;
-  const dark = theme === "dark";
-  return (
-    <Button
-      variant="outline"
-      onClick={() => setTheme(`${dark ? "light" : "dark"}`)}
-      title={`Switch to ${dark ? "light" : "dark"} mode`}
-    >
-      {dark ? (
-        <FaSun className="hover:cursor-pointer hover:text-primary" />
-      ) : (
-        <FaMoon className="hover:cursor-pointer hover:text-primary" />
-      )}
-    </Button>
-  );
-};
+// const mounted = useMounted(); // ✅ Prevent hydration mismatch
+//   if (!mounted)
+//     return <Button variant="outline" disabled={true}></Button>;
+//   const dark = theme === "dark";
+//   return (
+//     <Button
+//       variant="outline"
+//       onClick={() => setTheme(`${dark ? "light" : "dark"}`)}
+//       title={`Switch to ${dark ? "light" : "dark"} mode`}
+//     >
+//       {dark ? (
+//         <FaSun className="hover:cursor-pointer hover:text-primary" />
+//       ) : (
+//         <FaMoon className="hover:cursor-pointer hover:text-primary" />
+//       )}
+//     </Button>
+//   );
+// };
 
-export default ThemeToggleMode;
+// export default ThemeToggleMode;
 
 // "use client";
 

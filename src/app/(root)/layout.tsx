@@ -1,4 +1,5 @@
 import Header from "@/components/Header"
+import { FaCheckCircle } from "react-icons/fa"
 
 
 const LandingPageLayout = ({children}: {children: React.ReactNode}) => {
@@ -18,5 +19,17 @@ const LandingPageLayout = ({children}: {children: React.ReactNode}) => {
           </div>
         </div>
 
+    <div className="hidden md:block absolute bottom-8 left-8 lg:bottom-10 lg:left-10 animate-bounce">
+      <div className="bg-neutral-900 text-white px-2.5 py-1.5 rounded-lg text-xs lg:text-sm flex items-center shadow-lg">
+        <FaCheckCircle className="mr-1.5" />
+        Responsive
+      </div>
+     </div>
+    <div className="hidden md:block absolute top-16 right-[15%] lg:top-20 animate-bounce delay-300">
+      <div className="bg-indigo-950 text-white px-2.5 py-1.5 rounded-lg text-xs lg:text-sm flex items-center shadow-lg">
+        <FaCheckCircle className="mr-1.5" />
+        Accessible
+      </div>
+     </div>
     </main>)}
     export default LandingPageLayout

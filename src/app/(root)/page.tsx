@@ -1,14 +1,12 @@
 
-import HeroSection from "@/components/HeroSection";
+import ImageUpload from "@/components/ImageUploadWrapper";
 import ResourceList from "@/components/ResourceList";
 import ResourceOverview from "@/components/ResourceOverview";
 import { Button } from "@/components/ui/button";
 import { sampleResources } from "@/constants";
 
-
-
 export default function LandingPage() {
-  return <>
+  return <div>
  <ResourceOverview {...sampleResources[0]} />
  <ResourceList 
   title="Latest Resources"
@@ -26,7 +24,8 @@ export default function LandingPage() {
     <p className="font-mono">Roboto Mono </p>
     <p className="font-condensed">Roboto Condensed</p>
     <p className="font-handwriting">Caveat Handwriting</p>
-    <HeroSection />
-  </>;
+    <ImageUpload />
+    
+  </div>;
   
 }

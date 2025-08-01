@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         hostname: "randomuser.me",
         port: "",
       },
+      {protocol: "https",
+        hostname: "ik.imagekit.io",
+        port: "",
+      }
     ],
   },
 };
