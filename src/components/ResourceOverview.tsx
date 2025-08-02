@@ -75,8 +75,6 @@ const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
         </div>
 
         {/* Image column */}
-        
-
           <div className="hidden md:flex md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
         <div className="relative">
           <ResourceImage

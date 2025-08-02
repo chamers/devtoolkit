@@ -4,6 +4,7 @@ import ResourceList from "@/components/ResourceList";
 import ResourceOverview from "@/components/ResourceOverview";
 import { Button } from "@/components/ui/button";
 import { sampleResources } from "@/constants";
+import Rating from "../../../Rating";
 
 export default function LandingPage() {
   return <div>
@@ -25,6 +26,7 @@ export default function LandingPage() {
     <p className="font-condensed">Roboto Condensed</p>
     <p className="font-handwriting">Caveat Handwriting</p>
     <ImageUpload />
+    <Rating />
     
   </div>;
   
