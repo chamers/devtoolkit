@@ -1,6 +1,6 @@
 // Define strict types for pricing and project type
-export type PricingModel = "Free" | "Paid" | "Freemium";
-export type ProjectType = "Official" | "Community";
+export type PricingModel = "Free" | "Paid" | "Freemium" | "Open Source";
+export type ProjectType = "Official" | "Community" | "Personal";
 export type Category =
   | "Design"
   | "UI/UX"

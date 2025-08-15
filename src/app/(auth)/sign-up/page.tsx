@@ -4,7 +4,7 @@ import { signUpSchema } from "@/lib/validations"
 
 const page = () => {
   return (
-    <AuthForm type="SIGN_UP" schema={signUpSchema} defaultValues={{ email: "", password: "", userName: "" }} onSubmit={() => {}} />
+    <AuthForm type="SIGN_UP" schema={signUpSchema} defaultValues={{userName: "", email: "", password: ""  }} onSubmit={() => {}} />
   )
 }
 export default page

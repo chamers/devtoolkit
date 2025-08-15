@@ -5,8 +5,12 @@ import ResourceOverview from "@/components/ResourceOverview";
 import { Button } from "@/components/ui/button";
 import { sampleResources } from "@/constants";
 import Rating from "../../../Rating";
+import db from "../../../database/drizzle";
+import { users } from "../../../database/schema";
 
-export default function LandingPage() {
+const LandingPage = async () => {
+  const result = await db.select().from(users);
+  console.log(JSON.stringify(result, null, 2));
   return <div>
  <ResourceOverview {...sampleResources[0]} />
  <ResourceList 
@@ -31,3 +35,5 @@ export default function LandingPage() {
   </div>;
   
 }
+
+export default LandingPage;
