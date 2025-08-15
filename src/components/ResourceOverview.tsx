@@ -4,9 +4,9 @@ import { StarRating } from "./StarRating";
 import { Button } from "./ui/button";
 import { SiBmcsoftware } from "react-icons/si";
 import { FiTrendingUp, FiBookOpen } from "react-icons/fi";
-import ResourceImage from "./ResourceImage";
+// import ResourceImage from "./ResourceImage";
 import Image from "next/image";
-import Slider from "./Slider";
+import SliderWrapper from "./SliderWrapper";
 
 
 export default function ResourceOverview(props: Resource) {
@@ -77,7 +77,7 @@ const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
 
         {/* Image column */}
           <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
-        <div className="relative">
+        {/* <div className="relative">
           <ResourceImage
             variant="regular"
             className="z-10"
@@ -86,8 +86,8 @@ const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
           <div className="absolute left-16 top-10 rotate-12 opacity-40">
             <ResourceImage variant="regular" logoUrl={logoUrl} />
           </div>
-        </div>
-        <Slider />
+        </div> */}
+        <SliderWrapper />
 
       </div>
     </section>

@@ -1,32 +1,19 @@
 "use client";
 import { descriptions, images } from "@/constants";
 import Image from "next/image";
-import { useMemo, useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-
-const getRandomNumber = () => Math.floor(Math.random() * 41) - 20; // -20..20
-
-const Slider = () => {
+export default function Slider({ initialRotations }: { initialRotations: number[] }) {
   const [index, setIndex] = useState(0);
-  const [mounted, setMounted] = useState(false);
-  // Generate a stable random rotation for each image once
-  const rotationsRef = useRef<number[]>(
-    images.map(() => getRandomNumber())
-  );
-
-useEffect(() => {
-    // Runs only on the client, after hydration
-    rotationsRef.current = images.map(() => getRandomNumber());
-    setMounted(true);
-  }, []);
+  const rotationsRef = useRef<number[]>(initialRotations); // stable, matches SSR
 
   return (
     <div className="relative">
       {/* Slider */}
       <div className="flex gap-x-20 lg:items-start items-center lg:flex-row flex-col">
         {/* Images */}
-        <div className="sm:w-[400px] sm:h-[400px] w-[300px] h-[300px] relative">
+        <div className=" w-[250px] h-[250px] relative">
           {images.map((image, i) => (
             <Image
               key={i}
@@ -50,7 +37,7 @@ useEffect(() => {
           {descriptions.map((desc, i) => (
             <p
               key={i}
-              className={`text-center sm:text-xl text-gray-600 absolute transition-all duration-300 ${
+              className={`text-center text-gray-600 absolute transition-all duration-300 ${
                 i === index ? "opacity-100 delay-200" : "opacity-0"
               }`}
             >
@@ -83,6 +70,5 @@ useEffect(() => {
       </div>
     </div>
   );
-};
+}
 
-export default Slider;
