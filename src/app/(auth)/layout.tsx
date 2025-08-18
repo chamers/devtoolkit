@@ -33,8 +33,13 @@
 
 
 import Image from "next/image";
+import { auth } from "../../../auth";
+import { redirect } from "next/navigation";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+const layout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth();
+
+  if (session) redirect("/");
   return (
     <main className="relative flex min-h-screen items-center justify-center flex-col-reverse sm:flex-row bg-gradient-to-br from-comet via-waterloo to-santas-gray p-6 sm:p-10 gap-6">
       {/* Glow Background Effects */}

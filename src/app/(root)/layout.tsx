@@ -1,8 +1,13 @@
 import Header from "@/components/Header"
 import { FaCheckCircle } from "react-icons/fa"
+import { auth } from "../../../auth";
+import { redirect } from "next/navigation";
 
 
-const LandingPageLayout = ({children}: {children: React.ReactNode}) => {
+const LandingPageLayout = async ({children}: {children: React.ReactNode}) => {
+  const session = await auth();
+
+  if (!session) redirect("/sign-in");
   return (
     <main className="flex min-h-screen flex-col items-center w-full relative">
        {/* Glow Background Effects */}
@@ -13,7 +18,7 @@ const LandingPageLayout = ({children}: {children: React.ReactNode}) => {
       </div>
      
         <div className="flex flex-col w-[90%] max-w-screen-2xl">
-               <Header />
+               <Header session={session}/>
           <div className="px-10 md:px-16 mx-auto mt-10 pb-10">
             {children}
           </div>

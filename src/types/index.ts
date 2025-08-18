@@ -52,3 +52,8 @@ export interface Resource {
   isFeatured: boolean; // Indicates if the resource is featured
 }
 
+export interface AuthCredentials {
+  userName: string;
+  email: string;
+  password: string;
+}

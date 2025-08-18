@@ -5,8 +5,10 @@ import Image from "next/image";
 import MainNavLinks from "./MainNavLinks";
 import ThemeToggleMode from "./ThemeToggleMode";
 
-
-const Header = () => {
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Session } from "next-auth";
+import { getInitials } from "@/utils/stringHelpers";
+const Header = ({ session }:{session:Session}) => {
  
 
   return (
@@ -50,7 +52,14 @@ const Header = () => {
        {/* Navigation Links + ThemeSwitch */}
         <div className="hidden lg:flex lg:items-center lg:gap-x-6">
           <MainNavLinks />
-          <ThemeToggleMode />
+         
+          <Link href="/my-profile"><Avatar>
+  {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+  <AvatarFallback className="bg-amber-100 font-medium">
+    {getInitials(session?.user?.name ?? session?.user?.email ?? "User")}
+  </AvatarFallback>
+</Avatar></Link>
+ <ThemeToggleMode />
         </div>
        
       </nav>

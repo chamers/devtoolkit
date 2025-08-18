@@ -19,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from "next/dist/client/link"
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants"
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
@@ -31,6 +33,7 @@ interface Props<T extends FieldValues> {
 const AuthForm = <T extends FieldValues>({type, schema, defaultValues, onSubmit}:Props<T>)  => {
 const mounted = useMounted(); // ✅ Prevent hydration mismatch
   
+const router = useRouter();
 
   const isSignIn = type === "SIGN_IN"
   // 1. Define your form.
@@ -40,11 +43,23 @@ const form: UseFormReturn<T> = useForm({
   })
 
   // 2. Define a submit handler.
-  const handleSubmit:SubmitHandler<T> = async (data) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(data)
-  }
+   const handleSubmit: SubmitHandler<T> = async (data) => {
+    const result = await onSubmit(data);
+
+    if (result.success) {
+      toast.success(isSignIn
+    ? "Image uploaded successfully on sign-in!"
+    : "Image uploaded successfully on sign-up!");
+
+      router.push("/");
+    } else {
+      toast.error(
+  `Error ${isSignIn ? "signing in" : "signing up"}: ${
+    result.error ?? "An error occurred."
+  }`
+);
+    }
+  };
   // 3. Use useMounted to prevent hydration mismatch
   //    This is important for client-side only components.
   if (!mounted) return null;
