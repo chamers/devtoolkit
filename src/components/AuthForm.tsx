@@ -37,6 +37,7 @@ const router = useRouter();
 
   const isSignIn = type === "SIGN_IN"
   // 1. Define your form.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const form: UseFormReturn<T> = useForm({
     resolver: zodResolver(schema as ZodType<T, any, any>),
     defaultValues: defaultValues as DefaultValues<T>
