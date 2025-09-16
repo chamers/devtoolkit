@@ -8,6 +8,10 @@ import { signIn } from "../../../auth";
 import { headers } from "next/headers";
 import ratelimit from "../ratelimit";
 import { redirect } from "next/navigation";
+import { workflowClient } from "../workflow";
+import config from "@/lib/config";
+
+
 
 export const signInWithCredentials = async (
   params: Pick<AuthCredentials, "email" | "password">,
@@ -64,13 +68,13 @@ export const signUp = async (params: AuthCredentials) => {
       password: hashedPassword,
     });
 
-    // await workflowClient.trigger({
-    //   url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
-    //   body: {
-    //     email,
-    //     fullName,
-    //   },
-    // });
+    await workflowClient.trigger({
+      url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
+      body: {
+        email,
+        userName,
+      },
+    });
 
     await signInWithCredentials({ email, password });
 
