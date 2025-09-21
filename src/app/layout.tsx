@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers  from "./providers";
 import localFont from "next/font/local";
 
+
 const poppins = localFont({
   src: [
     { path: "/fonts/Poppins-Thin.ttf", weight: "100", style: "normal" },
