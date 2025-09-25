@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 export const signUpSchema = z.object({
   userName: z.string().min(1, "Username is required"),
   email: z.string().email("Enter a valid email"),
@@ -8,42 +9,6 @@ export const signInSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
-// const urlOrPath = z
-//   .string()
-//   .trim()
-//   .refine(
-//     (v) => /^https?:\/\//i.test(v) || v.startsWith("/") || v.startsWith("data:") || v.startsWith("blob:"),
-//     { message: "Must be an http(s) URL, data/blob URI, or an absolute path starting with /" }
-//   );
-
-// const commentSchema = z.object({
-//   user: z.string().trim().min(2).max(50),
-//   comment: z.string().trim().min(2).max(500),
-//   date: z.coerce.date(),
-// });
-// export const resourceSchema = z.object({
-//   title: z.string().trim().min(2).max(100),
-//   description: z.string().trim().min(10).max(1000),
-//   author: z.string().trim().min(2).max(100),
-//   category: z.string().trim().min(2).max(50),
-//   rating: z.coerce.number().min(1).max(5),
-//   logoUrl: urlOrPath,
-//   websiteUrl: z.string().trim().url().nonempty("Website URL is required"),
-//   pricing: z.string().trim().min(3).max(50),
-//   tags: z
-//       .array(z.string().trim().min(1).max(30))
-//       .min(1)
-//       .max(20)
-//       .refine((arr) => new Set(arr.map((t) => t.toLowerCase())).size === arr.length, {
-//         message: "Tags must be unique (case-insensitive)",
-//       }),
-//   createdAt: z.coerce.date(),
-//     updatedAt: z.coerce.date(),
-//   isMobileFriendly: z.boolean().optional().default(false),
-//   projectType: z.enum(["Official", "Community", "Personal", "Enterprise"]),
-//   comments: z.array(commentSchema).optional().default([]),
-//   isFeatured: z.boolean().optional().default(false),
-// });
 
 // --- ENUMS (mirror your TS union types) ---
 export const pricingModelSchema = z.enum([
@@ -121,28 +86,22 @@ const ratingSchema = z.coerce.number().min(0).max(5);
 // --- Full Resource Schema (matches DB) ---
 export const resourceSchema = z
   .object({
-    id: z.coerce.number().int().positive(),
+    id: z.string().uuid(),
     title: z.string().trim().min(2).max(100),
-    author: z.string().trim().min(2).max(100),
-    category: categorySchema,
-    rating: ratingSchema,
-    description: z.string().trim().min(10).max(2000),
-
-    logoUrl: logoUrlSchema,
-    websiteUrl: websiteUrlSchema,
-
+    // author: z.string().trim().min(2).max(100),
+    // category: categorySchema,
+    // rating: ratingSchema,
+    // description: z.string().trim().min(10).max(2000),
+    // logoUrl: logoUrlSchema,
+    // websiteUrl: websiteUrlSchema,
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-
-    tags: tagsSchema,
-
-    pricing: pricingModelSchema,
-    projectType: projectTypeSchema,
-
+    // tags: tagsSchema,
+    // pricing: pricingModelSchema,
+    // projectType: projectTypeSchema,
     comments: z.array(resourceCommentSchema),
-
-    isMobileFriendly: z.boolean(),
-    isFeatured: z.boolean(),
+    // isMobileFriendly: z.boolean(),
+    // isFeatured: z.boolean(),
   })
   .superRefine((data, ctx) => {
     if (data.updatedAt < data.createdAt) {
