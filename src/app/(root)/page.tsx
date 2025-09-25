@@ -7,6 +7,7 @@ import { sampleResources } from "@/constants";
 import Rating from "../../../Rating";
 import db from "../../../database/drizzle";
 import { users } from "../../../database/schema";
+import ColorPickerWrapper from "@/components/ColorPickerWrapper";
 
 const LandingPage = async () => {
   const result = await db.select().from(users);
@@ -30,6 +31,7 @@ const LandingPage = async () => {
     <p className="font-condensed">Roboto Condensed</p>
     <p className="font-handwriting">Caveat Handwriting</p>
     <ImageUpload />
+    <ColorPickerWrapper />
     <Rating />
     
   </div>;
