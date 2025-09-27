@@ -88,9 +88,9 @@ export const resourceSchema = z
   .object({
     id: z.string().uuid(),
     title: z.string().trim().min(2).max(100),
-    // author: z.string().trim().min(2).max(100),
-    // category: categorySchema,
-    // rating: ratingSchema,
+    author: z.string().trim().min(2).max(100),
+    category: categorySchema,
+    rating: ratingSchema,
     // description: z.string().trim().min(10).max(2000),
     // logoUrl: logoUrlSchema,
     // websiteUrl: websiteUrlSchema,
