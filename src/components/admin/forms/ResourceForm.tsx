@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,23 +25,49 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { resourceCreateSchema, categorySchema } from "@/lib/validations";
-import ImageUpload from "@/components/ImageUploadWrapper"; // dynamic wrapper (ssr: false)
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  resourceCreateSchema,
+  categorySchema,
+  pricingModelSchema,
+  projectTypeSchema,
+} from "@/lib/validations";
+import ImageUpload from "@/components/ImageUploadWrapper";
 import { Badge } from "@/components/ui/badge";
+
+/* -----------------------------
+   Tags helper (module scope)
+------------------------------*/
+function parseTags(input: string): string[] {
+  if (!input) return [];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of input.split(",")) {
+    const t = raw.trim();
+    if (!t) continue;
+    const key = t.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      out.push(t); // keep original case
+    }
+    if (out.length >= 50) break; // cap
+  }
+  return out;
+}
 
 interface Props extends Partial<Resource> {
   type?: "create" | "edit";
 }
 
 const ResourceForm = ({ type, ...resource }: Props) => {
-  const mounted = useMounted(); // ✅ Prevent hydration mismatch
-
-  // const router = useRouter();
+  const mounted = useMounted();
 
   const CATEGORIES = categorySchema.options;
+  const PRICING = pricingModelSchema.options;
+  const PROJECT_TYPES = projectTypeSchema.options;
 
-  type FormInput = z.input<typeof resourceCreateSchema>; // before coercion (rating: unknown)
-  type FormOutput = z.output<typeof resourceCreateSchema>;
+  type FormInput = z.input<typeof resourceCreateSchema>; // before coercion
+  type FormOutput = z.output<typeof resourceCreateSchema>; // after coercion
 
   const form = useForm<FormInput, undefined, FormOutput>({
     resolver: zodResolver(resourceCreateSchema),
@@ -52,22 +79,39 @@ const ResourceForm = ({ type, ...resource }: Props) => {
       description: resource?.description ?? "",
       logoUrl: resource?.logoUrl ?? "",
       websiteUrl: resource?.websiteUrl ?? "",
+      tags: resource?.tags ?? [], // canonical array (schema field)
+      pricing: resource?.pricing ?? PRICING[0],
+      projectType: resource?.projectType ?? PROJECT_TYPES[0],
+      isMobileFriendly: resource?.isMobileFriendly ?? false,
+      isFeatured: resource?.isFeatured ?? false,
     },
   });
 
-  // Optional: preview state derived from form
+  // Preview for logo
   const logoUrlValue = form.watch("logoUrl");
 
-  // 2. Define a submit handler.
-  const onSubmit = async (values: z.infer<typeof resourceCreateSchema>) => {
+  // Local UI state for comma-separated tags
+  const [tagsText, setTagsText] = React.useState<string>(
+    (resource?.tags ?? []).join(", ")
+  );
+
+  // Keep RHF "tags" (string[]) in sync with the local string
+  React.useEffect(() => {
+    form.setValue("tags", parseTags(tagsText), {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tagsText]);
+
+  const onSubmit = async (values: FormOutput) => {
     console.log("Submitted:", values);
     console.log("Logo URL:", values.logoUrl);
     console.log("website URL:", values.websiteUrl);
+    console.log("tags array:", values.tags);
     console.count("onSubmit called");
   };
 
-  // 3. Use useMounted to prevent hydration mismatch
-  //    This is important for client-side only components.
   if (!mounted) return null;
 
   return (
@@ -76,7 +120,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
         {/* title input */}
         <FormField
           control={form.control}
-          name={"title"}
+          name="title"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="capitalize">Resource Title</FormLabel>
@@ -113,7 +157,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
           )}
         />
 
-        {/* category input*/}
+        {/* category input */}
         <FormField
           control={form.control}
           name="category"
@@ -153,7 +197,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   min={0}
                   max={5}
                   step={0.5}
-                  value={field.value as number | ""} // ← narrow the type right here
+                  value={field.value as number | ""} // keep controlled
                   onChange={(e) =>
                     field.onChange(
                       e.currentTarget.value === ""
@@ -170,13 +214,14 @@ const ResourceForm = ({ type, ...resource }: Props) => {
             </FormItem>
           )}
         />
+
         {/* description input */}
         <FormField
           control={form.control}
-          name={"description"}
+          name="description"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="Capitalize">Resource Description</FormLabel>
+              <FormLabel className="capitalize">Resource Description</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Resource description"
@@ -185,11 +230,139 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   className="book-form_input"
                 />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/* tags (comma-separated -> string[]) */}
+        <FormItem className="flex flex-col gap-1">
+          <FormLabel className="capitalize">Tags</FormLabel>
+          <FormControl>
+            <Input
+              placeholder="react, hooks, patterns"
+              value={tagsText}
+              onChange={(e) => setTagsText(e.target.value)}
+              className="h-10"
+            />
+          </FormControl>
+          <p className="text-xs text-muted-foreground">
+            Separate with commas. Max 50. Tags must be unique
+            (case-insensitive).
+          </p>
+
+          {/* Tiny preview of parsed tags */}
+          {form.watch("tags")?.length ? (
+            <div className="flex flex-wrap gap-1 pt-1">
+              {form.watch("tags").map((t) => (
+                <span key={t} className="rounded border px-2 py-0.5 text-xs">
+                  {t}
+                </span>
+              ))}
+            </div>
+          ) : null}
+
+          <FormMessage />
+        </FormItem>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* pricing model input */}
+          <FormField
+            control={form.control}
+            name="pricing"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="capitalize">Pricing Model</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a pricing model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PRICING.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* project type input */}
+          <FormField
+            control={form.control}
+            name="projectType"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="capitalize">Project Type</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a project type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROJECT_TYPES.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* mobile friendly + featured checkboxes */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="isMobileFriendly"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Mobile Friendly</FormLabel>
+                  <p className="text-xs text-muted-foreground">
+                    Mark this if the resource is optimized for mobile use.
+                  </p>
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isFeatured"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Featured</FormLabel>
+                  <p className="text-xs text-muted-foreground">
+                    Highlight this resource as featured.
+                  </p>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* logoUrl: paste a URL OR upload */}
         <FormField
@@ -233,17 +406,11 @@ const ResourceForm = ({ type, ...resource }: Props) => {
               {logoUrlValue ? (
                 <div className="mt-3 flex items-center gap-2">
                   <Badge variant="secondary">Preview</Badge>
-                  {/* Use next/image if you prefer; using plain img to avoid extra config here */}
-                  {/* If you use next/image, ensure your next.config images.domains includes your ImageKit domain */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={logoUrlValue}
                     alt="Logo preview"
                     className="h-10 w-auto rounded border"
-                    onError={() => {
-                      // Optional: clear invalid URL on error
-                      // form.setValue("logoUrl", "", { shouldDirty: true, shouldValidate: true });
-                    }}
                   />
                 </div>
               ) : null}
@@ -252,6 +419,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
             </FormItem>
           )}
         />
+
         {/* websiteUrl input */}
         <FormField
           control={form.control}
@@ -265,21 +433,18 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   placeholder="https://example.com"
                   {...field}
                   className="h-10"
-                  required // remove if schema is optional and you want optional behavior
+                  required
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          // onClick={() => console.log("Current title:", form.getValues("title"))}
-        >
-          Submit
-        </Button>
+
+        <Button type="submit">{type === "edit" ? "Update" : "Submit"}</Button>
       </form>
     </Form>
   );
 };
+
 export default ResourceForm;

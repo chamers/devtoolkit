@@ -73,11 +73,6 @@ const websiteUrlSchema = z
     }
   );
 
-// const websiteUrlSchema = z
-//   .string()
-//   .trim()
-//   .url({ message: "websiteUrl must be a valid URL" });
-
 export const resourceCommentSchema = z.object({
   user: z.string().trim().min(1).max(100),
   comment: z.string().trim().min(1).max(1000),
@@ -107,12 +102,12 @@ export const resourceSchema = z
     websiteUrl: websiteUrlSchema,
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    // tags: tagsSchema,
-    // pricing: pricingModelSchema,
-    // projectType: projectTypeSchema,
+    tags: tagsSchema,
+    pricing: pricingModelSchema,
+    projectType: projectTypeSchema,
     comments: z.array(resourceCommentSchema),
-    // isMobileFriendly: z.boolean(),
-    // isFeatured: z.boolean(),
+    isMobileFriendly: z.boolean(),
+    isFeatured: z.boolean(),
   })
   .superRefine((data, ctx) => {
     if (data.updatedAt < data.createdAt) {
