@@ -93,21 +93,21 @@
 //   );
 // }
 
-'use client';
+"use client";
 
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 import {
   upload,
   ImageKitUploadNetworkError,
   ImageKitInvalidRequestError,
   ImageKitAbortError,
   ImageKitServerError,
-} from '@imagekit/next';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { Image } from '@imagekit/next';
-import { toast } from 'sonner';
+} from "@imagekit/next";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Image } from "@imagekit/next";
+import { toast } from "sonner";
 
 type Props = {
   onUploaded?: (url: string | null) => void; // <-- NEW
@@ -122,7 +122,7 @@ export default function ImageUpload({ onUploaded }: Props) {
   const handleUpload = async () => {
     const fileInput = fileInputRef.current;
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-      toast.error('Please select a file first');
+      toast.error("Please select a file first");
       return;
     }
 
@@ -131,7 +131,7 @@ export default function ImageUpload({ onUploaded }: Props) {
     setProgress(0);
 
     try {
-      const res = await fetch('/api/auth/imagekit');
+      const res = await fetch("/api/imagekit");
       const auth = await res.json();
 
       const result = await upload({
@@ -150,18 +150,18 @@ export default function ImageUpload({ onUploaded }: Props) {
       const url = result.url ?? null;
       setUploadedUrl(url);
       onUploaded?.(url); // <-- notify parent (the form)
-      toast.success('Image uploaded successfully!');
+      toast.success("Image uploaded successfully!");
     } catch (error) {
       if (error instanceof ImageKitUploadNetworkError) {
-        toast.error('Network error');
+        toast.error("Network error");
       } else if (error instanceof ImageKitInvalidRequestError) {
-        toast.error('Invalid request');
+        toast.error("Invalid request");
       } else if (error instanceof ImageKitAbortError) {
-        toast.warning('Upload aborted');
+        toast.warning("Upload aborted");
       } else if (error instanceof ImageKitServerError) {
-        toast.error('Server error');
+        toast.error("Server error");
       } else {
-        toast.error('Unknown upload error');
+        toast.error("Unknown upload error");
       }
     } finally {
       setUploading(false);
@@ -172,7 +172,7 @@ export default function ImageUpload({ onUploaded }: Props) {
     <div className="space-y-4 max-w-md">
       <Input type="file" ref={fileInputRef} />
       <Button onClick={handleUpload} disabled={uploading} variant="outline">
-        {uploading ? 'Uploading...' : 'Upload'}
+        {uploading ? "Uploading..." : "Upload"}
       </Button>
 
       {uploading && <Progress value={progress} className="h-2" />}

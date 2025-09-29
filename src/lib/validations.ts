@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const signUpSchema = z.object({
   userName: z.string().min(1, "Username is required"),
@@ -18,11 +18,7 @@ export const pricingModelSchema = z.enum([
   "Open Source",
 ]);
 
-export const projectTypeSchema = z.enum([
-  "Official",
-  "Community",
-  "Personal",
-]);
+export const projectTypeSchema = z.enum(["Official", "Community", "Personal"]);
 
 export const categorySchema = z.enum([
   "Design",
@@ -65,7 +61,22 @@ const logoUrlSchema = z
 const websiteUrlSchema = z
   .string()
   .trim()
-  .url({ message: "websiteUrl must be a valid URL" });
+  .refine(
+    (v) =>
+      /^https?:\/\//i.test(v) || // ✅ matches http:// or https://
+      v.startsWith("/") ||
+      v.startsWith("data:") ||
+      v.startsWith("blob:"),
+    {
+      message:
+        "websiteUrl must be an http(s) URL, data/blob URI, or an absolute path starting with /",
+    }
+  );
+
+// const websiteUrlSchema = z
+//   .string()
+//   .trim()
+//   .url({ message: "websiteUrl must be a valid URL" });
 
 export const resourceCommentSchema = z.object({
   user: z.string().trim().min(1).max(100),
@@ -91,9 +102,9 @@ export const resourceSchema = z
     author: z.string().trim().min(2).max(100),
     category: categorySchema,
     rating: ratingSchema,
-    // description: z.string().trim().min(10).max(2000),
-    // logoUrl: logoUrlSchema,
-    // websiteUrl: websiteUrlSchema,
+    description: z.string().trim().min(10).max(2000),
+    logoUrl: logoUrlSchema.optional(),
+    websiteUrl: websiteUrlSchema,
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     // tags: tagsSchema,
@@ -128,4 +139,3 @@ export type Category = z.infer<typeof categorySchema>;
 export type ResourceComment = z.infer<typeof resourceCommentSchema>;
 export type Resource = z.infer<typeof resourceSchema>;
 export type ResourceCreateInput = z.infer<typeof resourceCreateSchema>;
-
