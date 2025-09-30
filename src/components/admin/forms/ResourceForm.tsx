@@ -34,6 +34,9 @@ import {
 } from "@/lib/validations";
 import ImageUpload from "@/components/ImageUploadWrapper";
 import { Badge } from "@/components/ui/badge";
+import { createResource } from "@/lib/admin/actions/resource";
+import { toast } from "sonner";
+import router from "next/router";
 
 /* -----------------------------
    Tags helper (module scope)
@@ -110,6 +113,16 @@ const ResourceForm = ({ type, ...resource }: Props) => {
     console.log("website URL:", values.websiteUrl);
     console.log("tags array:", values.tags);
     console.count("onSubmit called");
+    const result = await createResource(values);
+    if (result.success) {
+      toast.success("Resource created successfully!");
+
+      router.push(`/admin/resources/${result.data.id}`);
+    } else {
+      toast.error(
+        `Error creating resource: ${result.error ?? "Unknown error"}`
+      );
+    }
   };
 
   if (!mounted) return null;

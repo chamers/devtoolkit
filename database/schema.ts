@@ -1,14 +1,14 @@
+import { sql } from "drizzle-orm";
 import {
   varchar,
   uuid,
-  integer,
   text,
   pgTable,
   date,
   pgEnum,
   timestamp,
-  serial,
   boolean,
+  numeric,
 } from "drizzle-orm/pg-core";
 
 export const STATUS_ENUM = pgEnum("status", [
@@ -50,7 +50,6 @@ export const CATEGORY_ENUM = pgEnum("category", [
   "Development",
 ]);
 
-
 // --- USERS TABLE ---
 export const users = pgTable("users", {
   id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
@@ -66,23 +65,59 @@ export const users = pgTable("users", {
 });
 
 // --- RESOURCES TABLE ---
-export const resources = pgTable("resources", {
-  id: serial("id").primaryKey(), // number in TS
-  title: varchar("title", { length: 255 }).notNull(),
-  author: varchar("author", { length: 255 }).notNull(),
-  category: CATEGORY_ENUM("category").notNull(),
-  rating: integer("rating").notNull(), // enforce 0..5 in code or add a CHECK
-  description: text("description").notNull(),
-  logoUrl: text("logo_url").notNull(),
-  websiteUrl: text("website_url").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-  tags: text("tags").array().notNull().default([]), // string[]
-  pricing: PRICING_ENUM("pricing").notNull(),
-  projectType: PROJECT_TYPE_ENUM("project_type").notNull(),
-  isMobileFriendly: boolean("is_mobile_friendly").notNull().default(false),
-  isFeatured: boolean("is_featured").notNull().default(false),
-});
+export const resources = pgTable(
+  "resources",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    title: varchar("title", { length: 255 }).notNull(),
+    author: varchar("author", { length: 255 }).notNull(),
+    category: CATEGORY_ENUM("category").notNull(),
+
+    // numeric with 1 decimal place, range 0..5
+    // rating: numeric("rating", { precision: 2, scale: 1 }).notNull(),
+    // rating: real("rating").notNull(),
+    // rating: integer("rating").notNull(),
+    rating: numeric("rating", {
+      precision: 2,
+      scale: 1,
+      mode: "number",
+    }).notNull(),
+
+    description: text("description").notNull(),
+
+    // choose one: nullable if optional in app
+    logoUrl: text("logo_url"), // or remove .notNull() if optional
+
+    websiteUrl: text("website_url").notNull(),
+
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+
+    tags: text("tags")
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
+
+    pricing: PRICING_ENUM("pricing").notNull(),
+    projectType: PROJECT_TYPE_ENUM("project_type").notNull(),
+
+    isMobileFriendly: boolean("is_mobile_friendly").notNull().default(false),
+    isFeatured: boolean("is_featured").notNull().default(false),
+
+    // CHECK constraint (Drizzle exposes via `.check()` in builders or add in migration SQL)
+  },
+  (table) => ({
+    ratingRange: sql`CHECK (${table.rating} >= 0 AND ${table.rating} <= 5)`,
+    // optional indexes:
+    // categoryIdx: index("resources_category_idx").on(table.category),
+    // featuredIdx: index("resources_featured_idx").on(table.isFeatured),
+  })
+);
 
 // --- RESOURCE COMMENTS TABLE ---
 export const resourceComments = pgTable("resource_comments", {

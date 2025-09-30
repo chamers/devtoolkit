@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { resourceSchema, resourceCreateSchema } from "@/lib/validations"; // 👈 adjust path if needed
+
 // Define strict types for pricing and project type
 export type PricingModel = "Free" | "Paid" | "Freemium" | "Open Source";
 export type ProjectType = "Official" | "Community" | "Personal";
@@ -22,12 +25,10 @@ export type Category =
   | "AI/ML"
   | "Development";
 
-  
-
 // Constrain rating to 0–5 (by using a branded type)
 export type Rating = number & { __ratingBrand: never };
 
-export interface ResourceComment { 
+export interface ResourceComment {
   user: string;
   comment: string;
   date: Date;
@@ -38,11 +39,11 @@ export interface Resource {
   title: string;
   author: string;
   category: Category;
-  rating: Rating; 
+  rating: Rating;
   description: string;
   logoUrl: string;
   websiteUrl: string;
-  createdAt: Date; 
+  createdAt: Date;
   updatedAt: Date;
   tags: string[];
   pricing: PricingModel;
@@ -57,3 +58,17 @@ export interface AuthCredentials {
   email: string;
   password: string;
 }
+
+/** ---------- Types derived from Zod (no drift) ---------- */
+
+// What the client form sends (post-coercion)
+export type CreateResourceParams = z.output<typeof resourceCreateSchema>;
+
+// Updatable fields = resource minus server-managed fields
+type UpdatableResource = Omit<
+  z.output<typeof resourceSchema>,
+  "id" | "createdAt" | "updatedAt" | "comments"
+>;
+
+// For update: require id + any subset of updatable fields
+export type UpdateResourceParams = { id: string } & Partial<UpdatableResource>;

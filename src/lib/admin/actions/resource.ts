@@ -1,34 +1,25 @@
-// lib/admin/actions/resource.ts
+// src/lib/admin/actions/resource.ts
 "use server";
 
-import db from "../../../../database/drizzle";
+import { CreateResourceParams } from "@/types";
 import { resources } from "../../../../database/schema";
-import { resourceCreateSchema, type ResourceCreateInput } from "@/lib/validations";
+import db from "../../../../database/drizzle";
 
-export const createResource = async (params: ResourceCreateInput) => {
+export const createResource = async (params: CreateResourceParams) => {
   try {
-    // Validate on the server too (defense in depth)
-    const input = resourceCreateSchema.parse(params);
-
-    const now = new Date();
-    const row = {
-      ...input,
-      createdAt: now,
-      updatedAt: now,
-      comments: [], // let DB default if you prefer
-    };
-
-    const [inserted] = await db.insert(resources).values(row).returning();
+    const newResource = await db
+      .insert(resources)
+      .values({
+        ...params,
+      })
+      .returning();
 
     return {
       success: true,
-      data: JSON.parse(JSON.stringify(inserted)),
+      data: JSON.parse(JSON.stringify(newResource[0])),
     };
   } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      message: "An error occurred while creating the resource",
-    };
+    console.log(error);
+    return { success: false, error: "Failed to create resource" };
   }
 };
