@@ -36,7 +36,7 @@ import ImageUpload from "@/components/ImageUploadWrapper";
 import { Badge } from "@/components/ui/badge";
 import { createResource } from "@/lib/admin/actions/resource";
 import { toast } from "sonner";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 /* -----------------------------
    Tags helper (module scope)
@@ -64,7 +64,7 @@ interface Props extends Partial<Resource> {
 
 const ResourceForm = ({ type, ...resource }: Props) => {
   const mounted = useMounted();
-
+  const router = useRouter();
   const CATEGORIES = categorySchema.options;
   const PRICING = pricingModelSchema.options;
   const PROJECT_TYPES = projectTypeSchema.options;
