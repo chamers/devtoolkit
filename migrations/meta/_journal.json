@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1754925165398,
-      "tag": "0000_lumpy_madrox",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1754927659647,
-      "tag": "0001_empty_natasha_romanoff",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1759252204216,
-      "tag": "0002_last_maelstrom",
+      "when": 1759327689888,
+      "tag": "0000_glossy_blizzard",
       "breakpoints": true
     }
   ]

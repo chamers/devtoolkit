@@ -9,6 +9,8 @@ import {
   timestamp,
   boolean,
   numeric,
+  real,
+  check,
 } from "drizzle-orm/pg-core";
 
 export const STATUS_ENUM = pgEnum("status", [
@@ -111,12 +113,11 @@ export const resources = pgTable(
 
     // CHECK constraint (Drizzle exposes via `.check()` in builders or add in migration SQL)
   },
-  (table) => ({
-    ratingRange: sql`CHECK (${table.rating} >= 0 AND ${table.rating} <= 5)`,
-    // optional indexes:
-    // categoryIdx: index("resources_category_idx").on(table.category),
-    // featuredIdx: index("resources_featured_idx").on(table.isFeatured),
-  })
+  (t) => [
+    check("resources_rating_range", sql`${t.rating} >= 0 AND ${t.rating} <= 5`),
+    // index('resources_category_idx').on(t.category),
+    // index('resources_featured_idx').on(t.isFeatured),
+  ]
 );
 
 // --- RESOURCE COMMENTS TABLE ---

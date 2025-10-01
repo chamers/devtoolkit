@@ -1,5 +1,5 @@
 {
-  "id": "b2f4257d-0159-4af5-8710-30ff014268bf",
+  "id": "9e2a02ff-c137-4f80-a56b-a396002fa793",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -76,9 +76,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "title": {
           "name": "title",
@@ -101,7 +102,7 @@
         },
         "rating": {
           "name": "rating",
-          "type": "integer",
+          "type": "numeric(2, 1)",
           "primaryKey": false,
           "notNull": true
         },
@@ -115,7 +116,7 @@
           "name": "logo_url",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "website_url": {
           "name": "website_url",
@@ -142,7 +143,7 @@
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{}'"
+          "default": "ARRAY[]::text[]"
         },
         "pricing": {
           "name": "pricing",
@@ -178,7 +179,12 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "resources_rating_range": {
+          "name": "resources_rating_range",
+          "value": "\"resources\".\"rating\" >= 0 AND \"resources\".\"rating\" <= 5"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.users": {
