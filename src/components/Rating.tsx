@@ -1,14 +1,14 @@
 "use client";
-import Star from "@/components/Star"
+import Star from "@/components/Star";
 import { useState } from "react";
 
 const Rating = () => {
-  const [rating, setRating] = useState<number>(0)
+  const [rating, setRating] = useState<number>(0);
 
-  const handleRating = (starIndex:number, isLeftHalf:boolean):void => {
-    const newRating = isLeftHalf ? starIndex + 0.5 : starIndex + 1
-    setRating(newRating)
-  }
+  const handleRating = (starIndex: number, isLeftHalf: boolean): void => {
+    const newRating = isLeftHalf ? starIndex + 0.5 : starIndex + 1;
+    setRating(newRating);
+  };
   return (
     <div className="flex justify-center items-center ">
       <div className="bg-[#f5ffbe] rounded-xl shadow-xl text-center p-6 sm:p-10 md:p-14 lg:p-18">
@@ -17,7 +17,12 @@ const Rating = () => {
         </h2>
         <div className="flex justify-center mb-4 gap-1 sm:gap-2">
           {Array.from({ length: 5 }, (_, index) => (
-            <Star key={index} index={index} rating={rating} onRatingChange={handleRating} />
+            <Star
+              key={index}
+              index={index}
+              rating={rating}
+              onRatingChange={handleRating}
+            />
           ))}
         </div>
         <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-gray-600">
@@ -25,7 +30,7 @@ const Rating = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Rating
+export default Rating;
