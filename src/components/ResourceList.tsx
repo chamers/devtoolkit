@@ -1,14 +1,12 @@
-
-import { Resource } from "@/types";
+import { Resource } from "@/lib/types";
 import ResourceCard from "./ResourceCard";
-
 
 interface Props {
   title: string;
   resources: Resource[]; // Replace 'any' with the actual type of resources
   containerClassName?: string;
 }
-const ResourceList = ({title, resources, containerClassName }:Props) => {
+const ResourceList = ({ title, resources, containerClassName }: Props) => {
   return (
     <section className={containerClassName}>
       <h2>{title}</h2>

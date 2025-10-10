@@ -1,7 +1,7 @@
 // src/lib/admin/actions/resource.ts
 "use server";
 
-import { CreateResourceParams } from "@/types";
+import { CreateResourceParams } from "@/lib/types";
 import { resources } from "../../../../database/schema";
 import db from "../../../../database/drizzle";
 

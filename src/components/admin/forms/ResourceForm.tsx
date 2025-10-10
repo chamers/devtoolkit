@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useMounted from "@/hooks/useMounted";
-import type { Resource } from "@/types";
+import type { Resource } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
 import {

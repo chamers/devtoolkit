@@ -1,4 +1,4 @@
-import { Rating, Resource } from "@/types";
+import { Rating, Resource } from "@/lib/types";
 
 export const navigationLinks = [
   {
@@ -65,10 +65,10 @@ export const sampleResources: Resource[] = [
     rating: 4 as Rating,
     logoUrl: "/images/bookImg1.png",
     author: "Figma Inc.",
-    createdAt: new Date(),          // Add this
-    updatedAt: new Date(), 
+    createdAt: new Date(), // Add this
+    updatedAt: new Date(),
     isMobileFriendly: true,
-    projectType: "Official", 
+    projectType: "Official",
     comments: [
       {
         user: "user938",
@@ -96,9 +96,9 @@ export const sampleResources: Resource[] = [
         date: new Date("2025-06-05"),
       },
     ],
-  
+
     isFeatured: true,
-},
+  },
   {
     id: 2,
     title: "Figma",
@@ -110,10 +110,10 @@ export const sampleResources: Resource[] = [
     rating: 4 as Rating,
     logoUrl: "/images/bookImg1.png",
     author: "Figma Inc.",
-    createdAt: new Date(),          // Add this
-    updatedAt: new Date(), 
+    createdAt: new Date(), // Add this
+    updatedAt: new Date(),
     isMobileFriendly: true,
-    projectType: "Official", 
+    projectType: "Official",
     comments: [
       {
         user: "user938",
@@ -141,9 +141,9 @@ export const sampleResources: Resource[] = [
         date: new Date("2025-06-05"),
       },
     ],
-  
+
     isFeatured: false,
-},
+  },
   {
     id: 3,
     title: "Figma",
@@ -155,10 +155,10 @@ export const sampleResources: Resource[] = [
     rating: 4 as Rating,
     logoUrl: "/images/bookImg1.png",
     author: "Figma Inc.",
-    createdAt: new Date(),          // Add this
-    updatedAt: new Date(), 
+    createdAt: new Date(), // Add this
+    updatedAt: new Date(),
     isMobileFriendly: true,
-    projectType: "Official", 
+    projectType: "Official",
     comments: [
       {
         user: "user938",
@@ -186,11 +186,10 @@ export const sampleResources: Resource[] = [
         date: new Date("2025-06-05"),
       },
     ],
-  
+
     isFeatured: true,
-},
- 
-]
+  },
+];
 
 export const images = [
   "/images/image-1.jpg",

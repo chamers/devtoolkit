@@ -1,4 +1,4 @@
-import { Rating } from "@/types";
+import { Rating } from "@/lib/types";
 
 // // -- Utility Function to get CSS variable class --
 // export function getCategoryColorClass(category: Category): string {

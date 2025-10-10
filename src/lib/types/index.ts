@@ -1,4 +1,12 @@
-import { z } from "zod";
+import type { z } from "zod";
+import { signUpSchema, signInSchema } from "@/lib/validations";
+
+/* ===========================
+   Auth Types
+=========================== */
+export type SignUpInput = z.infer<typeof signUpSchema>;
+export type SignInInput = z.infer<typeof signInSchema>;
+
 import { resourceSchema, resourceCreateSchema } from "@/lib/validations"; // 👈 adjust path if needed
 
 // Define strict types for pricing and project type
