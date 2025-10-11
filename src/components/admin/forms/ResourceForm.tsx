@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useMounted from "@/hooks/useMounted";
-import type { Resource } from "@/lib/types";
+import type { ResourceFull } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -58,7 +58,7 @@ function parseTags(input: string): string[] {
   return out;
 }
 
-interface Props extends Partial<Resource> {
+interface Props extends Partial<ResourceFull> {
   type?: "create" | "edit";
 }
 

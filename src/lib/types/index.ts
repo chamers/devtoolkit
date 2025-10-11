@@ -12,6 +12,7 @@ export type {
   PricingModel,
   ProjectType,
   Category,
+  LogoUrl,
   ResourceComment,
   ResourceFull, // full resource shape (incl. server-managed fields)
   ResourceCreate, // create input shape

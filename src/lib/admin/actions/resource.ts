@@ -1,11 +1,11 @@
 // src/lib/admin/actions/resource.ts
 "use server";
 
-import { CreateResourceParams } from "@/lib/types";
+import { ResourceCreate } from "@/lib/types";
 import { resources } from "../../../../database/schema";
 import db from "../../../../database/drizzle";
 
-export const createResource = async (params: CreateResourceParams) => {
+export const createResource = async (params: ResourceCreate) => {
   try {
     const newResource = await db
       .insert(resources)

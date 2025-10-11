@@ -1,3 +1,4 @@
+import { LogoUrl } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
@@ -19,7 +20,7 @@ const variantStyles: Record<ResourceImageVariant, string> = {
 interface Props {
   className?: string;
   variant?: ResourceImageVariant;
-  logoUrl: string;
+  logoUrl: LogoUrl;
 }
 const ResourceImage = ({
   className,
@@ -33,7 +34,6 @@ const ResourceImage = ({
         variantStyles[variant],
         className
       )}
-
     >
       <div
         className="absolute z-10"

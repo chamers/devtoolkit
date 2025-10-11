@@ -1,9 +1,9 @@
-import { Resource } from "@/lib/types";
+import { ResourceFull } from "@/lib/types";
 import ResourceCard from "./ResourceCard";
 
 interface Props {
   title: string;
-  resources: Resource[]; // Replace 'any' with the actual type of resources
+  resources: ResourceFull[]; // Replace 'any' with the actual type of resources
   containerClassName?: string;
 }
 const ResourceList = ({ title, resources, containerClassName }: Props) => {

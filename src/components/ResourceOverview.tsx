@@ -1,4 +1,4 @@
-import { Resource } from "../lib/types";
+import { ResourceFull } from "../lib/types";
 import { StarRating } from "./StarRating";
 import { Button } from "./ui/button";
 import { SiBmcsoftware } from "react-icons/si";
@@ -7,7 +7,7 @@ import { FiTrendingUp, FiBookOpen } from "react-icons/fi";
 import Image from "next/image";
 import SliderWrapper from "./SliderWrapper";
 
-export default function ResourceOverview(props: Resource) {
+export default function ResourceOverview(props: ResourceFull) {
   const { title, description, author, category, rating, logoUrl } = props;
   const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
   return (
