@@ -13,7 +13,9 @@ export const signInSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-// --- ENUMS (mirror your TS union types) ---
+/* ===========================
+   Enums (mirror DB enums)
+=========================== */
 export const pricingModelSchema = z.enum([
   "Free",
   "Paid",
@@ -45,13 +47,26 @@ export const categorySchema = z.enum([
   "Development",
 ]);
 
-// --- Subschemas ---
+/** Convenience arrays for UI dropdowns (same values as the enums above). */
+export const CATEGORY_OPTIONS = categorySchema.options;
+export const PRICING_OPTIONS = pricingModelSchema.options;
+export const PROJECT_TYPE_OPTIONS = projectTypeSchema.options;
+
+/* ===========================
+   Subschemas
+=========================== */
+const httpLike = /^https?:\/\//i;
+
 const logoUrlSchema = z
   .string()
   .trim()
+  // allow empty string from UI and convert to undefined (works well with nullable DB column)
+  .transform((v) => (v === "" ? undefined : v))
+  .optional()
   .refine(
     (v) =>
-      /^https?:\/\//i.test(v) ||
+      v === undefined ||
+      httpLike.test(v) ||
       v.startsWith("/") ||
       v.startsWith("data:") ||
       v.startsWith("blob:"),
@@ -66,7 +81,7 @@ const websiteUrlSchema = z
   .trim()
   .refine(
     (v) =>
-      /^https?:\/\//i.test(v) || // ✅ matches http:// or https://
+      httpLike.test(v) ||
       v.startsWith("/") ||
       v.startsWith("data:") ||
       v.startsWith("blob:"),
@@ -95,7 +110,7 @@ const ratingSchema = z.coerce.number().min(0).max(5);
 // --- Full Resource Schema (matches DB) ---
 export const resourceSchema = z
   .object({
-    id: z.string().uuid(),
+    id: z.uuid(),
     title: z.string().trim().min(2).max(100),
     author: z.string().trim().min(2).max(100),
     category: categorySchema,
@@ -130,10 +145,22 @@ export const resourceCreateSchema = resourceSchema.omit({
   comments: true,
 });
 
-// --- Handy types (derived from schemas) ---
+/* ===========================
+   Resource: update (partial)
+   — optional, helpful for edit flows
+=========================== */
+export const resourceUpdateSchema = resourceSchema
+  .omit({ id: true, createdAt: true, updatedAt: true, comments: true })
+  .partial();
+
+/* ===========================
+   Exported Types (post-coercion)
+=========================== */
 export type PricingModel = z.infer<typeof pricingModelSchema>;
 export type ProjectType = z.infer<typeof projectTypeSchema>;
 export type Category = z.infer<typeof categorySchema>;
+
 export type ResourceComment = z.infer<typeof resourceCommentSchema>;
-export type Resource = z.infer<typeof resourceSchema>;
-export type ResourceCreateInput = z.infer<typeof resourceCreateSchema>;
+export type ResourceFull = z.output<typeof resourceSchema>;
+export type ResourceCreate = z.output<typeof resourceCreateSchema>;
+export type ResourceUpdate = z.output<typeof resourceUpdateSchema>;

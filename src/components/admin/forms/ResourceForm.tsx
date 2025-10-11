@@ -28,9 +28,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   resourceCreateSchema,
-  categorySchema,
-  pricingModelSchema,
-  projectTypeSchema,
+  CATEGORY_OPTIONS,
+  PRICING_OPTIONS,
+  PROJECT_TYPE_OPTIONS,
 } from "@/lib/validations";
 import ImageUpload from "@/components/ImageUploadWrapper";
 import { Badge } from "@/components/ui/badge";
@@ -65,9 +65,6 @@ interface Props extends Partial<Resource> {
 const ResourceForm = ({ type, ...resource }: Props) => {
   const mounted = useMounted();
   const router = useRouter();
-  const CATEGORIES = categorySchema.options;
-  const PRICING = pricingModelSchema.options;
-  const PROJECT_TYPES = projectTypeSchema.options;
 
   type FormInput = z.input<typeof resourceCreateSchema>; // before coercion
   type FormOutput = z.output<typeof resourceCreateSchema>; // after coercion
@@ -77,14 +74,14 @@ const ResourceForm = ({ type, ...resource }: Props) => {
     defaultValues: {
       title: resource?.title ?? "",
       author: resource?.author ?? "",
-      category: resource?.category ?? CATEGORIES[0],
+      category: resource?.category ?? CATEGORY_OPTIONS[0],
       rating: typeof resource?.rating === "number" ? resource.rating : 0,
       description: resource?.description ?? "",
       logoUrl: resource?.logoUrl ?? "",
       websiteUrl: resource?.websiteUrl ?? "",
       tags: resource?.tags ?? [], // canonical array (schema field)
-      pricing: resource?.pricing ?? PRICING[0],
-      projectType: resource?.projectType ?? PROJECT_TYPES[0],
+      pricing: resource?.pricing ?? PRICING_OPTIONS[0],
+      projectType: resource?.projectType ?? PROJECT_TYPE_OPTIONS[0],
       isMobileFriendly: resource?.isMobileFriendly ?? false,
       isFeatured: resource?.isFeatured ?? false,
     },
@@ -183,7 +180,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CATEGORIES.map((c) => (
+                    {CATEGORY_OPTIONS.map((c) => (
                       <SelectItem key={c} value={c}>
                         {c}
                       </SelectItem>
@@ -292,7 +289,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                       <SelectValue placeholder="Select a pricing model" />
                     </SelectTrigger>
                     <SelectContent>
-                      {PRICING.map((c) => (
+                      {PRICING_OPTIONS.map((c) => (
                         <SelectItem key={c} value={c}>
                           {c}
                         </SelectItem>
@@ -318,7 +315,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                       <SelectValue placeholder="Select a project type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {PROJECT_TYPES.map((c) => (
+                      {PROJECT_TYPE_OPTIONS.map((c) => (
                         <SelectItem key={c} value={c}>
                           {c}
                         </SelectItem>

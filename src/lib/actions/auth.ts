@@ -1,7 +1,6 @@
 "use server";
 import type { SignUpInput, SignInInput } from "@/lib/types";
 import { eq } from "drizzle-orm";
-import { AuthCredentials } from "@/lib/types";
 import db from "../../../database/drizzle";
 import { users } from "../../../database/schema";
 import { hash } from "bcrypt";
