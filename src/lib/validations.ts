@@ -159,6 +159,8 @@ export const resourceUpdateSchema = resourceSchema
 export type PricingModel = z.infer<typeof pricingModelSchema>;
 export type ProjectType = z.infer<typeof projectTypeSchema>;
 export type Category = z.infer<typeof categorySchema>;
+export type LogoUrl = z.output<typeof logoUrlSchema>;
+export type Rating = z.output<typeof ratingSchema>;
 
 export type ResourceComment = z.infer<typeof resourceCommentSchema>;
 export type ResourceFull = z.output<typeof resourceSchema>;

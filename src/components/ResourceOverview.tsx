@@ -8,14 +8,14 @@ import Image from "next/image";
 import SliderWrapper from "./SliderWrapper";
 
 export default function ResourceOverview(props: ResourceFull) {
-  const { title, description, author, category, rating, logoUrl } = props;
+  const { title, description, author, category, rating } = props;
   const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
   return (
     <section
       className={`
         flex flex-1 flex-col items-start gap-6
         md:flex-row md:items-center md:justify-between
-        bg-${categoryClass}                     
+       bg-${categoryClass}               
         p-6 rounded-lg shadow-xl               
       `}
     >

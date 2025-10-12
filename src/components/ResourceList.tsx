@@ -7,6 +7,7 @@ interface Props {
   containerClassName?: string;
 }
 const ResourceList = ({ title, resources, containerClassName }: Props) => {
+  if (resources.length < 2) return;
   return (
     <section className={containerClassName}>
       <h2>{title}</h2>

@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import ColorPicker from "@/components/ColorPicker";
+import useMounted from "@/hooks/useMounted";
 
 const ColorPickerWrapper = () => {
   const [color, setColor] = useState<string>("#6B7280"); // default gray-500
-
+  const mounted = useMounted();
+  if (!mounted) return null;
   return (
     <div className="my-6 space-y-4">
       <div className="flex items-center gap-3">
