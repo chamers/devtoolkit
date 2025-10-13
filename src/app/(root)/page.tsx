@@ -30,7 +30,7 @@ const LandingPage = async () => {
 
   // console.log(JSON.stringify(result, null, 2));
   return (
-    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
       {/* Personalized greeting (only shown if logged in) */}
       {session?.user ? (
         <div className="rounded-md border p-4">
