@@ -15,8 +15,8 @@ export default function ResourceOverview(props: ResourceFull) {
       className={`
         flex flex-1 flex-col items-start gap-6
         md:flex-row md:items-center md:justify-between
-       bg-${categoryClass}               
-        p-6 rounded-lg shadow-xl               
+       bg-${categoryClass}
+        p-6 rounded-lg shadow-xl
       `}
     >
       {/* Text content column */}
@@ -124,16 +124,6 @@ export default function ResourceOverview(props: ResourceFull) {
 
       {/* Image column */}
       <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
-        {/* <div className="relative">
-          <ResourceImage
-            variant="regular"
-            className="z-10"
-            logoUrl={logoUrl}
-          />
-          <div className="absolute left-16 top-10 rotate-12 opacity-40">
-            <ResourceImage variant="regular" logoUrl={logoUrl} />
-          </div>
-        </div> */}
         <SliderWrapper />
       </div>
     </section>
