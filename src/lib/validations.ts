@@ -57,24 +57,54 @@ export const PROJECT_TYPE_OPTIONS = projectTypeSchema.options;
 =========================== */
 const httpLike = /^https?:\/\//i;
 
-const logoUrlSchema = z
+// const logoUrlSchema = z
+//   .string()
+//   .trim()
+//   // allow empty string from UI and convert to undefined (works well with nullable DB column)
+//   .transform((v) => (v === "" ? undefined : v))
+//   .optional()
+//   .refine(
+//     (v) =>
+//       v === undefined ||
+//       httpLike.test(v) ||
+//       v.startsWith("/") ||
+//       v.startsWith("data:") ||
+//       v.startsWith("blob:"),
+//     {
+//       message:
+//         "logoUrl must be an http(s) URL, data/blob URI, or an absolute path starting with /",
+//     }
+//   );
+
+// Single item validator (kept reusable)
+export const logoUrlItemSchema = z
   .string()
   .trim()
-  // allow empty string from UI and convert to undefined (works well with nullable DB column)
-  .transform((v) => (v === "" ? undefined : v))
-  .optional()
   .refine(
     (v) =>
-      v === undefined ||
       httpLike.test(v) ||
       v.startsWith("/") ||
       v.startsWith("data:") ||
       v.startsWith("blob:"),
     {
       message:
-        "logoUrl must be an http(s) URL, data/blob URI, or an absolute path starting with /",
+        "Each logo URL must be http(s), data/blob URI, or an absolute / path",
     }
   );
+
+// Array: max 5 images, unique, filter out empties in transform from form
+export const logoUrlsSchema = z
+  .array(logoUrlItemSchema)
+  .max(5, { message: "Add up to 5 images" })
+  .refine(
+    (arr) =>
+      new Set(arr.map((u) => u.trim().toLowerCase())).size === arr.length,
+    {
+      message: "Image URLs must be unique (case-insensitive)",
+    }
+  )
+  .optional()
+  .transform((arr) => (arr && arr.length ? arr : []));
 
 const websiteUrlSchema = z
   .string()
@@ -116,7 +146,7 @@ export const resourceSchema = z
     category: categorySchema,
     rating: ratingSchema,
     description: z.string().trim().min(10).max(2000),
-    logoUrl: logoUrlSchema.optional(),
+    logoUrls: logoUrlsSchema.optional(),
     websiteUrl: websiteUrlSchema,
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
@@ -159,7 +189,8 @@ export const resourceUpdateSchema = resourceSchema
 export type PricingModel = z.infer<typeof pricingModelSchema>;
 export type ProjectType = z.infer<typeof projectTypeSchema>;
 export type Category = z.infer<typeof categorySchema>;
-export type LogoUrl = z.output<typeof logoUrlSchema>;
+export type LogoUrl = z.infer<typeof logoUrlItemSchema>;
+export type LogoUrls = z.output<typeof logoUrlsSchema>;
 export type Rating = z.output<typeof ratingSchema>;
 
 export type ResourceComment = z.infer<typeof resourceCommentSchema>;

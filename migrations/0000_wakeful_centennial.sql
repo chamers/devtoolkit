@@ -19,7 +19,7 @@ CREATE TABLE "resources" (
 	"category" "category" NOT NULL,
 	"rating" numeric(2, 1) NOT NULL,
 	"description" text NOT NULL,
-	"logo_url" text,
+	"logo_urls" text[] DEFAULT ARRAY[]::text[],
 	"website_url" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,

@@ -9,7 +9,6 @@ import {
   timestamp,
   boolean,
   numeric,
-  real,
   check,
 } from "drizzle-orm/pg-core";
 
@@ -71,15 +70,9 @@ export const resources = pgTable(
   "resources",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-
     title: varchar("title", { length: 255 }).notNull(),
     author: varchar("author", { length: 255 }).notNull(),
     category: CATEGORY_ENUM("category").notNull(),
-
-    // numeric with 1 decimal place, range 0..5
-    // rating: numeric("rating", { precision: 2, scale: 1 }).notNull(),
-    // rating: real("rating").notNull(),
-    // rating: integer("rating").notNull(),
     rating: numeric("rating", {
       precision: 2,
       scale: 1,
@@ -89,7 +82,10 @@ export const resources = pgTable(
     description: text("description").notNull(),
 
     // choose one: nullable if optional in app
-    logoUrl: text("logo_url"), // or remove .notNull() if optional
+    // logoUrl: text("logo_url"),  or remove .notNull() if optional
+    logoUrls: text("logo_urls")
+      .array()
+      .default(sql`ARRAY[]::text[]`),
 
     websiteUrl: text("website_url").notNull(),
 

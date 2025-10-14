@@ -14,6 +14,7 @@ export type {
   Category,
   Rating,
   LogoUrl,
+  LogoUrls,
   ResourceComment,
   ResourceFull, // full resource shape (incl. server-managed fields)
   ResourceCreate, // create input shape

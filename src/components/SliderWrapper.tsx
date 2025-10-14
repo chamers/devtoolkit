@@ -6,8 +6,7 @@ function getRandomNumber() {
   return Math.floor(Math.random() * 41) - 20;
 }
 
-export default function SliderWrapper() {
-  const initialRotations = images.map(() => getRandomNumber());
-  // TODO: accept images from the resource and pass them to <Slider /> later
-  return <Slider initialRotations={initialRotations} />;
+export default function SliderWrapper({ images }: { images: string[] }) {
+  const initialRotations = (images ?? []).map(() => getRandomNumber());
+  return <Slider initialRotations={initialRotations} images={images ?? []} />;
 }

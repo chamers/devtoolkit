@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import useMounted from "@/hooks/useMounted";
 import type { ResourceFull } from "@/lib/types";
@@ -77,7 +77,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
       category: resource?.category ?? CATEGORY_OPTIONS[0],
       rating: typeof resource?.rating === "number" ? resource.rating : 0,
       description: resource?.description ?? "",
-      logoUrl: resource?.logoUrl ?? "",
+      logoUrls: resource?.logoUrls ?? [],
       websiteUrl: resource?.websiteUrl ?? "",
       tags: resource?.tags ?? [], // canonical array (schema field)
       pricing: resource?.pricing ?? PRICING_OPTIONS[0],
@@ -88,8 +88,11 @@ const ResourceForm = ({ type, ...resource }: Props) => {
   });
 
   // Preview for logo
-  const logoUrlValue = form.watch("logoUrl");
-
+  // const logoUrlValue = form.watch("logoUrl");
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "logoUrls",
+  });
   // Local UI state for comma-separated tags
   const [tagsText, setTagsText] = React.useState<string>(
     (resource?.tags ?? []).join(", ")
@@ -106,7 +109,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
 
   const onSubmit = async (values: FormOutput) => {
     console.log("Submitted:", values);
-    console.log("Logo URL:", values.logoUrl);
+    console.log("Logo URL:", values.logoUrls);
     console.log("website URL:", values.websiteUrl);
     console.log("tags array:", values.tags);
     console.count("onSubmit called");
@@ -374,61 +377,93 @@ const ResourceForm = ({ type, ...resource }: Props) => {
           />
         </div>
 
-        {/* logoUrl: paste a URL OR upload */}
-        <FormField
-          control={form.control}
-          name="logoUrl"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-2">
-              <FormLabel className="capitalize">Logo URL</FormLabel>
+        {/* MULTI LOGO URLS */}
+        <div className="space-y-3">
+          <FormLabel className="capitalize">
+            Resource Images (up to 5)
+          </FormLabel>
 
-              {/* Option A: paste an external URL or an absolute /path */}
-              <FormControl>
-                <Input
-                  type="url"
-                  placeholder="https://example.com/logo.png or /images/logo.png"
-                  value={field.value ?? ""} // keep controlled
-                  onChange={(e) => field.onChange(e.target.value)}
-                  className="h-10"
-                />
-              </FormControl>
-              <p className="text-xs text-muted-foreground">
-                Paste a public URL, a data/blob URI, or an absolute path
-                starting with <code>/</code>.
-              </p>
+          {/* Existing items */}
+          {fields.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              No images added yet.
+            </p>
+          )}
 
-              {/* Option B: upload to ImageKit */}
-              <div className="mt-2">
-                <div className="text-xs text-muted-foreground mb-1">
-                  Or upload an image:
-                </div>
-                <ImageUpload
-                  onUploaded={(url) => {
-                    form.setValue("logoUrl", url ?? "", {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                  }}
-                />
-              </div>
+          <div className="grid gap-3">
+            {fields.map((field, idx) => (
+              <FormField
+                key={field.id}
+                control={form.control}
+                name={`logoUrls.${idx}`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="flex items-center gap-3">
+                        <Input
+                          type="url"
+                          placeholder="https://... or /images/foo.png"
+                          value={field.value ?? ""}
+                          onChange={(e) => field.onChange(e.target.value)}
+                          className="h-10"
+                        />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          onClick={() => remove(idx)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+          </div>
 
-              {/* Tiny live preview if we have a URL */}
-              {logoUrlValue ? (
-                <div className="mt-3 flex items-center gap-2">
-                  <Badge variant="secondary">Preview</Badge>
+          {/* Upload/Add controls */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => append("")}
+              disabled={fields.length >= 5}
+            >
+              Add URL field
+            </Button>
+
+            <ImageUpload
+              onUploaded={(url) => {
+                if (!url) return;
+                if ((form.getValues("logoUrls")?.length ?? 0) >= 5) return;
+                append(url);
+              }}
+            />
+            <p className="text-xs text-muted-foreground">Maximum 5 images.</p>
+          </div>
+
+          {/* Preview */}
+          {form.watch("logoUrls")?.length ? (
+            <div className="flex flex-wrap gap-2 pt-1">
+              {form.watch("logoUrls").map((u, i) => (
+                <div
+                  key={u + i}
+                  className="flex items-center gap-2 border rounded p-1"
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={logoUrlValue}
-                    alt="Logo preview"
-                    className="h-10 w-auto rounded border"
+                    src={u}
+                    alt={`preview-${i}`}
+                    className="h-10 w-10 object-cover rounded"
                   />
+                  <Badge variant="secondary">#{i + 1}</Badge>
                 </div>
-              ) : null}
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              ))}
+            </div>
+          ) : null}
+        </div>
 
         {/* websiteUrl input */}
         <FormField

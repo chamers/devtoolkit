@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
- images: {
+  images: {
     remotePatterns: [
       {
         protocol: "https",
@@ -23,13 +23,11 @@ const nextConfig: NextConfig = {
         hostname: "randomuser.me",
         port: "",
       },
-      {protocol: "https",
-        hostname: "ik.imagekit.io",
-        port: "",
-      }
+      { protocol: "https", hostname: "cdn.dribbble.com" },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
     ],
   },
-   typescript: {
+  typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
