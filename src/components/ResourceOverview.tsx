@@ -8,7 +8,15 @@ import Image from "next/image";
 import SliderWrapper from "./SliderWrapper";
 
 export default function ResourceOverview(props: ResourceFull) {
-  const { title, description, author, category, rating, logoUrls } = props;
+  const {
+    title,
+    descriptions = [],
+    author,
+    category,
+    rating,
+    logoUrls = [],
+  } = props;
+  const primaryDescription = descriptions[0] ?? "";
   const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
   return (
     <section
@@ -39,8 +47,8 @@ export default function ResourceOverview(props: ResourceFull) {
                     {title}
                   </span>
                 </h1>
-                <p className="font-handwriting dark:text-dark-foreground-60 sm:text-xl md:text-2xl lg:text-3xl">
-                  {description}
+                <p className="font-handwriting text-neutral-700 dark:text-dark-foreground-60 sm:text-xl md:text-2xl lg:text-3xl">
+                  {primaryDescription}
                 </p>
                 <div className="flex gap-3 items-center">
                   <div className="h-px bg-neutral-300 dark:bg-neutral-700 w-12"></div>
@@ -124,7 +132,10 @@ export default function ResourceOverview(props: ResourceFull) {
 
       {/* Image column */}
       <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
-        <SliderWrapper images={logoUrls.slice(0, 5)} />
+        <SliderWrapper
+          images={logoUrls.slice(0, 5)}
+          descriptions={descriptions.slice(0, 5)}
+        />
       </div>
     </section>
   );

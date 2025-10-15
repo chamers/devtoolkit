@@ -1,5 +1,5 @@
 "use client";
-// import { descriptions, images } from "@/constants";
+
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -14,40 +14,59 @@ export default function Slider({
   descriptions?: string[];
 }) {
   const [index, setIndex] = useState(0);
-  const rotationsRef = useRef<number[]>(initialRotations); // stable, matches SSR
+
+  // Keep rotations stable and aligned to the images length
+  const rotationsRef = useRef<number[]>(
+    initialRotations.length === images.length
+      ? initialRotations
+      : images.map((_, i) => initialRotations[i] ?? 0)
+  );
+
   const count = images.length;
   if (!count) return null;
 
   return (
     <div className="relative">
       <div className="flex gap-x-20 lg:items-start items-center lg:flex-row flex-col">
-        <div className="w-[250px] h-[250px] relative">
-          {images.map((image, i) => (
-            <Image
-              key={i}
-              src={image}
-              alt={`Slide ${i + 1}`}
-              className={[
-                "w-full h-full absolute object-cover rounded-3xl transition-opacity transition-transform duration-300",
-                i === index ? "opacity-100 z-10" : "opacity-70 z-0",
-                "pointer-events-none select-none",
-              ].join(" ")}
-              fill
-              sizes="(min-width: 1024px) 250px, 250px"
-              draggable={false}
-              style={{
-                transform: `rotate(${
-                  i === index ? 0 : rotationsRef.current[i] ?? 0
-                }deg)`,
-                transformOrigin: "50% 50%",
-                willChange: "transform, opacity",
-              }}
-              priority={i === 0}
-            />
-          ))}
+        {/* Image stack */}
+        <div className="w-[250px] h-[250px] relative overflow-hidden rounded-3xl">
+          {images.map((image, i) => {
+            const isActive = i === index;
+            const rotate = isActive ? 0 : rotationsRef.current[i] ?? 0;
+
+            return (
+              <Image
+                key={i}
+                src={image}
+                alt={`Slide ${i + 1}`}
+                className={[
+                  "absolute inset-0 w-full h-full object-cover",
+                  // Keep all images visible (so corners can peek)
+                  // De-emphasize non-active ones a touch
+                  isActive ? "z-20" : "z-10",
+                  "pointer-events-none select-none",
+                  "transition-transform duration-300 ease-out",
+                ].join(" ")}
+                fill
+                sizes="(min-width: 1024px) 250px, 250px"
+                draggable={false}
+                style={{
+                  // Active image slightly smaller so the rotated ones' corners can peek out
+                  // Background ones slightly larger + rotated
+                  transform: isActive
+                    ? "scale(0.96) rotate(0deg)"
+                    : `scale(1.02) rotate(${rotate}deg)`,
+                  transformOrigin: "50% 50%",
+                  // Gently dim background images without hiding corners
+                  filter: isActive ? "none" : "brightness(0.9) saturate(0.95)",
+                }}
+                priority={i === 0}
+              />
+            );
+          })}
         </div>
 
-        {/* Optional descriptions if provided, index-aligned */}
+        {/* Descriptions (index-aligned, optional) */}
         {descriptions.length ? (
           <div className="relative sm:w-[400px] w-[320px] mt-6 lg:mt-5 min-h-[3rem]">
             {descriptions.map((desc, i) => (

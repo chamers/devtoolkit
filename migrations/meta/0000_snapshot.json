@@ -1,5 +1,5 @@
 {
-  "id": "b96e90e4-0dd7-4a91-83e5-b13b239cfe22",
+  "id": "9d56f652-750a-458b-b77e-305806cce468",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -106,11 +106,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "description": {
-          "name": "description",
-          "type": "text",
+        "descriptions": {
+          "name": "descriptions",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "ARRAY[]::text[]"
         },
         "logo_urls": {
           "name": "logo_urls",

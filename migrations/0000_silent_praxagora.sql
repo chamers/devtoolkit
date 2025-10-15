@@ -18,7 +18,7 @@ CREATE TABLE "resources" (
 	"author" varchar(255) NOT NULL,
 	"category" "category" NOT NULL,
 	"rating" numeric(2, 1) NOT NULL,
-	"description" text NOT NULL,
+	"descriptions" text[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"logo_urls" text[] DEFAULT ARRAY[]::text[],
 	"website_url" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,

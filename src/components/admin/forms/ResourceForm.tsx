@@ -37,6 +37,7 @@ import { Badge } from "@/components/ui/badge";
 import { createResource } from "@/lib/admin/actions/resource";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
 
 /* -----------------------------
    Tags helper (module scope)
@@ -62,6 +63,9 @@ interface Props extends Partial<ResourceFull> {
   type?: "create" | "edit";
 }
 
+const MAX_LOGOS = 5;
+const MAX_DESCRIPTIONS = 5;
+
 const ResourceForm = ({ type, ...resource }: Props) => {
   const mounted = useMounted();
   const router = useRouter();
@@ -76,7 +80,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
       author: resource?.author ?? "",
       category: resource?.category ?? CATEGORY_OPTIONS[0],
       rating: typeof resource?.rating === "number" ? resource.rating : 0,
-      description: resource?.description ?? "",
+      descriptions: resource?.descriptions ?? [""],
       logoUrls: resource?.logoUrls ?? [],
       websiteUrl: resource?.websiteUrl ?? "",
       tags: resource?.tags ?? [], // canonical array (schema field)
@@ -89,10 +93,12 @@ const ResourceForm = ({ type, ...resource }: Props) => {
 
   // Preview for logo
   // const logoUrlValue = form.watch("logoUrl");
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "logoUrls",
-  });
+  const {
+    fields: logoFields,
+    append: appendLogo,
+    remove: removeLogo,
+  } = useFieldArray({ control: form.control, name: "logoUrls" });
+
   // Local UI state for comma-separated tags
   const [tagsText, setTagsText] = React.useState<string>(
     (resource?.tags ?? []).join(", ")
@@ -107,16 +113,32 @@ const ResourceForm = ({ type, ...resource }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tagsText]);
 
+  // const onSubmit = async (values: FormOutput) => {
+  //   console.log("Submitted:", values);
+  //   console.log("Logo URL:", values.logoUrls);
+  //   console.log("website URL:", values.websiteUrl);
+  //   console.log("tags array:", values.tags);
+  //   console.count("onSubmit called");
+  //   const result = await createResource(values);
+  //   if (result.success) {
+  //     toast.success("Resource created successfully!");
+
+  //     router.push(`/admin/resources/${result.data.id}`);
+  //   } else {
+  //     toast.error(
+  //       `Error creating resource: ${result.error ?? "Unknown error"}`
+  //     );
+  //   }
+  // };
+
   const onSubmit = async (values: FormOutput) => {
-    console.log("Submitted:", values);
-    console.log("Logo URL:", values.logoUrls);
-    console.log("website URL:", values.websiteUrl);
-    console.log("tags array:", values.tags);
-    console.count("onSubmit called");
-    const result = await createResource(values);
+    const cleaned = {
+      ...values,
+      descriptions: values.descriptions.map((d) => d.trim()).filter(Boolean),
+    };
+    const result = await createResource(cleaned);
     if (result.success) {
       toast.success("Resource created successfully!");
-
       router.push(`/admin/resources/${result.data.id}`);
     } else {
       toast.error(
@@ -228,22 +250,52 @@ const ResourceForm = ({ type, ...resource }: Props) => {
           )}
         />
 
-        {/* description input */}
+        {/* MULTIPLE DESCRIPTIONS */}
         <FormField
           control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-1">
-              <FormLabel className="capitalize">Resource Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Resource description"
-                  {...field}
-                  rows={10}
-                  className="book-form_input"
-                />
-              </FormControl>
-              <FormMessage />
+          name="descriptions"
+          render={() => (
+            <FormItem className="flex flex-col gap-2">
+              <FormLabel>Descriptions (up to {MAX_DESCRIPTIONS})</FormLabel>
+              <div className="space-y-3">
+                {descFields.map((field, idx) => (
+                  <FormItem key={field.id}>
+                    <FormControl>
+                      <div className="flex items-start gap-2">
+                        <Textarea
+                          placeholder={`Description ${idx + 1}`}
+                          rows={4}
+                          {...form.register(`descriptions.${idx}` as const)}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          aria-label={`Remove description ${idx + 1}`}
+                          onClick={() => removeDesc(idx)}
+                        >
+                          <X size={16} />
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                ))}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() =>
+                    descFields.length < MAX_DESCRIPTIONS && appendDesc("")
+                  }
+                >
+                  Add description
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {descFields.length}/{MAX_DESCRIPTIONS}
+                </span>
+              </div>
             </FormItem>
           )}
         />
@@ -377,93 +429,82 @@ const ResourceForm = ({ type, ...resource }: Props) => {
           />
         </div>
 
-        {/* MULTI LOGO URLS */}
-        <div className="space-y-3">
-          <FormLabel className="capitalize">
-            Resource Images (up to 5)
-          </FormLabel>
-
-          {/* Existing items */}
-          {fields.length === 0 && (
-            <p className="text-xs text-muted-foreground">
-              No images added yet.
-            </p>
-          )}
-
-          <div className="grid gap-3">
-            {fields.map((field, idx) => (
-              <FormField
-                key={field.id}
-                control={form.control}
-                name={`logoUrls.${idx}`}
-                render={({ field }) => (
-                  <FormItem>
+        {/* MULTIPLE IMAGES — as implemented previously */}
+        <FormField
+          control={form.control}
+          name="logoUrls"
+          render={() => (
+            <FormItem className="flex flex-col gap-2">
+              <FormLabel>Resource Images</FormLabel>
+              <div className="space-y-2">
+                {logoFields.map((field, idx) => (
+                  <div key={field.id} className="flex items-center gap-2">
                     <FormControl>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="url"
-                          placeholder="https://... or /images/foo.png"
-                          value={field.value ?? ""}
-                          onChange={(e) => field.onChange(e.target.value)}
-                          className="h-10"
-                        />
-                        <Button
-                          type="button"
-                          variant="secondary"
-                          onClick={() => remove(idx)}
-                        >
-                          Remove
-                        </Button>
-                      </div>
+                      <Input
+                        type="url"
+                        placeholder={`https://example.com/image-${idx + 1}.png`}
+                        {...form.register(`logoUrls.${idx}` as const)}
+                        className="h-10"
+                      />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
-
-          {/* Upload/Add controls */}
-          <div className="flex flex-wrap items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => append("")}
-              disabled={fields.length >= 5}
-            >
-              Add URL field
-            </Button>
-
-            <ImageUpload
-              onUploaded={(url) => {
-                if (!url) return;
-                if ((form.getValues("logoUrls")?.length ?? 0) >= 5) return;
-                append(url);
-              }}
-            />
-            <p className="text-xs text-muted-foreground">Maximum 5 images.</p>
-          </div>
-
-          {/* Preview */}
-          {form.watch("logoUrls")?.length ? (
-            <div className="flex flex-wrap gap-2 pt-1">
-              {form.watch("logoUrls").map((u, i) => (
-                <div
-                  key={u + i}
-                  className="flex items-center gap-2 border rounded p-1"
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeLogo(idx)}
+                      aria-label={`Remove image ${idx + 1}`}
+                    >
+                      <X size={16} />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() =>
+                    logoFields.length < MAX_LOGOS && appendLogo("")
+                  }
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={u}
-                    alt={`preview-${i}`}
-                    className="h-10 w-10 object-cover rounded"
-                  />
-                  <Badge variant="secondary">#{i + 1}</Badge>
+                  Add URL
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {logoFields.length}/{MAX_LOGOS}
+                </span>
+              </div>
+              <div className="mt-2">
+                <div className="text-xs text-muted-foreground mb-1">
+                  Or upload images:
                 </div>
-              ))}
-            </div>
-          ) : null}
-        </div>
+                <ImageUpload
+                  onUploaded={(url) => {
+                    if (!url) return;
+                    if (logoFields.length >= MAX_LOGOS)
+                      return toast.error(`Max ${MAX_LOGOS} images`);
+                    appendLogo(url);
+                  }}
+                />
+              </div>
+              {form.watch("logoUrls")?.length ? (
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  {form.watch("logoUrls").map((u, i) => (
+                    <div key={`${u}-${i}`} className="flex items-center gap-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={u}
+                        alt={`Preview ${i + 1}`}
+                        className="h-12 w-12 rounded border object-cover"
+                      />
+                      <Badge variant="secondary">{i + 1}</Badge>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* websiteUrl input */}
         <FormField

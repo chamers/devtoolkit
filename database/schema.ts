@@ -79,12 +79,17 @@ export const resources = pgTable(
       mode: "number",
     }).notNull(),
 
-    description: text("description").notNull(),
+    // description: text("description").notNull(),
+    descriptions: text("descriptions")
+      .array()
+      .notNull()
+      .default(sql`ARRAY[]::text[]`),
 
     // choose one: nullable if optional in app
     // logoUrl: text("logo_url"),  or remove .notNull() if optional
     logoUrls: text("logo_urls")
       .array()
+      .notNull()
       .default(sql`ARRAY[]::text[]`),
 
     websiteUrl: text("website_url").notNull(),
