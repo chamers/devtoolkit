@@ -93,11 +93,30 @@ const ResourceForm = ({ type, ...resource }: Props) => {
 
   // Preview for logo
   // const logoUrlValue = form.watch("logoUrl");
+  // Field array for IMAGES (strings)
   const {
     fields: logoFields,
     append: appendLogo,
     remove: removeLogo,
-  } = useFieldArray({ control: form.control, name: "logoUrls" });
+  } = useFieldArray<FormInput, "logoUrls">({
+    control: form.control,
+    name: "logoUrls",
+  });
+  // const { fields: logoFields, append: appendLogo, remove: removeLogo } =
+  // useFieldArray({
+  //   control: form.control,
+  //   name: "logoUrls" as const,
+  // });
+
+  // ✅ NEW: field array for DESCRIPTIONS (strings)
+  const {
+    fields: descFields,
+    append: appendDesc,
+    remove: removeDesc,
+  } = useFieldArray<FormInput, "descriptions">({
+    control: form.control,
+    name: "descriptions",
+  });
 
   // Local UI state for comma-separated tags
   const [tagsText, setTagsText] = React.useState<string>(
@@ -429,7 +448,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
           />
         </div>
 
-        {/* MULTIPLE IMAGES — as implemented previously */}
+        {/* MULTIPLE IMAGES */}
         <FormField
           control={form.control}
           name="logoUrls"
@@ -473,6 +492,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   {logoFields.length}/{MAX_LOGOS}
                 </span>
               </div>
+
               <div className="mt-2">
                 <div className="text-xs text-muted-foreground mb-1">
                   Or upload images:
@@ -486,11 +506,11 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   }}
                 />
               </div>
+
               {form.watch("logoUrls")?.length ? (
                 <div className="mt-3 flex flex-wrap items-center gap-3">
                   {form.watch("logoUrls").map((u, i) => (
                     <div key={`${u}-${i}`} className="flex items-center gap-2">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={u}
                         alt={`Preview ${i + 1}`}
@@ -501,6 +521,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   ))}
                 </div>
               ) : null}
+
               <FormMessage />
             </FormItem>
           )}
