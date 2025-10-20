@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "placehold.co",
-        pathname: "/400x600.png",
       },
       {
         protocol: "https",

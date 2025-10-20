@@ -1,4 +1,5 @@
 import { ResourceFull } from "../lib/types";
+import Link from "next/link";
 import { StarRating } from "./StarRating";
 import { Button } from "./ui/button";
 import { SiBmcsoftware } from "react-icons/si";
@@ -6,18 +7,35 @@ import { FiTrendingUp, FiBookOpen } from "react-icons/fi";
 // import ResourceImage from "./ResourceImage";
 import Image from "next/image";
 import SliderWrapper from "./SliderWrapper";
+import { categoryStyles } from "@/lib/categoryStyles";
 
-export default function ResourceOverview(props: ResourceFull) {
+type Props = Pick<
+  ResourceFull,
+  | "id"
+  | "title"
+  | "descriptions"
+  | "author"
+  | "category"
+  | "rating"
+  | "logoUrls"
+  | "websiteUrl"
+>;
+
+export default function ResourceOverview(props: Props) {
   const {
+    id,
     title,
     descriptions = [],
     author,
     category,
     rating,
     logoUrls = [],
+    websiteUrl,
   } = props;
+
   const primaryDescription = descriptions[0] ?? "";
   const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
+
   return (
     <section
       className={`
@@ -35,7 +53,7 @@ export default function ResourceOverview(props: ResourceFull) {
               <div className="space-y-4 lg:space-y-5">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-900 text-amber-400">
-                    NEW
+                    FEATURED
                   </span>
                   <h2 className="flex items-center gap-1 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-neutral-900 text-amber-400 font-medium text-sm backdrop-blu-sm border border-neutral-800/50">
                     <FiTrendingUp />
@@ -50,6 +68,7 @@ export default function ResourceOverview(props: ResourceFull) {
                 <p className="font-handwriting text-neutral-700 dark:text-dark-foreground-60 sm:text-xl md:text-2xl lg:text-3xl">
                   {primaryDescription}
                 </p>
+
                 <div className="flex gap-3 items-center">
                   <div className="h-px bg-neutral-300 dark:bg-neutral-700 w-12"></div>
                   <p className="font-extralight">
@@ -66,8 +85,13 @@ export default function ResourceOverview(props: ResourceFull) {
                   </p>
                   <div className="h-px bg-neutral-300 dark:bg-neutral-700 w-12"></div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <StarRating rating={rating} />
+                  <span>({rating}/5)</span>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-3 lg:gap-4">
+
+              {/* <div className="flex flex-wrap gap-3 lg:gap-4">
                 <Button className="flex items-center transition group">
                   <SiBmcsoftware className="group-hover:rotate-12 transition-transform duration-300" />
                   <span>View Resource</span>
@@ -76,12 +100,39 @@ export default function ResourceOverview(props: ResourceFull) {
                   variant="outline"
                   className="flex items-center transition group"
                 >
+                  <Link href={`/resources/${id}/card`}>
+                    <Button className="flex items-center">
+                      <SiBmcsoftware className="mr-2" />
+                      View resource
+                    </Button>
+                  </Link>
                   <FiBookOpen className="group-hover:rotate-12 transition-transform duration-300 text-neutral-600 dark:text-neutral-400" />
                   <span className="font-mono tracking-widest text-neutral-600 dark:text-neutral-400">
                     documentation
                   </span>
                 </Button>
+              </div> */}
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link href={`/resources/${id}`}>
+                  <Button className="flex items-center">
+                    <SiBmcsoftware className="mr-2" />
+                    View resource
+                  </Button>
+                </Link>
+
+                <Button variant="outline" asChild className="flex items-center">
+                  <a
+                    href={websiteUrl ? `${websiteUrl}` : "#"}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FiBookOpen className="mr-2" />
+                    documentation
+                  </a>
+                </Button>
               </div>
+
               <div className="flex flex-col sm:flex-row gap-5 sm:items-center pt-6 lg:pt-7 border-t border-neutral-200 dark:border-neutral-800">
                 <div className="flex -space-x-3">
                   <Image
@@ -110,12 +161,6 @@ export default function ResourceOverview(props: ResourceFull) {
                   </span>
                 </div>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <StarRating rating={rating} />
-                    <p className="text-sm text-neutral-800 dark:text-neutral-400">
-                      ({rating}/5)
-                    </p>
-                  </div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     Trusted by{" "}
                     <span className="font-semibold text-neutral-900 dark:text-neutral-300">
@@ -131,12 +176,14 @@ export default function ResourceOverview(props: ResourceFull) {
       </div>
 
       {/* Image column */}
-      <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
-        <SliderWrapper
-          images={logoUrls.slice(0, 5)}
-          descriptions={descriptions.slice(0, 5)}
-        />
-      </div>
+      {logoUrls.length > 0 && (
+        <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
+          <SliderWrapper
+            images={logoUrls.slice(0, 5)}
+            descriptions={descriptions.slice(0, 5)}
+          />
+        </div>
+      )}
     </section>
   );
 }

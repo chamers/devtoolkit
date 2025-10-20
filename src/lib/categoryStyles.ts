@@ -1,0 +1,73 @@
+import type { Category } from "@/lib/types";
+
+const BG: Record<Category, string> = {
+  Design: "bg-rose-50 dark:bg-rose-950/30",
+  "UI/UX": "bg-purple-50 dark:bg-purple-950/30",
+  Frontend: "bg-sky-50 dark:bg-sky-950/30",
+  Backend: "bg-emerald-50 dark:bg-emerald-950/30",
+  Fullstack: "bg-indigo-50 dark:bg-indigo-950/30",
+  DevOps: "bg-teal-50 dark:bg-teal-950/30",
+  APIs: "bg-orange-50 dark:bg-orange-950/30",
+  JavaScript: "bg-yellow-50 dark:bg-yellow-950/30",
+  TypeScript: "bg-blue-50 dark:bg-blue-950/30",
+  CSS: "bg-pink-50 dark:bg-pink-950/30",
+  HTML: "bg-amber-50 dark:bg-amber-950/30",
+  Frameworks: "bg-fuchsia-50 dark:bg-fuchsia-950/30",
+  "Version Control": "bg-stone-50 dark:bg-stone-900/40",
+  Productivity: "bg-lime-50 dark:bg-lime-950/30",
+  Testing: "bg-red-50 dark:bg-red-950/30",
+  Security: "bg-slate-50 dark:bg-slate-900/40",
+  Accessibility: "bg-cyan-50 dark:bg-cyan-950/30",
+  "AI/ML": "bg-violet-50 dark:bg-violet-950/30",
+  Development: "bg-neutral-50 dark:bg-neutral-900/40",
+};
+
+const TEXT: Record<Category, string> = {
+  Design: "text-rose-600 dark:text-rose-300",
+  "UI/UX": "text-purple-600 dark:text-purple-300",
+  Frontend: "text-sky-600 dark:text-sky-300",
+  Backend: "text-emerald-600 dark:text-emerald-300",
+  Fullstack: "text-indigo-600 dark:text-indigo-300",
+  DevOps: "text-teal-600 dark:text-teal-300",
+  APIs: "text-orange-600 dark:text-orange-300",
+  JavaScript: "text-yellow-700 dark:text-yellow-300",
+  TypeScript: "text-blue-600 dark:text-blue-300",
+  CSS: "text-pink-600 dark:text-pink-300",
+  HTML: "text-amber-600 dark:text-amber-300",
+  Frameworks: "text-fuchsia-600 dark:text-fuchsia-300",
+  "Version Control": "text-stone-700 dark:text-stone-300",
+  Productivity: "text-lime-700 dark:text-lime-300",
+  Testing: "text-red-600 dark:text-red-300",
+  Security: "text-slate-700 dark:text-slate-300",
+  Accessibility: "text-cyan-600 dark:text-cyan-300",
+  "AI/ML": "text-violet-600 dark:text-violet-300",
+  Development: "text-neutral-700 dark:text-neutral-300",
+};
+
+const BTN_SOLID: Record<Category, string> = {
+  Design: "bg-rose-600 hover:bg-rose-700 text-white",
+  "UI/UX": "bg-purple-600 hover:bg-purple-700 text-white",
+  Frontend: "bg-sky-600 hover:bg-sky-700 text-white",
+  Backend: "bg-emerald-600 hover:bg-emerald-700 text-white",
+  Fullstack: "bg-indigo-600 hover:bg-indigo-700 text-white",
+  DevOps: "bg-teal-600 hover:bg-teal-700 text-white",
+  APIs: "bg-orange-600 hover:bg-orange-700 text-white",
+  JavaScript: "bg-yellow-600 hover:bg-yellow-700 text-white",
+  TypeScript: "bg-blue-600 hover:bg-blue-700 text-white",
+  CSS: "bg-pink-600 hover:bg-pink-700 text-white",
+  HTML: "bg-amber-600 hover:bg-amber-700 text-white",
+  Frameworks: "bg-fuchsia-600 hover:bg-fuchsia-700 text-white",
+  "Version Control": "bg-stone-700 hover:bg-stone-800 text-white",
+  Productivity: "bg-lime-700 hover:bg-lime-800 text-white",
+  Testing: "bg-red-600 hover:bg-red-700 text-white",
+  Security: "bg-slate-700 hover:bg-slate-800 text-white",
+  Accessibility: "bg-cyan-600 hover:bg-cyan-700 text-white",
+  "AI/ML": "bg-violet-600 hover:bg-violet-700 text-white",
+  Development: "bg-neutral-700 hover:bg-neutral-800 text-white",
+};
+
+export const categoryStyles = {
+  bg: (c: Category) => BG[c],
+  text: (c: Category) => TEXT[c],
+  buttonSolid: (c: Category) => BTN_SOLID[c],
+};
