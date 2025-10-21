@@ -63,6 +63,8 @@ interface Props extends Partial<ResourceFull> {
   type?: "create" | "edit";
 }
 
+type UploadedPayload = string | string[];
+
 const MAX_LOGOS = 5;
 const MAX_DESCRIPTIONS = 5;
 
@@ -72,6 +74,30 @@ const ResourceForm = ({ type, ...resource }: Props) => {
 
   type FormInput = z.input<typeof resourceCreateSchema>; // before coercion
   type FormOutput = z.output<typeof resourceCreateSchema>; // after coercion
+
+  // Small helper to add one or many URLs safely
+  function appendLogoUrls(urls: UploadedPayload) {
+    const arr = Array.isArray(urls) ? urls : [urls];
+    const remaining = MAX_LOGOS - form.getValues("logoUrls").length;
+
+    if (remaining <= 0) {
+      toast.error(`Max ${MAX_LOGOS} images`);
+      return;
+    }
+
+    const toAdd = arr.slice(0, remaining).filter(Boolean);
+    if (!toAdd.length) return;
+
+    toAdd.forEach((u) => appendLogo(u));
+
+    if (arr.length > toAdd.length) {
+      toast.error(
+        `Only ${remaining} more image${
+          remaining === 1 ? "" : "s"
+        } allowed (max ${MAX_LOGOS}).`
+      );
+    }
+  }
 
   const form = useForm<FormInput, undefined, FormOutput>({
     resolver: zodResolver(resourceCreateSchema),
@@ -452,79 +478,102 @@ const ResourceForm = ({ type, ...resource }: Props) => {
         <FormField
           control={form.control}
           name="logoUrls"
-          render={() => (
-            <FormItem className="flex flex-col gap-2">
-              <FormLabel>Resource Images</FormLabel>
-              <div className="space-y-2">
-                {logoFields.map((field, idx) => (
-                  <div key={field.id} className="flex items-center gap-2">
-                    <FormControl>
-                      <Input
-                        type="url"
-                        placeholder={`https://example.com/image-${idx + 1}.png`}
-                        {...form.register(`logoUrls.${idx}` as const)}
-                        className="h-10"
-                      />
-                    </FormControl>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeLogo(idx)}
-                      aria-label={`Remove image ${idx + 1}`}
-                    >
-                      <X size={16} />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() =>
-                    logoFields.length < MAX_LOGOS && appendLogo("")
-                  }
-                >
-                  Add URL
-                </Button>
-                <span className="text-xs text-muted-foreground">
-                  {logoFields.length}/{MAX_LOGOS}
-                </span>
-              </div>
+          render={() => {
+            const remainingSlots = MAX_LOGOS - logoFields.length;
+            return (
+              <FormItem className="flex flex-col gap-2">
+                <FormLabel>Resource Images</FormLabel>
 
-              <div className="mt-2">
-                <div className="text-xs text-muted-foreground mb-1">
-                  Or upload images:
-                </div>
-                <ImageUpload
-                  onUploaded={(url) => {
-                    if (!url) return;
-                    if (logoFields.length >= MAX_LOGOS)
-                      return toast.error(`Max ${MAX_LOGOS} images`);
-                    appendLogo(url);
-                  }}
-                />
-              </div>
-
-              {form.watch("logoUrls")?.length ? (
-                <div className="mt-3 flex flex-wrap items-center gap-3">
-                  {form.watch("logoUrls").map((u, i) => (
-                    <div key={`${u}-${i}`} className="flex items-center gap-2">
-                      <img
-                        src={u}
-                        alt={`Preview ${i + 1}`}
-                        className="h-12 w-12 rounded border object-cover"
-                      />
-                      <Badge variant="secondary">{i + 1}</Badge>
+                {/* Existing URL inputs (unchanged) */}
+                <div className="space-y-2">
+                  {logoFields.map((field, idx) => (
+                    <div key={field.id} className="flex items-center gap-2">
+                      <FormControl>
+                        <Input
+                          type="url"
+                          placeholder={`https://example.com/image-${
+                            idx + 1
+                          }.png`}
+                          {...form.register(`logoUrls.${idx}` as const)}
+                          className="h-10"
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeLogo(idx)}
+                        aria-label={`Remove image ${idx + 1}`}
+                      >
+                        <X size={16} />
+                      </Button>
                     </div>
                   ))}
                 </div>
-              ) : null}
 
-              <FormMessage />
-            </FormItem>
-          )}
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() =>
+                      logoFields.length < MAX_LOGOS && appendLogo("")
+                    }
+                  >
+                    Add URL
+                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    {logoFields.length}/{MAX_LOGOS}
+                  </span>
+                </div>
+
+                {/* NEW: Multi-file upload in one go */}
+                <div className="mt-2">
+                  <div className="mb-1 text-xs text-muted-foreground">
+                    Or upload images
+                    {remainingSlots > 0
+                      ? ` — up to ${remainingSlots} more`
+                      : ""}
+                    :
+                  </div>
+
+                  {/* Pass multiple + a cap; onUploaded now accepts string | string[] */}
+                  <ImageUpload
+                    multiple
+                    maxFiles={Math.max(0, remainingSlots)}
+                    onUploaded={(urls: UploadedPayload) => {
+                      if (!urls || remainingSlots <= 0) {
+                        if (remainingSlots <= 0)
+                          toast.error(`Max ${MAX_LOGOS} images`);
+                        return;
+                      }
+                      appendLogoUrls(urls);
+                    }}
+                  />
+                </div>
+
+                {form.watch("logoUrls")?.length ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-3">
+                    {form.watch("logoUrls").map((u, i) => (
+                      <div
+                        key={`${u}-${i}`}
+                        className="flex items-center gap-2"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={u}
+                          alt={`Preview ${i + 1}`}
+                          className="h-12 w-12 rounded border object-cover"
+                        />
+                        <Badge variant="secondary">{i + 1}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
 
         {/* websiteUrl input */}

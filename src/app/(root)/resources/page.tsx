@@ -30,6 +30,7 @@
 
 import db from "@/../database/drizzle";
 import { resources } from "@/../database/schema";
+import ResourceForm from "@/components/admin/forms/ResourceForm";
 import ResourceTile from "@/components/ResourceTile";
 
 export default async function Page() {
