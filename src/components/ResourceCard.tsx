@@ -7,6 +7,7 @@ import { SiBmcsoftware } from "react-icons/si";
 import { FaHeart } from "react-icons/fa";
 import { ResourceFull } from "@/lib/types";
 import { categoryStyles } from "@/lib/categoryStyles";
+import Image from "next/image";
 
 type Props = ResourceFull & {
   isAdmin?: boolean;
@@ -153,7 +154,7 @@ const ResourceCard = ({
       </section>
 
       {/* Gallery (simple) */}
-      {logoUrls.length > 0 && (
+      {/* {logoUrls.length > 0 && (
         <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {logoUrls.map((src, i) => (
             <img
@@ -163,6 +164,24 @@ const ResourceCard = ({
               className="w-full h-32 object-cover rounded-lg border"
               loading="lazy"
             />
+          ))}
+        </section>
+      )} */}
+      {logoUrls.length > 0 && (
+        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {logoUrls.map((src, i) => (
+            <div key={src + i} className="relative w-full h-32">
+              <Image
+                src={src}
+                alt={`${title} image ${i + 1}`}
+                fill
+                className="object-cover rounded-lg border"
+                sizes="(max-width: 640px) 50vw,
+                 (max-width: 768px) 33vw,
+                 25vw"
+                priority={i === 0} // preload the first image for perceived performance
+              />
+            </div>
           ))}
         </section>
       )}

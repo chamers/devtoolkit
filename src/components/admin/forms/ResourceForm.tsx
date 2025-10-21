@@ -184,7 +184,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
     const result = await createResource(cleaned);
     if (result.success) {
       toast.success("Resource created successfully!");
-      router.push(`/admin/resources/${result.data.id}`);
+      router.push(`/resources/${result.data.id}`);
     } else {
       toast.error(
         `Error creating resource: ${result.error ?? "Unknown error"}`
