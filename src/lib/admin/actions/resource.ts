@@ -32,9 +32,11 @@ export async function createResource(input: unknown) {
       .values({
         title: values.title,
         author: values.author,
+        mainCategory: values.mainCategory, // Assumes this is now in ResourceCreate
         category: values.category,
+        subcategory: values.subcategory, // Assumes this is now in ResourceCreate
         rating: values.rating,
-        descriptions: values.descriptions, // CHANGED
+        descriptions: values.descriptions,
         logoUrls: values.logoUrls ?? [],
         websiteUrl: values.websiteUrl,
         tags: values.tags ?? [],
