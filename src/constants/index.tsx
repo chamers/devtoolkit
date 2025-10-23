@@ -32,12 +32,12 @@ export const adminSideBarLinks = [
   },
   {
     img: "/icons/admin/bookmark.svg",
-    route: "/admin/resource-requests",
+    route: "/admin/resources",
     text: "Resource Requests",
   },
   {
     img: "/icons/admin/user.svg",
-    route: "/admin/account-requests",
+    route: "/admin/resources",
     text: "Account Requests",
   },
 ];
