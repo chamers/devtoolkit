@@ -645,7 +645,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                     :
                   </div>
 
-                  <ImageUpload
+                  {/* <ImageUpload
                     multiple
                     maxFiles={Math.max(0, remainingSlots)}
                     onUploaded={(urls: UploadedPayload) => {
@@ -655,6 +655,14 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                         return;
                       }
                       appendLogoUrls(urls);
+                    }}
+                  /> */}
+                  <ImageUpload
+                    multiple
+                    maxFiles={Math.max(0, remainingSlots)}
+                    onUploaded={(urls: string[]) => {
+                      if (urls.length === 0) return;
+                      appendLogoUrls(urls); // your helper accepts string | string[]
                     }}
                   />
                 </div>
