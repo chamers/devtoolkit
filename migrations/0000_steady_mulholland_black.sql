@@ -1,4 +1,4 @@
-CREATE TYPE "public"."category" AS ENUM('Design', 'UI/UX', 'Frontend', 'Backend', 'Fullstack', 'DevOps', 'APIs', 'JavaScript', 'TypeScript', 'CSS', 'HTML', 'Frameworks', 'Version Control', 'Productivity', 'Testing', 'Security', 'Accessibility', 'AI/ML', 'Development');--> statement-breakpoint
+CREATE TYPE "public"."main_category" AS ENUM('Development', 'Design', 'Architecture / 3D', 'Content & Writing', 'Marketing & Analytics', 'Video & Audio', 'Productivity', 'Education & E-Learning');--> statement-breakpoint
 CREATE TYPE "public"."pricing" AS ENUM('Free', 'Paid', 'Freemium', 'Open Source');--> statement-breakpoint
 CREATE TYPE "public"."project_type" AS ENUM('Official', 'Community', 'Personal');--> statement-breakpoint
 CREATE TYPE "public"."role" AS ENUM('USER', 'ADMIN');--> statement-breakpoint
@@ -16,10 +16,12 @@ CREATE TABLE "resources" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"author" varchar(255) NOT NULL,
-	"category" "category" NOT NULL,
+	"main_category" "main_category" NOT NULL,
+	"category" varchar(255) NOT NULL,
+	"subcategory" varchar(255) NOT NULL,
 	"rating" numeric(2, 1) NOT NULL,
 	"descriptions" text[] DEFAULT ARRAY[]::text[] NOT NULL,
-	"logo_urls" text[] DEFAULT ARRAY[]::text[],
+	"logo_urls" text[] DEFAULT ARRAY[]::text[] NOT NULL,
 	"website_url" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -44,4 +46,7 @@ CREATE TABLE "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
-ALTER TABLE "resource_comments" ADD CONSTRAINT "resource_comments_resource_id_resources_id_fk" FOREIGN KEY ("resource_id") REFERENCES "public"."resources"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "resource_comments" ADD CONSTRAINT "resource_comments_resource_id_resources_id_fk" FOREIGN KEY ("resource_id") REFERENCES "public"."resources"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "resources_taxonomy_idx" ON "resources" USING btree ("main_category","category","subcategory");--> statement-breakpoint
+CREATE INDEX "resources_featured_idx" ON "resources" USING btree ("is_featured");--> statement-breakpoint
+CREATE INDEX "resources_pricing_idx" ON "resources" USING btree ("pricing");

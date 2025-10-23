@@ -1,3 +1,4 @@
+// database/schema.ts
 import { sql } from "drizzle-orm";
 import {
   varchar,
@@ -10,14 +11,19 @@ import {
   boolean,
   numeric,
   check,
+  index,
 } from "drizzle-orm/pg-core";
 
+/* ===========================
+   Enums
+=========================== */
 export const STATUS_ENUM = pgEnum("status", [
   "PENDING",
   "APPROVED",
   "REJECTED",
 ]);
 export const ROLE_ENUM = pgEnum("role", ["USER", "ADMIN"]);
+
 export const PRICING_ENUM = pgEnum("pricing", [
   "Free",
   "Paid",
@@ -29,29 +35,25 @@ export const PROJECT_TYPE_ENUM = pgEnum("project_type", [
   "Community",
   "Personal",
 ]);
-export const CATEGORY_ENUM = pgEnum("category", [
-  "Design",
-  "UI/UX",
-  "Frontend",
-  "Backend",
-  "Fullstack",
-  "DevOps",
-  "APIs",
-  "JavaScript",
-  "TypeScript",
-  "CSS",
-  "HTML",
-  "Frameworks",
-  "Version Control",
-  "Productivity",
-  "Testing",
-  "Security",
-  "Accessibility",
-  "AI/ML",
+
+// 🔁 NEW: top-level taxonomy enum (replace old CATEGORY_ENUM)
+export const MAIN_CATEGORY_ENUM = pgEnum("main_category", [
   "Development",
+  "Design",
+  "Architecture / 3D",
+  "Content & Writing",
+  "Marketing & Analytics",
+  "Video & Audio",
+  "Productivity",
+  "Education & E-Learning",
 ]);
 
-// --- USERS TABLE ---
+// ⚠️ The old CATEGORY_ENUM is removed in the final state.
+// If you still need it during migration, keep it in the migration script only.
+
+/* ===========================
+   USERS
+=========================== */
 export const users = pgTable("users", {
   id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
   userName: varchar("user_name", { length: 255 }).notNull(),
@@ -60,33 +62,36 @@ export const users = pgTable("users", {
   status: STATUS_ENUM("status").default("PENDING"),
   role: ROLE_ENUM("role").default("USER"),
   lastActivityDate: date("last_activity_date").defaultNow(),
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-  }).defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });
 
-// --- RESOURCES TABLE ---
+/* ===========================
+   RESOURCES
+=========================== */
 export const resources = pgTable(
   "resources",
   {
     id: uuid("id").defaultRandom().primaryKey(),
+
     title: varchar("title", { length: 255 }).notNull(),
     author: varchar("author", { length: 255 }).notNull(),
-    category: CATEGORY_ENUM("category").notNull(),
+
+    // 🔁 NEW 3-level taxonomy
+    mainCategory: MAIN_CATEGORY_ENUM("main_category").notNull(),
+    category: varchar("category", { length: 255 }).notNull(),
+    subcategory: varchar("subcategory", { length: 255 }).notNull(),
+
     rating: numeric("rating", {
       precision: 2,
       scale: 1,
       mode: "number",
     }).notNull(),
 
-    // description: text("description").notNull(),
     descriptions: text("descriptions")
       .array()
       .notNull()
       .default(sql`ARRAY[]::text[]`),
 
-    // choose one: nullable if optional in app
-    // logoUrl: text("logo_url"),  or remove .notNull() if optional
     logoUrls: text("logo_urls")
       .array()
       .notNull()
@@ -112,16 +117,27 @@ export const resources = pgTable(
     isMobileFriendly: boolean("is_mobile_friendly").notNull().default(false),
     isFeatured: boolean("is_featured").notNull().default(false),
 
-    // CHECK constraint (Drizzle exposes via `.check()` in builders or add in migration SQL)
+    // Optional: keep this if you want a quick, denormalized path for searching/sorting.
+    // You can compute this in-app too; stored column may be handy.
+    // categoryPath: text("category_path").notNull(), // "Development > DevOps > Networking"
   },
   (t) => [
     check("resources_rating_range", sql`${t.rating} >= 0 AND ${t.rating} <= 5`),
-    // index('resources_category_idx').on(t.category),
-    // index('resources_featured_idx').on(t.isFeatured),
+
+    // Helpful indexes
+    index("resources_taxonomy_idx").on(
+      t.mainCategory,
+      t.category,
+      t.subcategory
+    ),
+    index("resources_featured_idx").on(t.isFeatured),
+    index("resources_pricing_idx").on(t.pricing),
   ]
 );
 
-// --- RESOURCE COMMENTS TABLE ---
+/* ===========================
+   RESOURCE COMMENTS
+=========================== */
 export const resourceComments = pgTable("resource_comments", {
   id: uuid("id").notNull().primaryKey().defaultRandom().unique(),
   resourceId: uuid("resource_id")

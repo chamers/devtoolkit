@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import useMounted from "@/hooks/useMounted";
 import type { ResourceFull } from "@/lib/types";
@@ -28,10 +28,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   resourceCreateSchema,
-  CATEGORY_OPTIONS,
   PRICING_OPTIONS,
   PROJECT_TYPE_OPTIONS,
 } from "@/lib/validations";
+import {
+  MAIN_CATEGORIES,
+  CATEGORY_OPTIONS_BY_MAIN,
+  SUBCATEGORY_OPTIONS_BY_MAIN_AND_CAT,
+  type Main,
+} from "@/lib/taxonomy";
 import ImageUpload from "@/components/ImageUploadWrapper";
 import { Badge } from "@/components/ui/badge";
 import { createResource } from "@/lib/admin/actions/resource";
@@ -75,6 +80,115 @@ const ResourceForm = ({ type, ...resource }: Props) => {
   type FormInput = z.input<typeof resourceCreateSchema>; // before coercion
   type FormOutput = z.output<typeof resourceCreateSchema>; // after coercion
 
+  // Compute safe defaults for cascading selects
+  const defaultMain: Main =
+    (resource?.mainCategory as Main) ?? (MAIN_CATEGORIES[0] as Main);
+  const defaultCats = CATEGORY_OPTIONS_BY_MAIN[defaultMain] ?? [];
+  const defaultCat =
+    resource?.category && defaultCats.includes(resource.category)
+      ? resource.category
+      : defaultCats[0] ?? "";
+  const defaultSubs = (SUBCATEGORY_OPTIONS_BY_MAIN_AND_CAT[defaultMain]?.[
+    defaultCat
+  ] ?? []) as readonly string[] | undefined;
+  const defaultSub =
+    resource?.subcategory && defaultSubs?.includes(resource.subcategory)
+      ? resource.subcategory
+      : defaultSubs?.[0] ?? "";
+
+  // Form setup
+  const form = useForm<FormInput, undefined, FormOutput>({
+    resolver: zodResolver(resourceCreateSchema),
+    defaultValues: {
+      title: resource?.title ?? "",
+      author: resource?.author ?? "",
+      // NEW triple
+      mainCategory: defaultMain,
+      category: defaultCat ?? "",
+      subcategory: defaultSub ?? "",
+      rating: typeof resource?.rating === "number" ? resource.rating : 0,
+      descriptions: resource?.descriptions ?? [""],
+      logoUrls: resource?.logoUrls ?? [],
+      websiteUrl: resource?.websiteUrl ?? "",
+      tags: resource?.tags ?? [],
+      pricing: resource?.pricing ?? PRICING_OPTIONS[0],
+      projectType: resource?.projectType ?? PROJECT_TYPE_OPTIONS[0],
+      isMobileFriendly: resource?.isMobileFriendly ?? false,
+      isFeatured: resource?.isFeatured ?? false,
+    },
+  });
+
+  // Watch parent fields to drive cascading dropdowns
+  const watchedMain = useWatch({
+    control: form.control,
+    name: "mainCategory",
+  }) as Main;
+  const watchedCat = useWatch({ control: form.control, name: "category" });
+
+  // When main changes, reset category + subcategory to first valid values
+  React.useEffect(() => {
+    const cats = CATEGORY_OPTIONS_BY_MAIN[watchedMain] ?? [];
+    const nextCat = cats[0] ?? "";
+    form.setValue("category", nextCat, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+
+    const subs = (SUBCATEGORY_OPTIONS_BY_MAIN_AND_CAT[watchedMain]?.[nextCat] ??
+      []) as readonly string[] | undefined;
+    const nextSub = subs?.[0] ?? "";
+    form.setValue("subcategory", nextSub, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedMain]);
+
+  // When category changes, reset subcategory to first valid value
+  React.useEffect(() => {
+    const subs = (SUBCATEGORY_OPTIONS_BY_MAIN_AND_CAT[watchedMain]?.[
+      watchedCat
+    ] ?? []) as readonly string[] | undefined;
+    const nextSub = subs?.[0] ?? "";
+    form.setValue("subcategory", nextSub, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedCat, watchedMain]);
+
+  // Field arrays
+  const {
+    fields: logoFields,
+    append: appendLogo,
+    remove: removeLogo,
+  } = useFieldArray<FormInput, "logoUrls">({
+    control: form.control,
+    name: "logoUrls",
+  });
+
+  const {
+    fields: descFields,
+    append: appendDesc,
+    remove: removeDesc,
+  } = useFieldArray<FormInput, "descriptions">({
+    control: form.control,
+    name: "descriptions",
+  });
+
+  // Local UI state for comma-separated tags
+  const [tagsText, setTagsText] = React.useState<string>(
+    (resource?.tags ?? []).join(", ")
+  );
+
+  React.useEffect(() => {
+    form.setValue("tags", parseTags(tagsText), {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tagsText]);
+
   // Small helper to add one or many URLs safely
   function appendLogoUrls(urls: UploadedPayload) {
     const arr = Array.isArray(urls) ? urls : [urls];
@@ -99,83 +213,6 @@ const ResourceForm = ({ type, ...resource }: Props) => {
     }
   }
 
-  const form = useForm<FormInput, undefined, FormOutput>({
-    resolver: zodResolver(resourceCreateSchema),
-    defaultValues: {
-      title: resource?.title ?? "",
-      author: resource?.author ?? "",
-      category: resource?.category ?? CATEGORY_OPTIONS[0],
-      rating: typeof resource?.rating === "number" ? resource.rating : 0,
-      descriptions: resource?.descriptions ?? [""],
-      logoUrls: resource?.logoUrls ?? [],
-      websiteUrl: resource?.websiteUrl ?? "",
-      tags: resource?.tags ?? [], // canonical array (schema field)
-      pricing: resource?.pricing ?? PRICING_OPTIONS[0],
-      projectType: resource?.projectType ?? PROJECT_TYPE_OPTIONS[0],
-      isMobileFriendly: resource?.isMobileFriendly ?? false,
-      isFeatured: resource?.isFeatured ?? false,
-    },
-  });
-
-  // Preview for logo
-  // const logoUrlValue = form.watch("logoUrl");
-  // Field array for IMAGES (strings)
-  const {
-    fields: logoFields,
-    append: appendLogo,
-    remove: removeLogo,
-  } = useFieldArray<FormInput, "logoUrls">({
-    control: form.control,
-    name: "logoUrls",
-  });
-  // const { fields: logoFields, append: appendLogo, remove: removeLogo } =
-  // useFieldArray({
-  //   control: form.control,
-  //   name: "logoUrls" as const,
-  // });
-
-  // ✅ NEW: field array for DESCRIPTIONS (strings)
-  const {
-    fields: descFields,
-    append: appendDesc,
-    remove: removeDesc,
-  } = useFieldArray<FormInput, "descriptions">({
-    control: form.control,
-    name: "descriptions",
-  });
-
-  // Local UI state for comma-separated tags
-  const [tagsText, setTagsText] = React.useState<string>(
-    (resource?.tags ?? []).join(", ")
-  );
-
-  // Keep RHF "tags" (string[]) in sync with the local string
-  React.useEffect(() => {
-    form.setValue("tags", parseTags(tagsText), {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tagsText]);
-
-  // const onSubmit = async (values: FormOutput) => {
-  //   console.log("Submitted:", values);
-  //   console.log("Logo URL:", values.logoUrls);
-  //   console.log("website URL:", values.websiteUrl);
-  //   console.log("tags array:", values.tags);
-  //   console.count("onSubmit called");
-  //   const result = await createResource(values);
-  //   if (result.success) {
-  //     toast.success("Resource created successfully!");
-
-  //     router.push(`/admin/resources/${result.data.id}`);
-  //   } else {
-  //     toast.error(
-  //       `Error creating resource: ${result.error ?? "Unknown error"}`
-  //     );
-  //   }
-  // };
-
   const onSubmit = async (values: FormOutput) => {
     const cleaned = {
       ...values,
@@ -193,6 +230,12 @@ const ResourceForm = ({ type, ...resource }: Props) => {
   };
 
   if (!mounted) return null;
+
+  // Option lists derived from current selections
+  const categoryOptions = CATEGORY_OPTIONS_BY_MAIN[watchedMain] ?? [];
+  const subcategoryOptions = (SUBCATEGORY_OPTIONS_BY_MAIN_AND_CAT[
+    watchedMain
+  ]?.[watchedCat] ?? []) as readonly string[] | undefined;
 
   return (
     <Form {...form}>
@@ -237,31 +280,97 @@ const ResourceForm = ({ type, ...resource }: Props) => {
           )}
         />
 
-        {/* category input */}
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-1">
-              <FormLabel className="capitalize">Category</FormLabel>
-              <FormControl>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {CATEGORY_OPTIONS.map((c) => (
-                      <SelectItem key={c} value={c}>
-                        {c}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* ===== NEW: Cascading Category Selects ===== */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {/* Main Category */}
+          <FormField
+            control={form.control}
+            name="mainCategory"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel>Main Category</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a main category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {MAIN_CATEGORIES.map((m) => (
+                        <SelectItem key={m} value={m}>
+                          {m}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Category */}
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel>Category</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={categoryOptions.length === 0}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categoryOptions.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Subcategory */}
+          <FormField
+            control={form.control}
+            name="subcategory"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel>Subcategory</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={
+                      !subcategoryOptions || subcategoryOptions.length === 0
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a subcategory" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(subcategoryOptions ?? []).map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        {/* ===== END cascading selects ===== */}
 
         {/* rating input */}
         <FormField
@@ -484,7 +593,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
               <FormItem className="flex flex-col gap-2">
                 <FormLabel>Resource Images</FormLabel>
 
-                {/* Existing URL inputs (unchanged) */}
+                {/* Existing URL inputs */}
                 <div className="space-y-2">
                   {logoFields.map((field, idx) => (
                     <div key={field.id} className="flex items-center gap-2">
@@ -526,7 +635,7 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                   </span>
                 </div>
 
-                {/* NEW: Multi-file upload in one go */}
+                {/* Upload */}
                 <div className="mt-2">
                   <div className="mb-1 text-xs text-muted-foreground">
                     Or upload images
@@ -536,7 +645,6 @@ const ResourceForm = ({ type, ...resource }: Props) => {
                     :
                   </div>
 
-                  {/* Pass multiple + a cap; onUploaded now accepts string | string[] */}
                   <ImageUpload
                     multiple
                     maxFiles={Math.max(0, remainingSlots)}

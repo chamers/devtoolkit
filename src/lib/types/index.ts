@@ -1,3 +1,4 @@
+// lib/types/index.ts
 import type { z } from "zod";
 
 /* ===========================
@@ -11,7 +12,9 @@ import { signUpSchema, signInSchema } from "@/lib/validations";
 export type {
   PricingModel,
   ProjectType,
-  Category,
+  MainCategory, // NEW: top-level domain (e.g., "Development", "Design", ...)
+  CategoryName, // NEW: second level (varies by main)
+  SubcategoryName, // NEW: third level (varies by main)
   Rating,
   LogoUrl,
   LogoUrls,

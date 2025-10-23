@@ -1,5 +1,5 @@
 {
-  "id": "9d56f652-750a-458b-b77e-305806cce468",
+  "id": "bf33bccf-7c54-4f1a-adf0-1d6c54a3dda6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -93,10 +93,22 @@
           "primaryKey": false,
           "notNull": true
         },
+        "main_category": {
+          "name": "main_category",
+          "type": "main_category",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
         "category": {
           "name": "category",
-          "type": "category",
-          "typeSchema": "public",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subcategory": {
+          "name": "subcategory",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
@@ -117,7 +129,7 @@
           "name": "logo_urls",
           "type": "text[]",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "ARRAY[]::text[]"
         },
         "website_url": {
@@ -176,7 +188,65 @@
           "default": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "resources_taxonomy_idx": {
+          "name": "resources_taxonomy_idx",
+          "columns": [
+            {
+              "expression": "main_category",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "category",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "subcategory",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "resources_featured_idx": {
+          "name": "resources_featured_idx",
+          "columns": [
+            {
+              "expression": "is_featured",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "resources_pricing_idx": {
+          "name": "resources_pricing_idx",
+          "columns": [
+            {
+              "expression": "pricing",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -274,29 +344,18 @@
     }
   },
   "enums": {
-    "public.category": {
-      "name": "category",
+    "public.main_category": {
+      "name": "main_category",
       "schema": "public",
       "values": [
+        "Development",
         "Design",
-        "UI/UX",
-        "Frontend",
-        "Backend",
-        "Fullstack",
-        "DevOps",
-        "APIs",
-        "JavaScript",
-        "TypeScript",
-        "CSS",
-        "HTML",
-        "Frameworks",
-        "Version Control",
+        "Architecture / 3D",
+        "Content & Writing",
+        "Marketing & Analytics",
+        "Video & Audio",
         "Productivity",
-        "Testing",
-        "Security",
-        "Accessibility",
-        "AI/ML",
-        "Development"
+        "Education & E-Learning"
       ]
     },
     "public.pricing": {

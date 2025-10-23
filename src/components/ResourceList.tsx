@@ -1,14 +1,17 @@
-import { ResourceFull } from "@/lib/types";
-
+import type { ResourceFull } from "@/lib/types";
 import ResourceCardMini from "./ResourceCardMini";
 
 interface Props {
   title: string;
-  resources: ResourceFull[]; // Replace 'any' with the actual type of resources
+  resources?: ResourceFull[]; // allow undefined
   containerClassName?: string;
 }
-const ResourceList = ({ title, resources, containerClassName }: Props) => {
-  if (resources.length < 2) return;
+
+const ResourceList = ({ title, resources = [], containerClassName }: Props) => {
+  if (resources.length === 0) return null; // nothing to render
+  // if you really want at least 2, keep this:
+  // if (resources.length < 2) return null;
+
   return (
     <section className={containerClassName}>
       <h2>{title}</h2>
@@ -20,4 +23,5 @@ const ResourceList = ({ title, resources, containerClassName }: Props) => {
     </section>
   );
 };
+
 export default ResourceList;
