@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ResourceFull } from "@/lib/types";
-import { categoryStyles } from "@/lib/categoryStyles";
+import { slugifyCategory } from "@/lib/utils";
 import React from "react";
 
 interface Props {
@@ -31,14 +31,16 @@ const ResourceCardMini: React.FC<Props> = ({ resource }) => {
       ? rating.toFixed(1)
       : "0.0";
 
+  const categoryClass = slugifyCategory(category);
+
   return (
     <Link
       href={`/resources/${id}`}
-      className={[
-        "block p-4 rounded-2xl shadow-md transition hover:shadow-lg border",
-        categoryStyles.bg(category),
-        "text-gray-900 dark:text-gray-100", // ✅ dark text by default, readable on light bg
-      ].join(" ")}
+      className={`
+        block p-4 rounded-2xl shadow-md transition hover:shadow-lg border
+       bg-${categoryClass}
+        text-gray-900 dark:text-gray-100
+      `}
     >
       <div className="flex items-center gap-3 mb-3">
         <div className="relative w-12 h-12 rounded bg-white overflow-hidden border">

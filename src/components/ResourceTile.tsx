@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { categoryStyles } from "@/lib/categoryStyles";
+import { slugifyCategory } from "@/lib/utils";
 import type { ResourceFull } from "@/lib/types";
 
 export default function ResourceTile({
@@ -28,12 +27,18 @@ export default function ResourceTile({
 >) {
   const logoUrl = logoUrls[0] ?? "/no-image.png"; // fallback local image
 
+  const categoryClass = slugifyCategory(category);
+
   return (
     <li
-      className={cn(
-        "rounded-lg shadow p-3 w-full sm:w-64 bg-white dark:bg-neutral-900 transition hover:shadow-md",
-        categoryStyles.bg(category)
-      )}
+      // className={cn(
+      //   "rounded-lg shadow p-3 w-full sm:w-64 bg-white dark:bg-neutral-900 transition hover:shadow-md",
+      //   categoryStyles.bg(category)
+      // )}
+      className={`
+        rounded-lg shadow p-3 w-full sm:w-64 bg-white dark:bg-neutral-900 transition hover:shadow-md border
+       bg-${categoryClass}
+      `}
     >
       <Link href={`/resources/${id}`} className="block space-y-2">
         {/* Image and title row */}

@@ -7,7 +7,7 @@ import { FiTrendingUp, FiBookOpen } from "react-icons/fi";
 // import ResourceImage from "./ResourceImage";
 import Image from "next/image";
 import SliderWrapper from "./SliderWrapper";
-import { categoryStyles } from "@/lib/categoryStyles";
+import { slugifyCategory } from "@/lib/utils";
 
 type Props = Pick<
   ResourceFull,
@@ -34,7 +34,7 @@ export default function ResourceOverview(props: Props) {
   } = props;
 
   const primaryDescription = descriptions[0] ?? "";
-  const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
+  const categoryClass = slugifyCategory(category);
 
   return (
     <section
