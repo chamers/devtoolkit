@@ -30,7 +30,11 @@ const nextConfig: NextConfig = {
 
       { protocol: "https", hostname: "www.coursera.org" }, // <-- this fixes your error
       { protocol: "https", hostname: "coursera.org" },
-      { protocol: "https", hostname: "randomuser.me" },
+      {
+        protocol: "https",
+        hostname: "randomuser.me",
+        pathname: "/api/portraits/**",
+      },
     ],
     // If you’re displaying lots of favicons/thumbnails from many domains,
     // consider enabling this to bypass optimization (optional):
