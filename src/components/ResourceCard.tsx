@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
 import ResourceImage from "./ResourceImage";
-import { cn } from "@/lib/utils";
+import { cn, slugifyCategory } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { SiBmcsoftware } from "react-icons/si";
 import { FaHeart } from "react-icons/fa";
 import { ResourceFull } from "@/lib/types";
-import { categoryStyles } from "@/lib/categoryStyles";
+// import { categoryStyles } from "@/lib/categoryStyles";
 import Image from "next/image";
 
 type Props = ResourceFull & {
@@ -31,7 +31,7 @@ const ResourceCard = ({
   updatedAt,
   isAdmin = false,
 }: Props) => {
-  const categoryClass = category.toLowerCase().replace(/[^a-z]/g, "");
+  const categoryClass = slugifyCategory(category);
 
   return (
     // <li
@@ -77,10 +77,14 @@ const ResourceCard = ({
     <article className="space-y-6">
       {/* Header */}
       <header
-        className={[
-          "p-6 rounded-lg shadow-xl border",
-          categoryStyles.bg(category),
-        ].join(" ")}
+        // className={[
+        //   "p-6 rounded-lg shadow-xl border",
+        //   categoryStyles.bg(category),
+        // ].join(" ")}
+        className={`
+        rounded-lg shadow p-3 w-full sm:w-64 bg-white dark:bg-neutral-900 transition hover:shadow-md border
+       bg-${categoryClass}
+      `}
       >
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-2xl md:text-3xl font-semibold">{title}</h1>
