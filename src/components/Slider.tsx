@@ -23,6 +23,7 @@ export default function Slider({
   sizePx = 250,
   initialRotations,
 }: SliderProps) {
+  // The index now corresponds directly to the sliced array content.
   const [index, setIndex] = useState(0);
 
   // Default repeating pattern for a casual photo-stack effect
@@ -46,21 +47,16 @@ export default function Slider({
   return (
     <div className="relative">
       <div className="flex gap-x-20 lg:items-start items-center lg:flex-row flex-col">
-        {/* Image stack */}
-        <div
-          // 🛑 FIX 1: Removed `overflow-hidden` so rotated corners can stick out.
-          // Added relative padding to ensure the rotated images have space.
-          className="relative w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] p-8"
-          style={{ width: sizePx + 64, height: sizePx + 64 }} // Add padding to size
-        >
-          {count > 0 &&
-            images.map((image, i) => {
+        {/* Image stack - Now always displayed if images exist */}
+        {count > 0 && (
+          <div
+            className="relative w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] p-8"
+            style={{ width: sizePx + 64, height: sizePx + 64 }}
+          >
+            {images.map((image, i) => {
               const isActive = i === index;
               const rotate = rotations[i];
 
-              // 🛑 FIX 2: Calculate Z-index based on distance from active index
-              // Ensures all non-active images are under the active one (z-index: 20)
-              // and maintain a stacking order among themselves.
               const zIndex = isActive ? 20 : 10 - Math.abs(i - index);
 
               return (
@@ -69,24 +65,19 @@ export default function Slider({
                   src={image}
                   alt={`Slide ${i + 1}`}
                   className={[
-                    // Images are absolutely positioned over the active one's space
-                    // We use `inset-8` to account for the parent's `p-8`
                     "absolute inset-8 w-full h-full object-cover rounded-3xl",
                     "pointer-events-none select-none",
-                    "transition-all duration-500 ease-out", // Use transition-all for smooth movement and fade
-                    isActive ? "opacity-100" : "opacity-40", // 🛑 FIX 3: Fading effect for non-active images
+                    "transition-all duration-500 ease-out",
+                    isActive ? "opacity-100" : "opacity-40",
                   ].join(" ")}
                   fill
                   sizes="(max-width: 640px) 300px, 400px"
                   draggable={false}
                   style={{
                     zIndex: zIndex,
-                    // 🛑 FIX 4: Apply rotation and translate (for stacking effect)
-                    // Active image is centered and not rotated.
-                    // Non-active images are rotated and slightly pushed back/down.
                     transform: isActive
                       ? "rotate(0deg) scale(1) translateY(0px)"
-                      : `rotate(${rotate}deg) scale(1) translateY(4px)`, // Added translateY(4px) for subtle depth
+                      : `rotate(${rotate}deg) scale(1) translateY(4px)`,
                     transformOrigin: "50% 50%",
                     filter: isActive
                       ? "none"
@@ -100,10 +91,10 @@ export default function Slider({
                 />
               );
             })}
-        </div>
-        {/* ... Descriptions and Controls remain the same ... */}
+          </div>
+        )}
 
-        {/* Descriptions (index-aligned, optional) */}
+        {/* Descriptions - Now always displayed if descriptions exist and the array is sliced */}
         {descriptions.length > 0 && (
           <div className="relative sm:w-[400px] w-[320px] mt-6 lg:mt-5 min-h-[3rem]">
             {descriptions.map((desc, i) => (
@@ -120,7 +111,7 @@ export default function Slider({
         )}
       </div>
 
-      {/* Controls */}
+      {/* Controls - These still work correctly on the new `count` */}
       {count > 1 && (
         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex gap-x-4">
           <button
