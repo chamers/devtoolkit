@@ -136,21 +136,21 @@ export default function ResourceOverview(props: Props) {
               <div className="flex flex-col sm:flex-row gap-5 sm:items-center pt-6 lg:pt-7 border-t border-neutral-200 dark:border-neutral-800">
                 <div className="flex -space-x-3">
                   <Image
-                    src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
+                    src="https://ik.imagekit.io/2yaqi8azs/randomuser-men1.jpg?updatedAt=1761480139450"
                     alt="User Avatar"
                     width={36}
                     height={36}
                     className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-neutral-200 dark:border-neutral-900 object-cover"
                   />
                   <Image
-                    src="https://randomuser.me/api/portraits/thumb/women/21.jpg"
+                    src="https://ik.imagekit.io/2yaqi8azs/randomuser-woman1.jpg?updatedAt=1761480139492"
                     alt="User Avatar"
                     width={36}
                     height={36}
                     className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-neutral-200 dark:border-neutral-900 object-cover"
                   />
                   <Image
-                    src="https://randomuser.me/api/portraits/thumb/men/12.jpg"
+                    src="https://ik.imagekit.io/2yaqi8azs/randomuser-men2.jpg?updatedAt=1761480139494"
                     alt="User Avatar"
                     width={36}
                     height={36}
