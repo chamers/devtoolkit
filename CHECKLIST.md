@@ -1,0 +1,82 @@
+- remove files from `public/*`
+- clear `globals.css`
+- clear `page.tsx`
+- install `npx shadcn@latest init`
+- install components `npx shadcn@latest add button label input sonner`
+- show button and test `dev` server
+
+== PART 1 ==
+
+- install Better Auth `npm install better-auth`
+- create `.env` and set Environment Variables
+- create `lib/auth.ts`
+- setup `postgres` database with `neon.tech`
+- install prisma `npm install prisma --save-dev`
+- initialise prisma `npx prisma init`
+- create **Post** Model
+- push database changes `npx prisma db push`
+- add `generated` to `.gitignore`
+- adjust **scripts** in package.json
+
+- create single Prisma Client in `lib/prisma.ts`
+- setup prisma adapter with better-auth
+- generate aut tables `npx @better-auth/cli generate --output=auth.schema.prisma`
+- make tweaks to `schema.prisma`
+- quick walkthrough the models:
+  - `User`
+  - `Session`
+  - `Account`
+  - `Verification`
+- push database changes `npx prisma db push`
+- better use `npx prisma migrate dev --name init_full_auth_schema`
+- create Mount Handler in `app/api/auth/[...all]/route.ts`
+- adjust `eslist.config.mjs` to ignore `/src/generated/**/*`
+- create Client instance in `lib/auth-client.ts`
+- Enable Email & Password Authentication
+- Create Sign UP Page PT1
+  - Create Form `components/register-form.tsx`
+  - Log Form Values
+- Setup Sonner
+- Create Sign Up Page PT2
+  - Add Form Validation
+  - Destructure SignUP Function
+  - Showcase `OnError`
+- OPTIONS - **minPasswordLenghts**
+- Create Sign Uppage PT3
+  - Sign Up _default automatically signs in the user_
+- Show Session on Profile Page
+- Show Data in Neon Dashboard
+- Sign Out User
+- Show Data in Neon Dashboard
+  - Destructure SignOut Function
+  - Show Removed Cookies
+- Create Sign In Page PT1
+  - Create Form `components/login-form.tsx`
+  - Log Form Values
+  - Destructure SignIn Function
+- Show Unauthorized on Profile Page
+- Create Sign In Page PT2
+  - Showcas `onError`
+  - Sign In User
+- Finish PART 1
+
+== PART 1 ==
+
+- Showcase `onRequest` and `onResponse`
+- Showcase Full Cycle Again
+- Add Convenience Links for Auth pages
+- OPTIONS - **autoSignIn**
+  - Showcase
+- OPTIONS - **advanced.database.generateId**
+  - Table IDs (change `schema.prisma` and push)
+  - Showcase
+  - Truncate Tables
+- OPTIONS - **emailAndPassword.password**
+  - Create User
+  - Argon2 `npm install @node-rs/argon2`
+  - Add to `next.config.ts`
+  - Create Utilities `lib/argon2.ts`
+  - Add to `lib/auth.ts`
+  - Showcase
+  - Truncate Tables
+- Create User

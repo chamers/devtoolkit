@@ -1,0 +1,251 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  // Assuming PostgreSQL since you are using pgTable, pgEnum, and specific SQL functions.
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  //output   = "../src/generated/prisma"
+}
+
+// ===========================
+// Enums
+// ===========================
+
+enum Status {
+  PENDING   @map("pending")
+  ACTIVE    @map("active")
+  SUSPENDED @map("suspended")
+  DELETED   @map("deleted")
+  ARCHIVED  @map("archived")
+  APPROVED  @map("approved")
+  REJECTED  @map("rejected")
+}
+
+enum Role {
+  USER      @map("user")
+  ADMIN     @map("admin")
+  MODERATOR @map("moderator")
+  EDITOR    @map("editor")
+  VIEWER    @map("viewer")
+}
+
+enum Pricing {
+  FREE          @map("free")
+  PAID          @map("paid")
+  FREEMIUM      @map("freemium")
+  SUBSCRIPTION  @map("subscription")
+  OPENSOURCE    @map("open_source")
+}
+
+enum ProjectType {
+  OFFICIAL   @map("official")
+  COMMUNITY  @map("community")
+  PERSONAL   @map("personal")
+  ENTERPRISE @map("enterprise")
+  AFFILIATE  @map("affiliate")
+  FOUNDATION @map("foundation")
+}
+
+enum MainCategory {
+  DEVELOPMENT               @map("development")
+  DESIGN                    @map("design")
+  MARKETING_ANALYTICS       @map("marketing_analytics")
+  PRODUCTIVITY              @map("productivity")
+  SECURITY                  @map("security")
+  UTILITIES                 @map("utilities")
+  EDUCATION_ELEARNING       @map("education_elearning")
+  FINANCE                   @map("finance")
+  HEALTH_WELLNESS           @map("health_wellness")
+  ARCHITECTURE_ENGINEERING  @map("architecture_engineering")
+  CONTENT_CREATION          @map("content_creation")
+  GAMING                    @map("gaming")
+  VIDEO_AUDIO               @map("video_audio")
+  CLOUD_INFRASTRUCTURE      @map("cloud_infrastructure")
+  OTHERS                    @map("others")
+}
+
+// ===========================
+// USERS Model  ->  table: users
+// ===========================
+model User {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // Stored as DATE; now() is cast to date by Postgres
+  lastActivityDate DateTime @default(now()) @map("last_activity_date") @db.Date
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  // Field name remains 'name' and maps to database column 'name'
+  name             String    @map("name") @db.VarChar(255)
+  email            String    @unique
+  emailVerified    Boolean   @default(false) @map("email_verified")
+  image            String?
+
+  status           Status    @default(PENDING)
+  role             Role      @default(USER)
+
+  comments         ResourceComment[]
+  resources        Resource[]
+
+  sessions         Session[]
+  accounts         Account[]
+
+  @@map("users")
+}
+
+model Session {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  expiresAt        DateTime  @map("expires_at")
+  token            String    @unique
+  ipAddress        String?   @map("ip_address")
+  userAgent        String?   @map("user_agent")
+
+  userId           String    @map("user_id") @db.Uuid
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  accountId        String    @map("account_id")
+  providerId       String    @map("provider_id")
+
+  accessToken          String?   @map("access_token")
+  refreshToken         String?   @map("refresh_token")
+  idToken              String?   @map("id_token")
+  accessTokenExpiresAt DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                String?
+  password             String?
+
+  userId           String    @map("user_id") @db.Uuid
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  identifier       String
+  value            String
+  expiresAt        DateTime  @map("expires_at")
+
+  @@unique([identifier, value])
+  @@index([expiresAt])
+  @@map("verifications")
+}
+
+// ===========================
+// RESOURCES Model  ->  table: resources
+// ===========================
+model Resource {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  title          String     @db.VarChar(255)
+  designer       String?    @db.VarChar(255)
+  tagLine        String     @map("tag_line") @db.VarChar(500)
+
+  mainCategory   MainCategory @map("main_category")
+  category       String     @db.VarChar(255)
+  subCategory    String     @map("sub_category") @db.VarChar(255)
+
+  rating         Decimal    @default(0.0) @db.Decimal(2, 1)
+
+  logoUrl        String?    @map("logo_url")
+  imgUrls        String[]   @map("img_urls")
+  descriptions   String[]   @map("descriptions")
+  tags           String[]   @map("tags")
+  websiteUrl     String     @map("website_url")
+
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  pricing        Pricing
+  projectType    ProjectType @map("project_type")
+
+  isMobileFriendly Boolean @default(false) @map("is_mobile_friendly")
+  isFeatured       Boolean @default(false) @map("is_featured")
+
+  comments         ResourceComment[]
+
+  userId           String @map("user_id") @db.Uuid
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([mainCategory, category, subCategory], name: "resources_taxonomy_idx")
+  @@index([isFeatured], name: "resources_featured_idx")
+  @@index([pricing], name: "resources_pricing_idx")
+  @@map("resources")
+}
+
+// ===========================
+// RESOURCE COMMENTS Model  ->  table: resource_comments
+// ===========================
+model ResourceComment {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  resourceId String   @map("resource_id") @db.Uuid
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  userId     String   @map("user_id") @db.Uuid
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  comment    String
+  rating     Decimal  @db.Decimal(2, 1)
+  // Stored as DATE; now() is cast to date by Postgres
+  date       DateTime @default(now()) @db.Date
+
+  @@index([resourceId])
+  @@index([userId])
+  @@map("resource_comments")
+}
+
+// ===========================
+// NEWS UPDATE Model  ->  table: news_updates
+// ===========================
+model NewsUpdate {
+  // REVERTED: Using PostgreSQL native UUID generation as requested
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  title           String    @db.VarChar(255)
+  content         String
+  externalUrl     String?   @map("external_url")
+  sourceName      String?   @map("source_name") @db.VarChar(100)
+
+  mainCategory    MainCategory @map("main_category")
+  publicationDate DateTime? @map("publication_date")
+
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([mainCategory])
+  @@index([publicationDate(sort: Desc)])
+  @@map("news_updates")
+}
