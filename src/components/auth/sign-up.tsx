@@ -64,7 +64,8 @@ const SignUp = () => {
           },
           onSuccess: () => {
             setSuccess("User has been created");
-            router.replace("/");
+            // router.replace("/");
+            router.push("/profile");
           },
           onError: (ctx) => {
             setError(ctx.error.message);

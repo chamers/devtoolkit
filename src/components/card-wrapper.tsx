@@ -38,7 +38,11 @@ const CardWrapper = ({
       <CardContent>{children}</CardContent>
       {cardFooterLink && (
         <CardFooter className="flex items-center justify-center gap-x-1">
-          {cardFooterDescription && <span>{cardFooterDescription}</span>}
+          {cardFooterDescription && (
+            <span className="text-muted-foreground text-sm">
+              {cardFooterDescription}
+            </span>
+          )}
           <Link
             href={cardFooterLink}
             className="underline text-blue-500 hover:text-blue-700"

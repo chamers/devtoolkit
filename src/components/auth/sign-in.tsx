@@ -61,8 +61,9 @@ const SignIn = () => {
             setLoading(true);
           },
           onSuccess: (ctx) => {
-            setSuccess("Signed in successfully");
-            router.replace("/");
+            setSuccess("Signed in successfully. Good to have you back!");
+            // router.replace("/");
+            router.push("/profile");
           },
           onError: (ctx) => {
             setError(ctx.error.message);
