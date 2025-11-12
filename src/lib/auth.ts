@@ -14,6 +14,9 @@ export const auth = betterAuth({
     minPasswordLength: 8,
     maxPasswordLength: 20,
   },
+  session: {
+    expiresIn: 30 * 24 * 60 * 60, // 30 days
+  },
   advanced: {
     database: {
       generateId: false, // ← IMPORTANT: let Postgres/Prisma create UUIDs
