@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import prisma from "@/db";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
   appName: "DevToolkit",
@@ -18,4 +19,5 @@ export const auth = betterAuth({
       generateId: false, // ← IMPORTANT: let Postgres/Prisma create UUIDs
     },
   },
+  plugins: [nextCookies()],
 });

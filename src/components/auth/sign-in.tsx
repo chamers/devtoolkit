@@ -24,6 +24,7 @@ import { signIn } from "../../lib/auth-client";
 import { useRouter } from "next/navigation";
 import FormSuccess from "../form-success";
 import { SigninInput, SigninSchema } from "@/lib/validation/auth.schema";
+import { signInEmailAction } from "@/actions/sign-in-email.action";
 
 const SignIn = () => {
   const router = useRouter();
@@ -45,34 +46,29 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = async (values: SigninInput) => {
+  const onSubmit = async (values: z.infer<typeof SigninSchema>) => {
+    resetState();
+    setLoading(true);
     try {
-      await signIn.email(
-        {
-          email: values.email,
-          password: values.password,
-        },
-        {
-          onResponse: () => {
-            setLoading(false);
-          },
-          onRequest: () => {
-            resetState();
-            setLoading(true);
-          },
-          onSuccess: (ctx) => {
-            setSuccess("Signed in successfully. Good to have you back!");
-            // router.replace("/");
-            router.push("/profile");
-          },
-          onError: (ctx) => {
-            setError(ctx.error.message);
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
+      // Build FormData for the server action
+      const fd = new FormData();
+      fd.set("email", values.email);
+      fd.set("password", values.password);
+
+      const result = await signInEmailAction(fd);
+
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+
+      setSuccess("Signin successful! Good to have you back.");
+      router.push("/profile");
+    } catch (e) {
+      console.error(e);
       setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 

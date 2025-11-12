@@ -20,10 +20,11 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
-import { signUp } from "@/lib/auth-client";
+// import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import FormSuccess from "../form-success";
 import { SignupInput, SignupSchema } from "@/lib/validation/auth.schema";
+import { signUpEmailAction } from "@/actions/sign-up-email.action";
 
 const SignUp = () => {
   const router = useRouter();
@@ -46,35 +47,62 @@ const SignUp = () => {
     },
   });
 
+  // const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
+  //   try {
+  //     await signUp.email(
+  //       {
+  //         name: values.name,
+  //         email: values.email,
+  //         password: values.password,
+  //       },
+  //       {
+  //         onResponse: () => {
+  //           setLoading(false);
+  //         },
+  //         onRequest: () => {
+  //           resetState();
+  //           setLoading(true);
+  //         },
+  //         onSuccess: () => {
+  //           setSuccess("User has been created");
+  //           // router.replace("/");
+  //           router.push("/profile");
+  //         },
+  //         onError: (ctx) => {
+  //           setError(ctx.error.message);
+  //         },
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //     setError("Something went wrong");
+  //   }
+  // };
+
   const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
+    resetState();
+    setLoading(true);
     try {
-      await signUp.email(
-        {
-          name: values.name,
-          email: values.email,
-          password: values.password,
-        },
-        {
-          onResponse: () => {
-            setLoading(false);
-          },
-          onRequest: () => {
-            resetState();
-            setLoading(true);
-          },
-          onSuccess: () => {
-            setSuccess("User has been created");
-            // router.replace("/");
-            router.push("/profile");
-          },
-          onError: (ctx) => {
-            setError(ctx.error.message);
-          },
-        }
-      );
-    } catch (error) {
-      console.error(error);
+      // Build FormData for the server action
+      const fd = new FormData();
+      fd.set("name", values.name);
+      fd.set("email", values.email);
+      fd.set("password", values.password);
+
+      const result = await signUpEmailAction(fd);
+
+      if (result?.error) {
+        setError(result.error);
+        return;
+      }
+
+      setSuccess("User has been created");
+      router.push("/profile");
+    } catch (e) {
+      console.error(e);
       setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
