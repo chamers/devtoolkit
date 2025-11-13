@@ -47,38 +47,6 @@ const SignUp = () => {
     },
   });
 
-  // const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
-  //   try {
-  //     await signUp.email(
-  //       {
-  //         name: values.name,
-  //         email: values.email,
-  //         password: values.password,
-  //       },
-  //       {
-  //         onResponse: () => {
-  //           setLoading(false);
-  //         },
-  //         onRequest: () => {
-  //           resetState();
-  //           setLoading(true);
-  //         },
-  //         onSuccess: () => {
-  //           setSuccess("User has been created");
-  //           // router.replace("/");
-  //           router.push("/profile");
-  //         },
-  //         onError: (ctx) => {
-  //           setError(ctx.error.message);
-  //         },
-  //       }
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //     setError("Something went wrong");
-  //   }
-  // };
-
   const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
     resetState();
     setLoading(true);
@@ -91,8 +59,8 @@ const SignUp = () => {
 
       const result = await signUpEmailAction(fd);
 
-      if (result?.error) {
-        setError(result.error);
+      if (!result.ok) {
+        setError(result.message);
         return;
       }
 
@@ -100,7 +68,7 @@ const SignUp = () => {
       router.push("/profile");
     } catch (e) {
       console.error(e);
-      setError("Something went wrong");
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -110,9 +78,9 @@ const SignUp = () => {
     <CardWrapper
       cardTitle="SignUp"
       cardDescription="Create a new account"
-      cardFooterLink="/login"
+      cardFooterLink="/signin"
       cardFooterDescription="Already have an account?"
-      cardFooterLinkTitle="Login"
+      cardFooterLinkTitle="Sign In"
     >
       <Form {...form}>
         <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -173,7 +141,7 @@ const SignUp = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={loading} type="submit" className="w-full">
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>

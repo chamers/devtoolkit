@@ -60,7 +60,7 @@
   - Sign In User
 - Finish PART 1
 
-== PART 1 ==
+== PART 2 ==
 
 - Showcase `onRequest` and `onResponse`
 - Showcase Full Cycle Again
@@ -80,3 +80,56 @@
   - Showcase
   - Truncate Tables
 - Create User
+- Sign Up User via SERVER ACTIONS
+  - create Action
+  - Log Form Values
+  - Sign Up User on Server
+- Sign In User via SERVER ACTIONS PT1 **HERE HERE HERE**
+  - Create Action
+  - Log Form Values
+  - Sign IN User on Server
+  - Showcase - No Cookies
+  - Manually Set Cookies
+  - Showcase- Cookies
+- Get Additional Session Properties
+- PLUGINS - **nextCookies()**
+- FINISH PART2
+
+== PART 3 ==
+
+- Get Session on Client
+  - Create Get Started Button
+  - destructure useSession
+  - Showcase
+- OPTIONS - **session.expiresIn**
+  - Change to 15 seconds
+  - Showcase
+  - Change to 30 days
+- Middleware
+  - Check for existence of a session cookie
+  - Showcase on auth routes
+- Error Handling
+- Hooks
+  - Validate Email's domain
+  - Transform Name
+- FINISH PART3
+
+== PART 4 ==
+
+- Roles (Custom Method)
+- Prisma
+  - Add UserRole Enum
+  - Push changes `npx prisma db push`
+- User
+  - Show filed is added because of `@default`
+  - Truncate Tables
+  - Create new User
+- Profile PT1
+  - Show role is not typed in `session.user`
+- OPTIONS - **user.additionalFields**
+  - Showcase `input` option
+- Profile PT2
+  - Show role is now typed and added to `session.user`
+- ISSUE: Client Session has no Context of the Role
+  - Cute circle on `get-started-button.tsx`
+  - InferAdditionalFields plugin on Client

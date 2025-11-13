@@ -24,3 +24,5 @@ export const auth = betterAuth({
   },
   plugins: [nextCookies()],
 });
+
+export type ErrorCode = keyof typeof auth.$ERROR_CODES;

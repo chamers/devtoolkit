@@ -56,8 +56,8 @@ const SignIn = () => {
 
       const result = await signInEmailAction(fd);
 
-      if (result?.error) {
-        setError(result.error);
+      if (!result.ok) {
+        setError(result.message);
         return;
       }
 
@@ -120,7 +120,7 @@ const SignIn = () => {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={loading} type="submit" className="w-full">
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
       </Form>
