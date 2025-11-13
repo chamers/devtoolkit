@@ -133,3 +133,11 @@
 - ISSUE: Client Session has no Context of the Role
   - Cute circle on `get-started-button.tsx`
   - InferAdditionalFields plugin on Client
+- Admin Panel
+  - Create Page / Link
+  - Manually Change Role
+  - Update Middleware
+  - Guard `/admin/dashboard`
+  - List Users With Prisma Query
+  - Delete User With Prisma Query
+- Database Hooks
