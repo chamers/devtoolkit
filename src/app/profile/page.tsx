@@ -1,7 +1,10 @@
 import SignOut from "@/components/auth/sign-out";
 import ReturnButton from "@/components/return-button";
+import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
+
 import { headers } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
@@ -16,7 +19,15 @@ export default async function Page() {
         <ReturnButton href="/" label="Home" />
         <h1>Profile</h1>
       </div>
-      <SignOut />
+      <div className="flex items-center gap-2">
+        {session.user.role === "ADMIN" && (
+          <Button size="sm" asChild>
+            <Link href="/admin/dashboard">Admin Dashboard</Link>
+          </Button>
+        )}
+        <SignOut />
+      </div>
+
       <pre className="text-sm overflow-clip">
         {JSON.stringify(session, null, 2)}
       </pre>
