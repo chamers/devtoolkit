@@ -67,10 +67,10 @@ const Page = async () => {
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2 text-center">{user.role}</td>
                 <td className="px-4 py-2 text-center">
-                  {user.role === "ADMIN" || user.id === session.user.id ? (
-                    <PlaceholderDeleteUserButton />
-                  ) : (
+                  {user.role === "USER" ? (
                     <DeleteUserButton userId={user.id} />
+                  ) : (
+                    <PlaceholderDeleteUserButton />
                   )}
                 </td>
               </tr>

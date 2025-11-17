@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import prisma from "@/db";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { Role } from "@/generated/prisma";
 
 export const auth = betterAuth({
   appName: "DevToolkit",
@@ -13,6 +14,20 @@ export const auth = betterAuth({
     autoSignIn: false,
     minPasswordLength: 8,
     maxPasswordLength: 20,
+  },
+  hooks: {},
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") || [];
+          if (ADMIN_EMAILS.includes(user.email)) {
+            return { data: { ...user, role: Role.ADMIN } };
+          }
+          return { data: user };
+        },
+      },
+    },
   },
   user: {
     additionalFields: {

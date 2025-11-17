@@ -14,7 +14,7 @@ const GetStartedButton = () => {
     );
   }
 
-  const href = session ? "/profile" : "/auth/signin";
+  const href = session ? "/profile" : "/signin";
   return (
     <div className="flex flex-col items-center gap-4">
       <Button size="lg" asChild>
