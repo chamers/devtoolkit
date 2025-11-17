@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
-import prisma from "@/db";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { admin } from "better-auth/plugins";
+import prisma from "@/db";
 import { Role } from "@/generated/prisma";
+import { ac, roles } from "./permissions";
 
 export const auth = betterAuth({
   appName: "DevToolkit",
@@ -45,7 +47,15 @@ export const auth = betterAuth({
       generateId: false, // ← IMPORTANT: let Postgres/Prisma create UUIDs
     },
   },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    admin({
+      defaultRole: Role.USER,
+      adminRoles: [Role.ADMIN, Role.MODERATOR, Role.EDITOR], // admin, user
+      ac,
+      roles,
+    }),
+  ],
 });
 
 export type ErrorCode = keyof typeof auth.$ERROR_CODES;

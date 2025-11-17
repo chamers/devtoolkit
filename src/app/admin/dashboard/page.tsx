@@ -2,15 +2,16 @@ import ReturnButton from "@/components/return-button";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import prisma from "@/db";
+//import prisma from "@/db";
 import {
   DeleteUserButton,
   PlaceholderDeleteUserButton,
 } from "@/components/delete-user-button";
 
 const Page = async () => {
+  const headersList = await headers();
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headersList,
   });
   if (!session) redirect("/signin");
   if (session.user.role !== "ADMIN") {
@@ -30,10 +31,21 @@ const Page = async () => {
       </div>
     );
   }
-  const users = await prisma.user.findMany({
-    orderBy: {
-      name: "asc",
+  // const users = await prisma.user.findMany({
+  //   orderBy: {
+  //     name: "asc",
+  //   },
+  // });
+  const { users } = await auth.api.listUsers({
+    headers: headersList,
+    query: {
+      sortBy: "name",
     },
+  });
+  const sortedUsers = users.sort((a, b) => {
+    if (a.role === "ADMIN" && b.role !== "ADMIN") return -1;
+    if (a.role !== "ADMIN" && b.role === "ADMIN") return 1;
+    return 0;
   });
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
@@ -60,7 +72,7 @@ const Page = async () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {sortedUsers.map((user) => (
               <tr key={user.id} className="border-b text-sm text-left">
                 <td className="px-4 py-2">{user.id.slice(0, 8)}</td>
                 <td className="px-4 py-2">{user.name}</td>

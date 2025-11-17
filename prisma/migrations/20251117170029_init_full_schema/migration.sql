@@ -25,6 +25,9 @@ CREATE TABLE "users" (
     "image" TEXT,
     "status" "Status" NOT NULL DEFAULT 'pending',
     "role" "Role" NOT NULL DEFAULT 'user',
+    "banned" BOOLEAN DEFAULT false,
+    "banReason" TEXT,
+    "banExpires" TIMESTAMP(3),
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -38,6 +41,7 @@ CREATE TABLE "sessions" (
     "token" TEXT NOT NULL,
     "ip_address" TEXT,
     "user_agent" TEXT,
+    "impersonatedBy" TEXT,
     "user_id" UUID NOT NULL,
 
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
