@@ -7,6 +7,8 @@ import {
   DeleteUserButton,
   PlaceholderDeleteUserButton,
 } from "@/components/delete-user-button";
+import UserRoleSelect from "@/components/user-role-select";
+import { Role } from "@/generated/prisma/wasm";
 
 const Page = async () => {
   const headersList = await headers();
@@ -77,7 +79,9 @@ const Page = async () => {
                 <td className="px-4 py-2">{user.id.slice(0, 8)}</td>
                 <td className="px-4 py-2">{user.name}</td>
                 <td className="px-4 py-2">{user.email}</td>
-                <td className="px-4 py-2 text-center">{user.role}</td>
+                <td className="px-4 py-2 text-center">
+                  <UserRoleSelect userId={user.id} role={user.role as Role} />
+                </td>
                 <td className="px-4 py-2 text-center">
                   {user.role === "USER" ? (
                     <DeleteUserButton userId={user.id} />
