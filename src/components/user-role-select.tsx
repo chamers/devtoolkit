@@ -21,7 +21,8 @@ const UserRoleSelect = ({ userId, role }: UserRoleSelectProps) => {
         user: ["set-role"],
       },
     });
-    if (!chanChangeRole.data?.success)
+    console.log(chanChangeRole);
+    if (chanChangeRole.error)
       return toast.error("You do not have permission to change roles.");
     await admin.setRole({
       userId,
