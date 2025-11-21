@@ -141,3 +141,12 @@
   - List Users With Prisma Query
   - Delete User With Prisma Query
 - Database Hooks
+
+== PART 5 ==
+
+- Google OAuth
+  - Create Buttons
+- Github OAuth
+- Account Linking
+- Error Handling
+  - `/auth/login/error`

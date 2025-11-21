@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import FormSuccess from "../form-success";
 import { SignupInput, SignupSchema } from "@/lib/validation/auth.schema";
 import { signUpEmailAction } from "@/actions/sign-up-email.action";
+import SignInOauthButton from "../sign-in-oauth-button";
 
 const SignUp = () => {
   const router = useRouter();
@@ -143,6 +144,11 @@ const SignUp = () => {
           <Button disabled={loading} type="submit" className="w-full">
             {loading ? "Submitting..." : "Submit"}
           </Button>
+          <div className="flex flex-col max-w-sm gap-4">
+            <hr className="max-w-sm" />
+            <SignInOauthButton signUp provider="google" />
+            <SignInOauthButton signUp provider="github" />
+          </div>
         </form>
       </Form>
     </CardWrapper>
