@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import { Toaster } from "@/components/ui/sonner";
+
+import Providers from "./providers";
 
 const poppins = localFont({
   src: [
@@ -96,8 +97,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${poppins.className} ${crimsonPro.variable} ${robotMono.variable} ${robotoCondensed.variable} ${GaramondItalic.variable} ${caveat.variable} bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-50`}
       >
-        {children}
-        <Toaster position="top-center" richColors />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

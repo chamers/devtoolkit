@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Color tokens bridged to your app-level CSS variables (from original) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -35,86 +36,204 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+
+  /* Radii helpers (from original) */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
   /* Typography (variables provided by next/font in layout.tsx) */
-  --font-sans: var(--font-sans);
+  /* kept from your original + matches second file */
+  --font-sans: var(--font-sans); /* ← from your original file (kept) */
   --font-serif-regular: var(--serif-regular);
   --font-serif-italic: var(--serif-italic);
   --font-mono: var(--font-mono);
   --font-condensed: var(--font-condensed);
   --font-handwriting: var(--font-hand);
+
+  /* -------------------------------------------------------------------------
+     Utility colors used for categories
+  ------------------------------------------------------------------------- */
+  --color-green-vogue: oklch(0.292 0.0841 252.89);
+  --color-ice-berg: oklch(0.9288 0.0214 223.01);
+  --color-tiara: oklch(0.8413 0.0155 207.1);
+  --color-tiara-light: oklch(95.899% 0.00951 222.558);
+  --color-tangaroa: oklch(0.2364 0.0816 259.61);
+  --color-deep-cove: oklch(0.2004 0.0674 261.15);
+  --color-fuchsia-gem: oklch(0.5356 0.2253 335.66);
+  --color-fuchsia-gem-10: oklch(0.5356 0.2253 335.66 / 0.1);
+  --color-fuchsia-gem-50: oklch(0.5356 0.2253 335.66 / 0.5);
+  --color-soft-amber: oklch(0.6343 0.1924 41.18);
+  --color-soft-amber-10: oklch(0.6343 0.1924 41.18 / 0.1);
+  --color-soft-amber-50: oklch(0.6343 0.1924 41.18 / 0.5);
+  --color-catalina-blue: oklch(0.3643 0.1213 256.27);
+  --color-comet: oklch(0.5055 0.0395 270.52);
+  --color-deep-blush: oklch(0.6928 0.1512 14.24);
+  --color-deep-blush-10: oklch(0.6928 0.1512 14.24 / 0.1);
+  --color-deep-blush-50: oklch(0.6928 0.1512 14.24 / 0.5);
+  --color-waterloo: oklch(0.6122 0.026 264.36);
+  --color-santas-gray: oklch(0.6915 0.0252 264.4);
 }
 
 :root {
-  --radius: 0.625rem;
+  /* UPDATED color system (from second file) */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.795 0.184 86.047);
+  --primary-foreground: oklch(0.421 0.095 57.708);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.795 0.184 86.047);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.795 0.184 86.047);
+  --sidebar-primary-foreground: oklch(0.421 0.095 57.708);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.795 0.184 86.047);
+
+  /* ADDED aliases used by some components (from second file) */
+  --bg: var(--background);
+  --fg: var(--foreground);
+
+  /* -------------------------------------------------------------------------
+     ADDED: Category variables (for bg-/bt-/text- utilities)
+     from second globals.css
+  ------------------------------------------------------------------------- */
+  /* Top-level categories */
+  --cat-development: var(--color-catalina-blue);
+  --cat-design: var(--color-fuchsia-gem);
+  --cat-architecture-3d: var(--color-green-vogue);
+  --cat-content-writing: var(--color-deep-blush);
+  --cat-marketing-analytics: var(--color-soft-amber);
+  --cat-video-audio: var(--color-tangaroa);
+  --cat-productivity: var(--color-waterloo);
+  --cat-education-elearning: var(--color-tiara);
+
+  /* Second-level (taxonomy) */
+  --cat-frontend: var(--color-deep-blush);
+  --cat-backend: var(--color-catalina-blue);
+  --cat-devops: var(--color-deep-cove);
+  --cat-fullstack: var(--color-tangaroa);
+  --cat-aiml: var(--color-fuchsia-gem);
+  --cat-mobile: var(--color-soft-amber);
+  --cat-data-analytics-eng: var(--color-waterloo);
+
+  --cat-uiux-design: var(--color-soft-amber);
+  --cat-graphic-design: var(--color-fuchsia-gem);
+  --cat-branding: var(--color-deep-blush);
+  --cat-3d-motion: var(--color-catalina-blue);
+
+  --cat-cad-bim: var(--color-tiara);
+  --cat-visualization: var(--color-soft-amber);
+  --cat-project-management-arch: var(--color-deep-cove);
+
+  --cat-copywriting: var(--color-deep-blush);
+  --cat-technical-writing: var(--color-tangaroa);
+  --cat-blogging-seo: var(--color-soft-amber);
+
+  --cat-seo-analytics: var(--color-soft-amber);
+  --cat-social-media: var(--color-fuchsia-gem);
+  --cat-automation-mktg: var(--color-green-vogue);
+  --cat-research-mktg: var(--color-catalina-blue);
+
+  --cat-video-editing: var(--color-tangaroa);
+  --cat-motion-vfx: var(--color-catalina-blue);
+  --cat-filmmaking: var(--color-deep-cove);
+  --cat-audio-production: var(--color-deep-blush);
+  --cat-color: var(--color-soft-amber);
+  --cat-delivery: var(--color-waterloo);
+  --cat-ai-media: var(--color-fuchsia-gem);
+  --cat-assets: var(--color-tiara);
+
+  --cat-knowledge-management: var(--color-waterloo);
+  --cat-project-management: var(--color-catalina-blue);
+  --cat-collaboration: var(--color-tiara);
+  --cat-automation: var(--color-green-vogue);
+  --cat-browsing-research: var(--color-santas-gray);
+  --cat-writing-aids: var(--color-deep-blush);
+
+  --cat-course-platforms: var(--color-tiara);
+  --cat-authoring: var(--color-soft-amber);
+  --cat-assessment: var(--color-catalina-blue);
+  --cat-classroom-tools: var(--color-waterloo);
+  --cat-certification: var(--color-deep-cove);
+  --cat-tutoring-ai-assistants: var(--color-fuchsia-gem);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.795 0.184 86.047);
+  --primary-foreground: oklch(0.421 0.095 57.708);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
+  --ring: oklch(0.554 0.135 66.442);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.795 0.184 86.047);
+  --sidebar-primary-foreground: oklch(0.421 0.095 57.708);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --sidebar-ring: oklch(0.554 0.135 66.442);
+
+  /* ADDED aliases (from second file) */
+  --bg: var(--background);
+  --fg: var(--foreground);
+}
+
+/* -----------------------------------------------------------------------------
+   ADDED: Animation tokens (from second globals.css)
+----------------------------------------------------------------------------- */
+@theme {
+  --animate-fade-in: fade-in 0.5s ease-out forwards;
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @layer base {
@@ -122,11 +241,11 @@
     @apply border-border outline-ring/50;
   }
   html {
-    @apply scroll-smooth;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    @apply scroll-smooth; /* from your original file */
+    transition: background-color 0.3s ease, color 0.3s ease; /* from original+second */
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased; /* original body + new tokens */
   }
   h1 {
     @apply text-5xl md:text-6xl lg:text-7xl font-serif-regular;
@@ -137,11 +256,1023 @@
   h3 {
     @apply text-2xl font-medium;
   }
+
+  /* Kept from your original base layer */
   p {
     @apply font-sans text-base leading-relaxed text-gray-800 
          sm:text-lg md:text-xl lg:text-2xl;
   }
   blockquote {
     @apply font-handwriting text-lg italic text-gray-600;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   ADDED: Category utilities (bg- / bt- / text-) from second globals.css
+----------------------------------------------------------------------------- */
+@layer utilities {
+  .menu-slide-in {
+    animation: slideIn 220ms ease-out forwards;
+  }
+
+  .menu-slide-out {
+    animation: slideOut 220ms ease-in forwards;
+  }
+
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOut {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+  }
+
+  @keyframes subtle-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px); /* small bounce */
+    }
+  }
+
+  .animate-subtle-bounce {
+    animation: subtle-bounce 2s ease-in-out infinite;
+  }
+
+  /* === Top-level === */
+  .bg-development {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-development) 10%,
+      transparent
+    );
+  }
+  .bt-development {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-development) 50%,
+      transparent
+    );
+  }
+  .text-development {
+    color: var(--cat-development);
+  }
+
+  .bg-design {
+    background-color: color-mix(in oklab, var(--cat-design) 10%, transparent);
+  }
+  .bt-design {
+    background-color: color-mix(in oklab, var(--cat-design) 50%, transparent);
+  }
+  .text-design {
+    color: var(--cat-design);
+  }
+
+  .bg-architecture-3d {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-architecture-3d) 10%,
+      transparent
+    );
+  }
+  .bt-architecture-3d {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-architecture-3d) 50%,
+      transparent
+    );
+  }
+  .text-architecture-3d {
+    color: var(--cat-architecture-3d);
+  }
+
+  .bg-content-writing {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-content-writing) 10%,
+      transparent
+    );
+  }
+  .bt-content-writing {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-content-writing) 50%,
+      transparent
+    );
+  }
+  .text-content-writing {
+    color: var(--cat-content-writing);
+  }
+
+  .bg-marketing-analytics {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-marketing-analytics) 10%,
+      transparent
+    );
+  }
+  .bt-marketing-analytics {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-marketing-analytics) 50%,
+      transparent
+    );
+  }
+  .text-marketing-analytics {
+    color: var(--cat-marketing-analytics);
+  }
+
+  .bg-video-audio {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-video-audio) 10%,
+      transparent
+    );
+  }
+  .bt-video-audio {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-video-audio) 50%,
+      transparent
+    );
+  }
+  .text-video-audio {
+    color: var(--cat-video-audio);
+  }
+
+  .bg-productivity {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-productivity) 10%,
+      transparent
+    );
+  }
+  .bt-productivity {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-productivity) 50%,
+      transparent
+    );
+  }
+  .text-productivity {
+    color: var(--cat-productivity);
+  }
+
+  .bg-education-elearning {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-education-elearning) 10%,
+      transparent
+    );
+  }
+  .bt-education-elearning {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-education-elearning) 50%,
+      transparent
+    );
+  }
+  .text-education-elearning {
+    color: var(--cat-education-elearning);
+  }
+
+  /* === Development subcats === */
+  .bg-frontend {
+    background-color: color-mix(in oklab, var(--cat-frontend) 10%, transparent);
+  }
+  .bt-frontend {
+    background-color: color-mix(in oklab, var(--cat-frontend) 50%, transparent);
+  }
+  .text-frontend {
+    color: var(--cat-frontend);
+  }
+
+  .bg-backend {
+    background-color: color-mix(in oklab, var(--cat-backend) 10%, transparent);
+  }
+  .bt-backend {
+    background-color: color-mix(in oklab, var(--cat-backend) 50%, transparent);
+  }
+  .text-backend {
+    color: var(--cat-backend);
+  }
+
+  .bg-devops {
+    background-color: color-mix(in oklab, var(--cat-devops) 10%, transparent);
+  }
+  .bt-devops {
+    background-color: color-mix(in oklab, var(--cat-devops) 50%, transparent);
+  }
+  .text-devops {
+    color: var(--cat-devops);
+  }
+
+  .bg-fullstack {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-fullstack) 10%,
+      transparent
+    );
+  }
+  .bt-fullstack {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-fullstack) 50%,
+      transparent
+    );
+  }
+  .text-fullstack {
+    color: var(--cat-fullstack);
+  }
+
+  .bg-aiml {
+    background-color: color-mix(in oklab, var(--cat-aiml) 10%, transparent);
+  }
+  .bt-aiml {
+    background-color: color-mix(in oklab, var(--cat-aiml) 50%, transparent);
+  }
+  .text-aiml {
+    color: var(--cat-aiml);
+  }
+
+  .bg-mobile {
+    background-color: color-mix(in oklab, var(--cat-mobile) 10%, transparent);
+  }
+  .bt-mobile {
+    background-color: color-mix(in oklab, var(--cat-mobile) 50%, transparent);
+  }
+  .text-mobile {
+    color: var(--cat-mobile);
+  }
+
+  .bg-data-analytics-eng {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-data-analytics-eng) 10%,
+      transparent
+    );
+  }
+  .bt-data-analytics-eng {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-data-analytics-eng) 50%,
+      transparent
+    );
+  }
+  .text-data-analytics-eng {
+    color: var(--cat-data-analytics-eng);
+  }
+
+  /* === Design subcats === */
+  .bg-uiux-design {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-uiux-design) 10%,
+      transparent
+    );
+  }
+  .bt-uiux-design {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-uiux-design) 50%,
+      transparent
+    );
+  }
+  .text-uiux-design {
+    color: var(--cat-uiux-design);
+  }
+
+  .bg-graphic-design {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-graphic-design) 10%,
+      transparent
+    );
+  }
+  .bt-graphic-design {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-graphic-design) 50%,
+      transparent
+    );
+  }
+  .text-graphic-design {
+    color: var(--cat-graphic-design);
+  }
+
+  .bg-branding {
+    background-color: color-mix(in oklab, var(--cat-branding) 10%, transparent);
+  }
+  .bt-branding {
+    background-color: color-mix(in oklab, var(--cat-branding) 50%, transparent);
+  }
+  .text-branding {
+    color: var(--cat-branding);
+  }
+
+  .bg-3d-motion {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-3d-motion) 10%,
+      transparent
+    );
+  }
+  .bt-3d-motion {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-3d-motion) 50%,
+      transparent
+    );
+  }
+  .text-3d-motion {
+    color: var(--cat-3d-motion);
+  }
+
+  /* === Architecture / 3D subcats === */
+  .bg-cad-bim {
+    background-color: color-mix(in oklab, var(--cat-cad-bim) 10%, transparent);
+  }
+  .bt-cad-bim {
+    background-color: color-mix(in oklab, var(--cat-cad-bim) 50%, transparent);
+  }
+  .text-cad-bim {
+    color: var(--cat-cad-bim);
+  }
+
+  .bg-visualization {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-visualization) 10%,
+      transparent
+    );
+  }
+  .bt-visualization {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-visualization) 50%,
+      transparent
+    );
+  }
+  .text-visualization {
+    color: var(--cat-visualization);
+  }
+
+  .bg-project-management-arch {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-project-management-arch) 10%,
+      transparent
+    );
+  }
+  .bt-project-management-arch {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-project-management-arch) 50%,
+      transparent
+    );
+  }
+  .text-project-management-arch {
+    color: var(--cat-project-management-arch);
+  }
+
+  /* === Content & Writing subcats === */
+  .bg-copywriting {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-copywriting) 10%,
+      transparent
+    );
+  }
+  .bt-copywriting {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-copywriting) 50%,
+      transparent
+    );
+  }
+  .text-copywriting {
+    color: var(--cat-copywriting);
+  }
+
+  .bg-technical-writing {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-technical-writing) 10%,
+      transparent
+    );
+  }
+  .bt-technical-writing {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-technical-writing) 50%,
+      transparent
+    );
+  }
+  .text-technical-writing {
+    color: var(--cat-technical-writing);
+  }
+
+  .bg-blogging-seo {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-blogging-seo) 10%,
+      transparent
+    );
+  }
+  .bt-blogging-seo {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-blogging-seo) 50%,
+      transparent
+    );
+  }
+  .text-blogging-seo {
+    color: var(--cat-blogging-seo);
+  }
+
+  /* === Marketing & Analytics subcats === */
+  .bg-seo-analytics {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-seo-analytics) 10%,
+      transparent
+    );
+  }
+  .bt-seo-analytics {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-seo-analytics) 50%,
+      transparent
+    );
+  }
+  .text-seo-analytics {
+    color: var(--cat-seo-analytics);
+  }
+
+  .bg-social-media {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-social-media) 10%,
+      transparent
+    );
+  }
+  .bt-social-media {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-social-media) 50%,
+      transparent
+    );
+  }
+  .text-social-media {
+    color: var(--cat-social-media);
+  }
+
+  .bg-automation-mktg {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-automation-mktg) 10%,
+      transparent
+    );
+  }
+  .bt-automation-mktg {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-automation-mktg) 50%,
+      transparent
+    );
+  }
+  .text-automation-mktg {
+    color: var(--cat-automation-mktg);
+  }
+
+  .bg-research-mktg {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-research-mktg) 10%,
+      transparent
+    );
+  }
+  .bt-research-mktg {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-research-mktg) 50%,
+      transparent
+    );
+  }
+  .text-research-mktg {
+    color: var(--cat-research-mktg);
+  }
+
+  /* === Video & Audio subcats === */
+  .bg-video-editing {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-video-editing) 10%,
+      transparent
+    );
+  }
+  .bt-video-editing {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-video-editing) 50%,
+      transparent
+    );
+  }
+  .text-video-editing {
+    color: var(--cat-video-editing);
+  }
+
+  .bg-motion-vfx {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-motion-vfx) 10%,
+      transparent
+    );
+  }
+  .bt-motion-vfx {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-motion-vfx) 50%,
+      transparent
+    );
+  }
+  .text-motion-vfx {
+    color: var(--cat-motion-vfx);
+  }
+
+  .bg-filmmaking {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-filmmaking) 10%,
+      transparent
+    );
+  }
+  .bt-filmmaking {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-filmmaking) 50%,
+      transparent
+    );
+  }
+  .text-filmmaking {
+    color: var(--cat-filmmaking);
+  }
+
+  .bg-audio-production {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-audio-production) 10%,
+      transparent
+    );
+  }
+  .bt-audio-production {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-audio-production) 50%,
+      transparent
+    );
+  }
+  .text-audio-production {
+    color: var(--cat-audio-production);
+  }
+
+  .bg-color {
+    background-color: color-mix(in oklab, var(--cat-color) 10%, transparent);
+  }
+  .bt-color {
+    background-color: color-mix(in oklab, var(--cat-color) 50%, transparent);
+  }
+  .text-color {
+    color: var(--cat-color);
+  }
+
+  .bg-delivery {
+    background-color: color-mix(in oklab, var(--cat-delivery) 10%, transparent);
+  }
+  .bt-delivery {
+    background-color: color-mix(in oklab, var(--cat-delivery) 50%, transparent);
+  }
+  .text-delivery {
+    color: var(--cat-delivery);
+  }
+
+  .bg-ai-media {
+    background-color: color-mix(in oklab, var(--cat-ai-media) 10%, transparent);
+  }
+  .bt-ai-media {
+    background-color: color-mix(in oklab, var(--cat-ai-media) 50%, transparent);
+  }
+  .text-ai-media {
+    color: var(--cat-ai-media);
+  }
+
+  .bg-assets {
+    background-color: color-mix(in oklab, var(--cat-assets) 10%, transparent);
+  }
+  .bt-assets {
+    background-color: color-mix(in oklab, var(--cat-assets) 50%, transparent);
+  }
+  .text-assets {
+    color: var(--cat-assets);
+  }
+
+  /* === Productivity subcats === */
+  .bg-knowledge-management {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-knowledge-management) 10%,
+      transparent
+    );
+  }
+  .bt-knowledge-management {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-knowledge-management) 50%,
+      transparent
+    );
+  }
+  .text-knowledge-management {
+    color: var(--cat-knowledge-management);
+  }
+
+  .bg-project-management {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-project-management) 10%,
+      transparent
+    );
+  }
+  .bt-project-management {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-project-management) 50%,
+      transparent
+    );
+  }
+  .text-project-management {
+    color: var(--cat-project-management);
+  }
+
+  .bg-collaboration {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-collaboration) 10%,
+      transparent
+    );
+  }
+  .bt-collaboration {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-collaboration) 50%,
+      transparent
+    );
+  }
+  .text-collaboration {
+    color: var(--cat-collaboration);
+  }
+
+  .bg-automation {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-automation) 10%,
+      transparent
+    );
+  }
+  .bt-automation {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-automation) 50%,
+      transparent
+    );
+  }
+  .text-automation {
+    color: var(--cat-automation);
+  }
+
+  .bg-browsing-research {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-browsing-research) 10%,
+      transparent
+    );
+  }
+  .bt-browsing-research {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-browsing-research) 50%,
+      transparent
+    );
+  }
+  .text-browsing-research {
+    color: var(--cat-browsing-research);
+  }
+
+  .bg-writing-aids {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-writing-aids) 10%,
+      transparent
+    );
+  }
+  .bt-writing-aids {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-writing-aids) 50%,
+      transparent
+    );
+  }
+  .text-writing-aids {
+    color: var(--cat-writing-aids);
+  }
+
+  /* === Education & E-Learning subcats === */
+  .bg-course-platforms {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-course-platforms) 10%,
+      transparent
+    );
+  }
+  .bt-course-platforms {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-course-platforms) 50%,
+      transparent
+    );
+  }
+  .text-course-platforms {
+    color: var(--cat-course-platforms);
+  }
+
+  .bg-authoring {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-authoring) 10%,
+      transparent
+    );
+  }
+  .bt-authoring {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-authoring) 50%,
+      transparent
+    );
+  }
+  .text-authoring {
+    color: var(--cat-authoring);
+  }
+
+  .bg-assessment {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-assessment) 10%,
+      transparent
+    );
+  }
+  .bt-assessment {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-assessment) 50%,
+      transparent
+    );
+  }
+  .text-assessment {
+    color: var(--cat-assessment);
+  }
+
+  .bg-classroom-tools {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-classroom-tools) 10%,
+      transparent
+    );
+  }
+  .bt-classroom-tools {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-classroom-tools) 50%,
+      transparent
+    );
+  }
+  .text-classroom-tools {
+    color: var(--cat-classroom-tools);
+  }
+
+  .bg-certification {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-certification) 10%,
+      transparent
+    );
+  }
+  .bt-certification {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-certification) 50%,
+      transparent
+    );
+  }
+  .text-certification {
+    color: var(--cat-certification);
+  }
+
+  .bg-tutoring-ai-assistants {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-tutoring-ai-assistants) 10%,
+      transparent
+    );
+  }
+  .bt-tutoring-ai-assistants {
+    background-color: color-mix(
+      in oklab,
+      var(--cat-tutoring-ai-assistants) 50%,
+      transparent
+    );
+  }
+  .text-tutoring-ai-assistants {
+    color: var(--cat-tutoring-ai-assistants);
+  }
+
+  /* === Leaf tags (kept from second file) === */
+  .bg-html {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 10%,
+      transparent
+    );
+  }
+  .bt-html {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 50%,
+      transparent
+    );
+  }
+  .text-html {
+    color: var(--color-fuchsia-gem);
+  }
+
+  .bg-css {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 10%,
+      transparent
+    );
+  }
+  .bt-css {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 50%,
+      transparent
+    );
+  }
+  .text-css {
+    color: var(--color-soft-amber);
+  }
+
+  .bg-javascript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 10%,
+      transparent
+    );
+  }
+  .bt-javascript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 50%,
+      transparent
+    );
+  }
+  .text-javascript {
+    color: var(--color-fuchsia-gem);
+  }
+
+  .bg-typescript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-blush) 10%,
+      transparent
+    );
+  }
+  .bt-typescript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-blush) 50%,
+      transparent
+    );
+  }
+  .text-typescript {
+    color: var(--color-deep-blush);
+  }
+
+  .bg-frameworks {
+    background-color: color-mix(
+      in oklab,
+      var(--color-tangaroa) 10%,
+      transparent
+    );
+  }
+  .bt-frameworks {
+    background-color: color-mix(
+      in oklab,
+      var(--color-tangaroa) 50%,
+      transparent
+    );
+  }
+  .text-frameworks {
+    color: var(--color-tangaroa);
+  }
+
+  .bg-accessibility {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 10%,
+      transparent
+    );
+  }
+  .bt-accessibility {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 50%,
+      transparent
+    );
+  }
+  .text-accessibility {
+    color: var(--color-soft-amber);
+  }
+
+  .bg-apis {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 10%,
+      transparent
+    );
+  }
+  .bt-apis {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 50%,
+      transparent
+    );
+  }
+  .text-apis {
+    color: var(--color-soft-amber);
+  }
+
+  .bg-versioncontrol {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-cove) 10%,
+      transparent
+    );
+  }
+  .bt-versioncontrol {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-cove) 50%,
+      transparent
+    );
+  }
+  .text-versioncontrol {
+    color: var(--color-deep-cove);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   ADDED: Resource image size utilities (from second globals.css)
+----------------------------------------------------------------------------- */
+@layer utilities {
+  .resource-image_extra_small {
+    @apply w-[28.95px] h-[28.95px];
+  }
+  .resource-image_small {
+    @apply w-[55px] h-[55px];
+  }
+  .resource-image_medium {
+    @apply w-[144px] h-[144px];
+  }
+  .resource-image_regular {
+    @apply w-[174px] h-[174px];
+  }
+  .resource-image_wide {
+    @apply w-[296px] h-[296px];
   }
 }

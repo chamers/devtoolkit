@@ -150,3 +150,22 @@
 - Account Linking
 - Error Handling
   - `/auth/login/error`
+
+== PART 6 ==
+
+- Nodemailer
+  - Create Template
+- Verify Email
+  - `emailAndPassword.requireEmailVerification`
+  - `emailVerification`
+  - Handle Error / Expired `/auth/verify`
+  - Destructure sendVerificationEmail
+  - Handle Signin Page Not Verified
+- Create Resource Sing Up Page
+  - Show case
+- Forgot Password
+  - Page / Form / Success
+- Reset Password
+  - Page / Form / Success
+  - Showcase
+- FINISH PART 6
