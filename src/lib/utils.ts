@@ -24,3 +24,11 @@ export function getInitials(input: string): string {
   // take first letter of first two words (e.g., "chris hamers" -> "CH")
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
+
+export function slugifyCategory(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "") // keep letters, numbers, spaces, and hyphens
+    .trim()
+    .replace(/\s+/g, "-"); // replace spaces with hyphens
+}
