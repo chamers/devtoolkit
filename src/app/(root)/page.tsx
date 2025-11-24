@@ -1,5 +1,6 @@
 import SignOut from "@/components/auth/sign-out";
 import GetStartedButton from "@/components/get-started-button";
+import ResourceList from "@/components/resource-list";
 import ResourceOverview from "@/components/resource-overview";
 import prisma from "@/db";
 import { ResourceFull } from "@/lib/validation/resource.schema";
@@ -22,6 +23,11 @@ const LandingPage = async () => {
         <h1>Welcome to DevToolkit</h1>
         <GetStartedButton />
         <ResourceOverview {...firstResource} />
+        <ResourceList
+          title="Latest Resources"
+          resources={latestResources.slice(1)}
+          containerClassName="my-10 flex flex-col "
+        />
       </div>
     </div>
   );

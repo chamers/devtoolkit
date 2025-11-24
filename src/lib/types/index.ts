@@ -41,6 +41,6 @@ export {
 import type { Prisma } from "@prisma/client";
 
 //export type DBUser = Prisma.UserGetPayload<{}>;
-export type DBResource = Prisma.ResourceGetPayload<{}>;
+//export type DBResource = Prisma.ResourceGetPayload<{}>;
 //export type DBResourceComment = Prisma.ResourceCommentGetPayload<{}>;
 //export type DBNewsUpdate = Prisma.NewsUpdateGetPayload<{}>;
