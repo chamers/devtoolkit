@@ -18,7 +18,7 @@ const LandingPage = async () => {
   }));
   const firstResource = latestResources[0];
   return (
-    <div className="flex items-center justify-center h-dvh">
+    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
       <div className="flex justify-center gap-8 flex-col items-center">
         <h1>Welcome to DevToolkit</h1>
         <GetStartedButton />

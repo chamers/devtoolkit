@@ -82,8 +82,8 @@ export default function ResourceOverview(props: Props) {
                     </div>
                   )}
 
-                  <h1 className="flex-grow min-w-0">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-sys-light-prim via-amber-400 to-amber-600">
+                  <h1 className="grow min-w-0">
+                    <span className="bg-clip-text text-transparent bg-linear-to-r from-orange-sys-light-prim via-amber-400 to-amber-600">
                       {title}
                     </span>
                   </h1>
