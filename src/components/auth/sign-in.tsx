@@ -74,14 +74,17 @@ const SignIn = () => {
 
   return (
     <CardWrapper
-      cardTitle="Sign In"
+      cardTitle="Welcome back to DevToolkit"
       cardDescription="Enter your email below to login to your account"
-      cardFooterDescription="Don't have an account?"
+      cardFooterDescription="New to DevToolkit?"
       cardFooterLink="/signup"
-      cardFooterLinkTitle="Sign up"
+      cardFooterLinkTitle="Create an account"
     >
       <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className="space-y-4 mx-auto w-full max-w-2/3"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormField
             control={form.control}
             name="email"

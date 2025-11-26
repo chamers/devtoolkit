@@ -77,8 +77,8 @@ const SignUp = () => {
 
   return (
     <CardWrapper
-      cardTitle="SignUp"
-      cardDescription="Create a new account"
+      cardTitle="Create your account"
+      cardDescription="Please complete the form to create an account"
       cardFooterLink="/signin"
       cardFooterDescription="Already have an account?"
       cardFooterLinkTitle="Sign In"

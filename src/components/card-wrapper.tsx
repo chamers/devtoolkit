@@ -1,5 +1,6 @@
 // src/components/card-wrapper.tsx
 import React from "react";
+import ReturnButton from "@/components/return-button";
 import {
   Card,
   CardContent,
@@ -30,28 +31,43 @@ const CardWrapper = ({
   className = "",
 }: CardWrapperType) => {
   return (
-    <Card className={`w-[400px] relative ${className}`}>
-      <CardHeader>
-        <CardTitle>{cardTitle}</CardTitle>
-        <CardDescription>{cardDescription}</CardDescription>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-      {cardFooterLink && (
-        <CardFooter className="flex items-center justify-center gap-x-1">
-          {cardFooterDescription && (
-            <span className="text-muted-foreground text-sm">
-              {cardFooterDescription}
-            </span>
-          )}
-          <Link
-            href={cardFooterLink}
-            className="underline text-blue-500 hover:text-blue-700"
+    <>
+      {/* Return button – natural width, left aligned */}
+      <div className="w-full flex justify-start mb-2">
+        <ReturnButton href="/" label="Home" />
+      </div>
+      <Card
+        className={`w-[400px] relative bg-transparent border-none  ${className}`}
+      >
+        <CardHeader>
+          <CardTitle
+            className="text-2xl 
+            font-semibold 
+            text-slate-900 
+            text-center"
           >
-            {cardFooterLinkTitle}
-          </Link>
-        </CardFooter>
-      )}
-    </Card>
+            {cardTitle}
+          </CardTitle>
+          <CardDescription className="font-handwriting text-2xl text-blue-100 text-center">
+            {cardDescription}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>{children}</CardContent>
+        {cardFooterLink && (
+          <CardFooter className="flex items-center justify-center gap-x-1">
+            {cardFooterDescription && (
+              <span className="text-sm">{cardFooterDescription}</span>
+            )}
+            <Link
+              href={cardFooterLink}
+              className="text-sm text-blue-100 hover:text-blue-200 transition-colors"
+            >
+              {cardFooterLinkTitle}
+            </Link>
+          </CardFooter>
+        )}
+      </Card>
+    </>
   );
 };
 

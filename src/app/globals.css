@@ -38,6 +38,7 @@
   --color-card: var(--card);
 
   /* Radii helpers (from original) */
+  --radius: 0.75rem; /* base radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -333,6 +334,9 @@
   .text-development {
     color: var(--cat-development);
   }
+  .cat-development {
+    --cat-color: var(--cat-development);
+  }
 
   .bg-design {
     background-color: color-mix(in oklab, var(--cat-design) 10%, transparent);
@@ -342,6 +346,9 @@
   }
   .text-design {
     color: var(--cat-design);
+  }
+  .cat-design {
+    --cat-color: var(--cat-design);
   }
 
   .bg-architecture-3d {
@@ -361,6 +368,9 @@
   .text-architecture-3d {
     color: var(--cat-architecture-3d);
   }
+  .cat-architecture-3d {
+    --cat-color: var(--cat-architecture-3d);
+  }
 
   .bg-content-writing {
     background-color: color-mix(
@@ -378,6 +388,9 @@
   }
   .text-content-writing {
     color: var(--cat-content-writing);
+  }
+  .cat-content-writing {
+    --cat-color: var(--cat-content-writing);
   }
 
   .bg-marketing-analytics {
@@ -397,6 +410,9 @@
   .text-marketing-analytics {
     color: var(--cat-marketing-analytics);
   }
+  .cat-marketing-analytics {
+    --cat-color: var(--cat-marketing-analytics);
+  }
 
   .bg-video-audio {
     background-color: color-mix(
@@ -414,6 +430,9 @@
   }
   .text-video-audio {
     color: var(--cat-video-audio);
+  }
+  .cat-video-audio {
+    --cat-color: var(--cat-video-audio);
   }
 
   .bg-productivity {
@@ -433,6 +452,9 @@
   .text-productivity {
     color: var(--cat-productivity);
   }
+  .cat-productivity {
+    --cat-color: var(--cat-productivity);
+  }
 
   .bg-education-elearning {
     background-color: color-mix(
@@ -451,6 +473,9 @@
   .text-education-elearning {
     color: var(--cat-education-elearning);
   }
+  .cat-education-elearning {
+    --cat-color: var(--cat-education-elearning);
+  }
 
   /* === Development subcats === */
   .bg-frontend {
@@ -462,6 +487,9 @@
   .text-frontend {
     color: var(--cat-frontend);
   }
+  .cat-frontend {
+    --cat-color: var(--cat-frontend);
+  }
 
   .bg-backend {
     background-color: color-mix(in oklab, var(--cat-backend) 10%, transparent);
@@ -472,6 +500,9 @@
   .text-backend {
     color: var(--cat-backend);
   }
+  .cat-backend {
+    --cat-color: var(--cat-backend);
+  }
 
   .bg-devops {
     background-color: color-mix(in oklab, var(--cat-devops) 10%, transparent);
@@ -481,6 +512,9 @@
   }
   .text-devops {
     color: var(--cat-devops);
+  }
+  .cat-devops {
+    --cat-color: var(--cat-devops);
   }
 
   .bg-fullstack {
@@ -500,6 +534,9 @@
   .text-fullstack {
     color: var(--cat-fullstack);
   }
+  .cat-fullstack {
+    --cat-color: var(--cat-fullstack);
+  }
 
   .bg-aiml {
     background-color: color-mix(in oklab, var(--cat-aiml) 10%, transparent);
@@ -510,6 +547,9 @@
   .text-aiml {
     color: var(--cat-aiml);
   }
+  .cat-aiml {
+    --cat-color: var(--cat-aiml);
+  }
 
   .bg-mobile {
     background-color: color-mix(in oklab, var(--cat-mobile) 10%, transparent);
@@ -519,6 +559,9 @@
   }
   .text-mobile {
     color: var(--cat-mobile);
+  }
+  .cat-mobile {
+    --cat-color: var(--cat-mobile);
   }
 
   .bg-data-analytics-eng {
@@ -537,6 +580,9 @@
   }
   .text-data-analytics-eng {
     color: var(--cat-data-analytics-eng);
+  }
+  .cat-data-analytics-eng {
+    --cat-color: var(--cat-data-analytics-eng);
   }
 
   /* === Design subcats === */
@@ -557,6 +603,9 @@
   .text-uiux-design {
     color: var(--cat-uiux-design);
   }
+  .cat-uiux-design {
+    --cat-color: var(--cat-uiux-design);
+  }
 
   .bg-graphic-design {
     background-color: color-mix(
@@ -575,6 +624,9 @@
   .text-graphic-design {
     color: var(--cat-graphic-design);
   }
+  .cat-graphic-design {
+    --cat-color: var(--cat-graphic-design);
+  }
 
   .bg-branding {
     background-color: color-mix(in oklab, var(--cat-branding) 10%, transparent);
@@ -584,6 +636,9 @@
   }
   .text-branding {
     color: var(--cat-branding);
+  }
+  .cat-branding {
+    --cat-color: var(--cat-branding);
   }
 
   .bg-3d-motion {
@@ -603,6 +658,9 @@
   .text-3d-motion {
     color: var(--cat-3d-motion);
   }
+  .cat-3d-motion {
+    --cat-color: var(--cat-3d-motion);
+  }
 
   /* === Architecture / 3D subcats === */
   .bg-cad-bim {
@@ -613,6 +671,9 @@
   }
   .text-cad-bim {
     color: var(--cat-cad-bim);
+  }
+  .cat-cad-bim {
+    --cat-color: var(--cat-cad-bim);
   }
 
   .bg-visualization {
@@ -632,6 +693,9 @@
   .text-visualization {
     color: var(--cat-visualization);
   }
+  .cat-visualization {
+    --cat-color: var(--cat-visualization);
+  }
 
   .bg-project-management-arch {
     background-color: color-mix(
@@ -649,6 +713,9 @@
   }
   .text-project-management-arch {
     color: var(--cat-project-management-arch);
+  }
+  .cat-project-management-arch {
+    --cat-color: var(--cat-project-management-arch);
   }
 
   /* === Content & Writing subcats === */
@@ -669,6 +736,9 @@
   .text-copywriting {
     color: var(--cat-copywriting);
   }
+  .cat-copywriting {
+    --cat-color: var(--cat-copywriting);
+  }
 
   .bg-technical-writing {
     background-color: color-mix(
@@ -687,6 +757,9 @@
   .text-technical-writing {
     color: var(--cat-technical-writing);
   }
+  .cat-technical-writing {
+    --cat-color: var(--cat-technical-writing);
+  }
 
   .bg-blogging-seo {
     background-color: color-mix(
@@ -704,6 +777,9 @@
   }
   .text-blogging-seo {
     color: var(--cat-blogging-seo);
+  }
+  .cat-blogging-seo {
+    --cat-color: var(--cat-blogging-seo);
   }
 
   /* === Marketing & Analytics subcats === */
@@ -724,6 +800,9 @@
   .text-seo-analytics {
     color: var(--cat-seo-analytics);
   }
+  .cat-seo-analytics {
+    --cat-color: var(--cat-seo-analytics);
+  }
 
   .bg-social-media {
     background-color: color-mix(
@@ -741,6 +820,9 @@
   }
   .text-social-media {
     color: var(--cat-social-media);
+  }
+  .cat-social-media {
+    --cat-color: var(--cat-social-media);
   }
 
   .bg-automation-mktg {
@@ -760,6 +842,9 @@
   .text-automation-mktg {
     color: var(--cat-automation-mktg);
   }
+  .cat-automation-mktg {
+    --cat-color: var(--cat-automation-mktg);
+  }
 
   .bg-research-mktg {
     background-color: color-mix(
@@ -777,6 +862,9 @@
   }
   .text-research-mktg {
     color: var(--cat-research-mktg);
+  }
+  .cat-research-mktg {
+    --cat-color: var(--cat-research-mktg);
   }
 
   /* === Video & Audio subcats === */
@@ -797,6 +885,9 @@
   .text-video-editing {
     color: var(--cat-video-editing);
   }
+  .cat-video-editing {
+    --cat-color: var(--cat-video-editing);
+  }
 
   .bg-motion-vfx {
     background-color: color-mix(
@@ -814,6 +905,9 @@
   }
   .text-motion-vfx {
     color: var(--cat-motion-vfx);
+  }
+  .cat-motion-vfx {
+    --cat-color: var(--cat-motion-vfx);
   }
 
   .bg-filmmaking {
@@ -833,6 +927,9 @@
   .text-filmmaking {
     color: var(--cat-filmmaking);
   }
+  .cat-filmmaking {
+    --cat-color: var(--cat-filmmaking);
+  }
 
   .bg-audio-production {
     background-color: color-mix(
@@ -851,7 +948,11 @@
   .text-audio-production {
     color: var(--cat-audio-production);
   }
+  .cat-audio-production {
+    --cat-color: var(--cat-audio-production);
+  }
 
+  /* Generic "current category" helpers */
   .bg-color {
     background-color: color-mix(in oklab, var(--cat-color) 10%, transparent);
   }
@@ -871,6 +972,9 @@
   .text-delivery {
     color: var(--cat-delivery);
   }
+  .cat-delivery {
+    --cat-color: var(--cat-delivery);
+  }
 
   .bg-ai-media {
     background-color: color-mix(in oklab, var(--cat-ai-media) 10%, transparent);
@@ -881,6 +985,9 @@
   .text-ai-media {
     color: var(--cat-ai-media);
   }
+  .cat-ai-media {
+    --cat-color: var(--cat-ai-media);
+  }
 
   .bg-assets {
     background-color: color-mix(in oklab, var(--cat-assets) 10%, transparent);
@@ -890,6 +997,9 @@
   }
   .text-assets {
     color: var(--cat-assets);
+  }
+  .cat-assets {
+    --cat-color: var(--cat-assets);
   }
 
   /* === Productivity subcats === */
@@ -910,6 +1020,9 @@
   .text-knowledge-management {
     color: var(--cat-knowledge-management);
   }
+  .cat-knowledge-management {
+    --cat-color: var(--cat-knowledge-management);
+  }
 
   .bg-project-management {
     background-color: color-mix(
@@ -927,6 +1040,9 @@
   }
   .text-project-management {
     color: var(--cat-project-management);
+  }
+  .cat-project-management {
+    --cat-color: var(--cat-project-management);
   }
 
   .bg-collaboration {
@@ -946,6 +1062,9 @@
   .text-collaboration {
     color: var(--cat-collaboration);
   }
+  .cat-collaboration {
+    --cat-color: var(--cat-collaboration);
+  }
 
   .bg-automation {
     background-color: color-mix(
@@ -963,6 +1082,9 @@
   }
   .text-automation {
     color: var(--cat-automation);
+  }
+  .cat-automation {
+    --cat-color: var(--cat-automation);
   }
 
   .bg-browsing-research {
@@ -982,6 +1104,9 @@
   .text-browsing-research {
     color: var(--cat-browsing-research);
   }
+  .cat-browsing-research {
+    --cat-color: var(--cat-browsing-research);
+  }
 
   .bg-writing-aids {
     background-color: color-mix(
@@ -999,6 +1124,9 @@
   }
   .text-writing-aids {
     color: var(--cat-writing-aids);
+  }
+  .cat-writing-aids {
+    --cat-color: var(--cat-writing-aids);
   }
 
   /* === Education & E-Learning subcats === */
@@ -1019,6 +1147,9 @@
   .text-course-platforms {
     color: var(--cat-course-platforms);
   }
+  .cat-course-platforms {
+    --cat-color: var(--cat-course-platforms);
+  }
 
   .bg-authoring {
     background-color: color-mix(
@@ -1036,6 +1167,9 @@
   }
   .text-authoring {
     color: var(--cat-authoring);
+  }
+  .cat-authoring {
+    --cat-color: var(--cat-authoring);
   }
 
   .bg-assessment {
@@ -1055,6 +1189,9 @@
   .text-assessment {
     color: var(--cat-assessment);
   }
+  .cat-assessment {
+    --cat-color: var(--cat-assessment);
+  }
 
   .bg-classroom-tools {
     background-color: color-mix(
@@ -1072,6 +1209,9 @@
   }
   .text-classroom-tools {
     color: var(--cat-classroom-tools);
+  }
+  .cat-classroom-tools {
+    --cat-color: var(--cat-classroom-tools);
   }
 
   .bg-certification {
@@ -1091,6 +1231,9 @@
   .text-certification {
     color: var(--cat-certification);
   }
+  .cat-certification {
+    --cat-color: var(--cat-certification);
+  }
 
   .bg-tutoring-ai-assistants {
     background-color: color-mix(
@@ -1108,6 +1251,187 @@
   }
   .text-tutoring-ai-assistants {
     color: var(--cat-tutoring-ai-assistants);
+  }
+  .cat-tutoring-ai-assistants {
+    --cat-color: var(--cat-tutoring-ai-assistants);
+  }
+
+  /* === Leaf tags (kept from second file) === */
+  .bg-html {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 10%,
+      transparent
+    );
+  }
+  .bt-html {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 50%,
+      transparent
+    );
+  }
+  .text-html {
+    color: var(--color-fuchsia-gem);
+  }
+  .cat-html {
+    --cat-color: var(--color-fuchsia-gem);
+  }
+
+  .bg-css {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 10%,
+      transparent
+    );
+  }
+  .bt-css {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 50%,
+      transparent
+    );
+  }
+  .text-css {
+    color: var(--color-soft-amber);
+  }
+  .cat-css {
+    --cat-color: var(--color-soft-amber);
+  }
+
+  .bg-javascript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 10%,
+      transparent
+    );
+  }
+  .bt-javascript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-fuchsia-gem) 50%,
+      transparent
+    );
+  }
+  .text-javascript {
+    color: var(--color-fuchsia-gem);
+  }
+  .cat-javascript {
+    --cat-color: var(--color-fuchsia-gem);
+  }
+
+  .bg-typescript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-blush) 10%,
+      transparent
+    );
+  }
+  .bt-typescript {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-blush) 50%,
+      transparent
+    );
+  }
+  .text-typescript {
+    color: var(--color-deep-blush);
+  }
+  .cat-typescript {
+    --cat-color: var(--color-deep-blush);
+  }
+
+  .bg-frameworks {
+    background-color: color-mix(
+      in oklab,
+      var(--color-tangaroa) 10%,
+      transparent
+    );
+  }
+  .bt-frameworks {
+    background-color: color-mix(
+      in oklab,
+      var(--color-tangaroa) 50%,
+      transparent
+    );
+  }
+  .text-frameworks {
+    color: var(--color-tangaroa);
+  }
+  .cat-frameworks {
+    --cat-color: var(--color-tangaroa);
+  }
+
+  .bg-accessibility {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 10%,
+      transparent
+    );
+  }
+  .bt-accessibility {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 50%,
+      transparent
+    );
+  }
+  .text-accessibility {
+    color: var(--color-soft-amber);
+  }
+  .cat-accessibility {
+    --cat-color: var(--color-soft-amber);
+  }
+
+  .bg-apis {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 10%,
+      transparent
+    );
+  }
+  .bt-apis {
+    background-color: color-mix(
+      in oklab,
+      var(--color-soft-amber) 50%,
+      transparent
+    );
+  }
+  .text-apis {
+    color: var(--color-soft-amber);
+  }
+  .cat-apis {
+    --cat-color: var(--color-soft-amber);
+  }
+
+  .bg-versioncontrol {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-cove) 10%,
+      transparent
+    );
+  }
+  .bt-versioncontrol {
+    background-color: color-mix(
+      in oklab,
+      var(--color-deep-cove) 50%,
+      transparent
+    );
+  }
+  .text-versioncontrol {
+    color: var(--color-deep-cove);
+  }
+  .cat-versioncontrol {
+    --cat-color: var(--color-deep-cove);
+  }
+
+  /* === Featured card helper === */
+  .featured-card {
+    box-shadow: 0 0 18px color-mix(in oklab, var(--cat-color) 45%, transparent) !important;
+  }
+
+  .featured-card:hover {
+    box-shadow: 0 0 24px color-mix(in oklab, var(--cat-color) 65%, transparent) !important;
   }
 
   /* === Leaf tags (kept from second file) === */
