@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+
 import { Button } from "../ui/button";
 import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ const SignOut = () => {
     setLoading,
     resetState,
   } = useAuthState();
+
   return (
     <Button
       variant="destructive"

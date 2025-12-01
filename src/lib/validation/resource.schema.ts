@@ -6,9 +6,9 @@ import { MainCategory, Pricing, ProjectType } from "@prisma/client";
    Enums (mirror Prisma enums)
 =========================== */
 
-export const pricingSchema = z.nativeEnum(Pricing);
-export const projectTypeSchema = z.nativeEnum(ProjectType);
-export const mainCategorySchema = z.nativeEnum(MainCategory);
+export const pricingSchema = z.enum(Pricing);
+export const projectTypeSchema = z.enum(ProjectType);
+export const mainCategorySchema = z.enum(MainCategory);
 
 /** Convenience arrays for UI dropdowns */
 export const PRICING_OPTIONS = Object.values(Pricing);
@@ -50,9 +50,9 @@ export const tagsSchema = z
   );
 
 export const resourceCommentSchema = z.object({
-  id: z.string().uuid(),
-  resourceId: z.string().uuid(),
-  userId: z.string().uuid(),
+  id: z.uuid(),
+  resourceId: z.uuid(),
+  userId: z.uuid(),
 
   comment: z.string().trim().min(1).max(5000),
 
@@ -99,9 +99,8 @@ export const resourceSchema = z
     rating: ratingSchema,
     comments: resourceCommentArraySchema.optional(),
 
-    logoUrl: z.string().trim().url().nullable().optional(),
-    imgUrls: z.array(z.string().trim().url()).default([]),
-
+    logoUrl: z.url().trim().nullable().optional(),
+    imgUrls: z.array(z.url().trim()).default([]),
     descriptions: descriptionArraySchema,
     tags: tagsSchema,
     websiteUrl: websiteUrlSchema,

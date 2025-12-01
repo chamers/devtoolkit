@@ -6,6 +6,7 @@ import prisma from "@/db";
 import { ResourceFull } from "@/lib/validation/resource.schema";
 
 const LandingPage = async () => {
+  const dbUsers = await prisma.user.findMany();
   // 1. Fetch latest 10 resources from Prisma
   const dbResources = await prisma.resource.findMany({
     orderBy: { createdAt: "desc" },
