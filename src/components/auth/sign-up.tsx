@@ -1,3 +1,4 @@
+// components/auth/sign-up.tsx
 "use client";
 import React from "react";
 import CardWrapper from "../card-wrapper";
@@ -19,13 +20,11 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-
-// import { signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import FormSuccess from "../form-success";
 import { SignupInput, SignupSchema } from "@/lib/validation/auth.schema";
-import { signUpEmailAction } from "@/actions/sign-up-email.action";
 import SignInOauthButton from "../sign-in-oauth-button";
+import { signUp } from "@/lib/auth-client"; // 👈 use Better Auth client here
 
 const SignUp = () => {
   const router = useRouter();
@@ -52,16 +51,16 @@ const SignUp = () => {
     resetState();
     setLoading(true);
     try {
-      // Build FormData for the server action
-      const fd = new FormData();
-      fd.set("name", values.name);
-      fd.set("email", values.email);
-      fd.set("password", values.password);
+      const res = await signUp.email({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
 
-      const result = await signUpEmailAction(fd);
-
-      if (!result.ok) {
-        setError(result.message);
+      if (res.error) {
+        setError(
+          res.error.message ?? "Something went wrong. Please try again."
+        );
         return;
       }
 

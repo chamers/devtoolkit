@@ -23,8 +23,8 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import FormSuccess from "../form-success";
 import { SigninInput, SigninSchema } from "@/lib/validation/auth.schema";
-import { signInEmailAction } from "@/actions/sign-in-email.action";
 import SignInOauthButton from "../sign-in-oauth-button";
+import { signIn } from "@/lib/auth-client";
 
 const SignIn = () => {
   const router = useRouter();
@@ -50,15 +50,13 @@ const SignIn = () => {
     resetState();
     setLoading(true);
     try {
-      // Build FormData for the server action
-      const fd = new FormData();
-      fd.set("email", values.email);
-      fd.set("password", values.password);
+      const res = await signIn.email({
+        email: values.email,
+        password: values.password,
+      });
 
-      const result = await signInEmailAction(fd);
-
-      if (!result.ok) {
-        setError(result.message);
+      if (res.error) {
+        setError(res.error.message ?? "Invalid email or password.");
         return;
       }
 

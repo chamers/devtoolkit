@@ -5,12 +5,75 @@ import { admin } from "better-auth/plugins";
 import prisma from "@/db";
 import { Role } from "@/generated/prisma";
 import { ac, roles } from "./permissions";
+import { redis } from "@/lib/redis";
 
 export const auth = betterAuth({
   appName: "DevToolkit",
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  // ------------------------
+  // Secondary storage (Upstash Redis)
+  // ------------------------
+  secondaryStorage: {
+    // must be async, Better Auth expects Promise-like
+    get: async (key) => {
+      // Upstash returns null or the stored JSON/string
+      return redis.get(key);
+    },
+    set: async (key, value, ttlSeconds) => {
+      if (ttlSeconds && ttlSeconds > 0) {
+        await redis.set(key, value, { ex: ttlSeconds });
+      } else {
+        await redis.set(key, value);
+      }
+    },
+    delete: async (key) => {
+      await redis.del(key);
+    },
+  },
+  // ------------------------
+  // Rate limiting via Upstash secondary storage
+  // ------------------------
+  rateLimit: {
+    //enabled: process.env.NODE_ENV === "production",
+    //enabled: !!process.env.UPSTASH_REDIS_REST_URL,
+    enabled: true, // 👈 force ON while debugging
+
+    // global fallback window/max (seconds & requests)
+    window: 60,
+    max: 100,
+
+    // use our Redis-based secondaryStorage instead of DB
+    storage: "secondary-storage",
+
+    // fine-grained per-route rules
+    customRules: {
+      // stricter login attempts
+      "/sign-in/email": {
+        window: 60, // 1 minute
+        max: 5, // 5 attempts per IP per minute
+      },
+      "/sign-up/email": {
+        window: 60,
+        max: 3,
+      },
+      // allow get-session to be freely called (no rate limit)
+      "/get-session": false,
+    },
+  },
+
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ["x-forwarded-for", "x-real-ip", "cf-connecting-ip"],
+      fallbackIP:
+        process.env.NODE_ENV === "development" ? "127.0.0.1" : undefined,
+    },
+    database: {
+      generateId: false,
+    },
+  },
+
   socialProviders: {
     google: {
       clientId: String(process.env.GOOGLE_CLIENT_ID),
@@ -57,11 +120,7 @@ export const auth = betterAuth({
       enabled: false,
     },
   },
-  advanced: {
-    database: {
-      generateId: false, // ← IMPORTANT: let Postgres/Prisma create UUIDs
-    },
-  },
+
   plugins: [
     nextCookies(),
     admin({
