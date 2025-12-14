@@ -3,9 +3,9 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 import prisma from "@/db";
-import { Role } from "@/generated/prisma";
 import { ac, roles } from "./permissions";
 import { redis } from "@/lib/redis";
+import { Role } from "@prisma/client";
 
 export const auth = betterAuth({
   appName: "DevToolkit",

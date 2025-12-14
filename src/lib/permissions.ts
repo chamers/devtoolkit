@@ -1,4 +1,4 @@
-import { Role } from "@/generated/prisma/client";
+import { Role } from "@prisma/client";
 import { createAccessControl } from "better-auth/plugins/access";
 import { defaultStatements, adminAc } from "better-auth/plugins/admin/access";
 
