@@ -54,11 +54,11 @@
 
 import prisma from "@/db";
 import { auth } from "@/lib/auth";
+import { Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Role } from "@/generated/prisma";
 
 export type DeleteUserResult = { ok: true } | { ok: false; message: string };
 
