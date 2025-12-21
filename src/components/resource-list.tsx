@@ -1,4 +1,4 @@
-import type { ResourceFull } from "@/lib/types";
+import { ResourceFull } from "@/lib/validation/resource.schema";
 import ResourceCardMini from "./resource-card-mini";
 
 interface Props {

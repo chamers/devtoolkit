@@ -1,4 +1,3 @@
-import SignOut from "@/components/auth/sign-out";
 import GetStartedButton from "@/components/get-started-button";
 import ResourceList from "@/components/resource-list";
 import ResourceOverview from "@/components/resource-overview";

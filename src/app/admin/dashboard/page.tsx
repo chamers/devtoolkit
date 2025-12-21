@@ -8,7 +8,7 @@ import {
   PlaceholderDeleteUserButton,
 } from "@/components/delete-user-button";
 import UserRoleSelect from "@/components/user-role-select";
-import { Role } from "@/generated/prisma/wasm";
+import { Role } from "@prisma/client";
 
 const Page = async () => {
   const headersList = await headers();

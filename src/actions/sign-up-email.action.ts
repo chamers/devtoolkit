@@ -8,39 +8,6 @@ export type SignUpResult =
   | { ok: true }
   | { ok: false; message: string; code?: ErrorCode | "unknown_error" };
 
-// export async function signUpEmailAction(formData: FormData) {
-//   const name = String(formData.get("name"));
-//   if (!name) return { error: "Name is required" };
-//   const email = String(formData.get("email"));
-//   if (!email) return { error: "Email is required" };
-//   const password = String(formData.get("password"));
-//   if (!password) return { error: "Password is required" };
-
-//   try {
-//     await auth.api.signUpEmail({
-//       body: {
-//         name,
-//         email,
-//         password,
-//       },
-//     });
-//     return { error: null };
-//   } catch (err) {
-//     if (err instanceof APIError) {
-//       const errCode = err.body ? (err.body.code as ErrorCode) : "unknown_error";
-//       switch (errCode) {
-//         case "USER_ALREADY_EXISTS":
-//           return { error: "A user with this email already exists." };
-//         default:
-//           return {
-//             error: err.message || "An error occurred during sign up.",
-//           };
-//       }
-//     }
-//     return { error: "Internal Server Error" };
-//   }
-// }
-
 export async function signUpEmailAction(
   formData: FormData
 ): Promise<SignUpResult> {

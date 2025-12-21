@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ResourceFull } from "@/lib/types";
+
 import { slugifyCategory } from "@/lib/utils";
 import React from "react";
+import { ResourceFull } from "@/lib/validation/resource.schema";
 
 interface Props {
   resource: ResourceFull;

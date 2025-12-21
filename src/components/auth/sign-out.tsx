@@ -33,10 +33,12 @@ const SignOut = () => {
               setLoading(true);
             },
             onSuccess: () => {
-              setSuccess("Signed out successfully. See you next time!");
+              toast.success("Signed out successfully. See you next time!");
+              setLoading(false); // explicit for safety
               router.push("/signin");
             },
             onError: (ctx) => {
+              setLoading(false);
               toast.error(ctx.error.message || "Error signing out");
             },
           },
