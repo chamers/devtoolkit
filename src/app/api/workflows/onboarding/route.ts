@@ -1,6 +1,6 @@
 import { serve } from "@upstash/workflow/nextjs";
 import prisma from "@/db";
-import { sendEmail } from "@/lib/workflow";
+import { sendEmailViaQStash } from "@/lib/workflow";
 
 type UserState = "non-active" | "active";
 
@@ -43,10 +43,10 @@ export const { POST } = serve<InitialData>(async (context) => {
 
   // 1. Welcome Email
   await context.run("new-signup", async () => {
-    await sendEmail({
+    await sendEmailViaQStash({
       email,
       subject: "Welcome to the platform",
-      message: `Welcome ${name}!`,
+      html: `Welcome ${name}!`,
     });
   });
   // 2. Wait 3 days
