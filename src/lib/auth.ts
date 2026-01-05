@@ -6,6 +6,38 @@ import prisma from "@/db";
 import { ac, roles } from "./permissions";
 import { redis } from "@/lib/redis";
 import { Role } from "@prisma/client";
+import { sendEmailViaQStash } from "@/lib/workflow";
+
+// Small helpers to keep email templates tidy
+function verifyEmailHtml(url: string) {
+  return `
+    <div style="font-family: ui-sans-serif, system-ui, -apple-system; line-height: 1.5;">
+      <h2>Verify your email</h2>
+      <p>Click the button below to verify your email for <strong>DevToolkit</strong>.</p>
+      <p>
+        <a href="${url}" style="display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:1px solid #ccc;">
+          Verify email
+        </a>
+      </p>
+      <p>If you didn’t request this, you can safely ignore this email.</p>
+    </div>
+  `;
+}
+
+function resetPasswordHtml(url: string) {
+  return `
+    <div style="font-family: ui-sans-serif, system-ui, -apple-system; line-height: 1.5;">
+      <h2>Reset your password</h2>
+      <p>Click the button below to reset your DevToolkit password.</p>
+      <p>
+        <a href="${url}" style="display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;border:1px solid #ccc;">
+          Reset password
+        </a>
+      </p>
+      <p>If you didn’t request this, you can safely ignore this email.</p>
+    </div>
+  `;
+}
 
 export const auth = betterAuth({
   appName: "DevToolkit",
@@ -84,12 +116,58 @@ export const auth = betterAuth({
       clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
     },
   },
+  // ✅ ADD THIS: Email verification configuration
+  emailVerification: {
+    sendOnSignUp: true,
+
+    // Optional: if someone tries to sign in without being verified,
+    // Better Auth can send another verification email.
+    sendOnSignIn: true,
+
+    sendVerificationEmail: async ({ user, url }) => {
+      // console.log("[verify] hook called for:", user.email);
+      // console.log("[verify] url:", url);
+
+      // // IMPORTANT: await while debugging
+      // const result = await sendEmailViaQStash({
+      //   email: user.email,
+      //   subject: "Verify your email for DevToolkit",
+      //   html: verifyEmailHtml(url),
+      // });
+
+      // console.log("[verify] qstash publish result:", result);
+
+      // Fire-and-forget, but don’t swallow errors
+      void sendEmailViaQStash({
+        email: user.email,
+        subject: "Verify your email for DevToolkit",
+        html: verifyEmailHtml(url),
+      }).catch((err) => {
+        console.error("[verify] failed to queue verification email:", err);
+      });
+    },
+  },
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
     minPasswordLength: 8,
     maxPasswordLength: 20,
+
+    // ✅ MUST live here (not at root)
+    requireEmailVerification: true,
+
+    // ✅ MUST live here (not at root)
+    sendResetPassword: async ({ user, url }) => {
+      void sendEmailViaQStash({
+        email: user.email,
+        subject: "Reset your DevToolkit password",
+        html: resetPasswordHtml(url),
+      }).catch((err) => {
+        console.error("[reset] failed to queue reset email:", err);
+      });
+    },
   },
+
   hooks: {},
   databaseHooks: {
     user: {
@@ -122,13 +200,13 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    nextCookies(),
     admin({
       defaultRole: Role.USER,
       adminRoles: [Role.ADMIN, Role.MODERATOR, Role.EDITOR], // admin, user
       ac,
       roles,
     }),
+    nextCookies(),
   ],
 });
 

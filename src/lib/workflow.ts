@@ -11,25 +11,28 @@ const qstashClient = new QStashClient({
   token: config.env.upstash.qstashToken,
 });
 
-export const sendEmail = async ({
-  email,
-  subject,
-  message,
-}: {
+export async function sendEmailViaQStash(opts: {
   email: string;
   subject: string;
-  message: string;
-}) => {
-  await qstashClient.publishJSON({
-    api: {
-      name: "email",
-      provider: resend({ token: config.env.resendToken }),
-    },
-    body: {
-      from: "DevToolkit <admin@devtoolkit.space>",
-      to: [email],
-      subject,
-      html: message,
-    },
-  });
-};
+  html: string;
+}) {
+  try {
+    return await qstashClient.publishJSON({
+      api: {
+        name: "email",
+        provider: resend({ token: config.env.resendToken }),
+      },
+      body: {
+        // ✅ match your verified sending domain (subdomain)
+        from: "DevToolkit <no-reply@hello.devtoolkit.tech>",
+        to: [opts.email],
+        subject: opts.subject,
+        html: opts.html,
+      },
+    });
+  } catch (err) {
+    // In production you *want* this logged
+    console.error("[qstash] failed to publish email job:", err);
+    throw err; // optional: keep throw so caller can decide; hooks already catch
+  }
+}

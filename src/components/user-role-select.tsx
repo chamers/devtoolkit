@@ -1,8 +1,8 @@
 "use client";
 
-import { Role } from "@/generated/prisma";
 import { useAuthState } from "@/hooks/useAuthState";
 import { admin } from "@/lib/auth-client";
+import { Role } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

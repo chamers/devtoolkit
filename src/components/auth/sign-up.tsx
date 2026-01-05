@@ -24,7 +24,8 @@ import { useRouter } from "next/navigation";
 import FormSuccess from "../form-success";
 import { SignupInput, SignupSchema } from "@/lib/validation/auth.schema";
 import SignInOauthButton from "../sign-in-oauth-button";
-import { signUp } from "@/lib/auth-client"; // 👈 use Better Auth client here
+import { signUpEmailAction } from "@/actions/sign-up-email.action";
+//import { signUp } from "@/lib/auth-client";
 
 const SignUp = () => {
   const router = useRouter();
@@ -50,22 +51,27 @@ const SignUp = () => {
   const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
     resetState();
     setLoading(true);
-    try {
-      const res = await signUp.email({
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      });
 
-      if (res.error) {
-        setError(
-          res.error.message ?? "Something went wrong. Please try again."
-        );
+    try {
+      const formData = new FormData();
+      formData.set("name", values.name);
+      formData.set("email", values.email);
+      formData.set("password", values.password);
+
+      const result = await signUpEmailAction(formData);
+
+      if (!result.ok) {
+        setError(result.message);
         return;
       }
 
-      setSuccess("User has been created");
-      router.push("/profile");
+      // ✅ Do NOT sign in, do NOT go to /profile yet
+      setSuccess(
+        "Account created. Please check your email to verify your address."
+      );
+
+      // Optional: send them to a dedicated page
+      //router.push(`/verify-email?email=${encodeURIComponent(values.email)}`);
     } catch (e) {
       console.error(e);
       setError("Something went wrong. Please try again.");

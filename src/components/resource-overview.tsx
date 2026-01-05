@@ -1,4 +1,3 @@
-import type { ResourceFull } from "@/lib/types";
 import Link from "next/link";
 import { StarRating } from "./star-rating";
 import { Button } from "./ui/button";
@@ -7,6 +6,7 @@ import { FiTrendingUp, FiBookOpen } from "react-icons/fi";
 import Image from "next/image";
 import SliderWrapper from "./slider-wrapper";
 import { slugifyCategory } from "@/lib/utils";
+import { ResourceFull } from "@/lib/validation/resource.schema";
 
 type Props = Pick<
   ResourceFull,
