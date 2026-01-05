@@ -60,18 +60,18 @@ export const { POST } = serve<InitialData>(async (context) => {
 
     if (state === "non-active") {
       await context.run("send-email-non-active", async () => {
-        await sendEmail({
+        await sendEmailViaQStash({
           email,
           subject: "Are you still there?",
-          message: `Hey ${name}, we miss you!`,
+          html: `Hey ${name}, we miss you!`,
         });
       });
     } else if (state === "active") {
       await context.run("send-email-active", async () => {
-        await sendEmail({
+        await sendEmailViaQStash({
           email,
           subject: "Newsletter - Welcome back!",
-          message: `Hi ${name}, great to see you again! 🎉  
+          html: `Hi ${name}, great to see you again! 🎉  
 We've just released fresh updates, hand-picked resources, and new features we think you'll love.  
 Grab a coffee and dive into what's new!`,
         });

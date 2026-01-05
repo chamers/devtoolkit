@@ -119,7 +119,7 @@ export const auth = betterAuth({
   // ✅ ADD THIS: Email verification configuration
   emailVerification: {
     sendOnSignUp: true,
-    expiresIn: 24 * 60 * 60, // 24 hours
+
     autoSignInAfterVerification: true,
 
     // Optional: if someone tries to sign in without being verified,
