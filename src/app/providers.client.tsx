@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 //import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import React from "react";
+import { SessionGate } from "@/components/session-gate";
 //import type { Session } from "next-auth";
 
 export default function ClientProviders({
@@ -24,6 +25,7 @@ export default function ClientProviders({
     //   </SessionProvider>
     // </ThemeProvider>
     <ThemeProvider>
+      <SessionGate />
       {children}
       <Toaster richColors position="top-right" />
     </ThemeProvider>

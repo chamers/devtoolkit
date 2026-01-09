@@ -194,6 +194,7 @@ export const auth = betterAuth({
   },
   session: {
     expiresIn: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 60 * 60 * 24, // refresh at most once per day
   },
   account: {
     accountLinking: {
