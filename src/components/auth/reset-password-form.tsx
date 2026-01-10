@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -42,10 +42,10 @@ const ResetPasswordSchema = z
 type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
 
 /* ------------------------------------------------------------------ */
-/* Component */
+/* Inner component (this is where useSearchParams lives) */
 /* ------------------------------------------------------------------ */
 
-const ResetPasswordForm = () => {
+function ResetPasswordInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -176,6 +176,16 @@ const ResetPasswordForm = () => {
       </Form>
     </CardWrapper>
   );
-};
+}
 
-export default ResetPasswordForm;
+/* ------------------------------------------------------------------ */
+/* Exported component (Suspense boundary) */
+/* ------------------------------------------------------------------ */
+
+export default function ResetPasswordForm() {
+  return (
+    <Suspense fallback={<p className="text-muted-foreground">Loading…</p>}>
+      <ResetPasswordInner />
+    </Suspense>
+  );
+}
