@@ -48,6 +48,7 @@ const SignIn = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SigninSchema>) => {
+    console.log("SIGNIN SUBMIT", values); // 👈 ADD THIS
     resetState();
     setLoading(true);
     try {
@@ -55,7 +56,7 @@ const SignIn = () => {
         email: values.email,
         password: values.password,
       });
-
+      console.log("SIGNIN RESPONSE", res); // 👈 ADD THIS
       if (res.error) {
         setError(res.error.message ?? "Invalid email or password.");
         return;
