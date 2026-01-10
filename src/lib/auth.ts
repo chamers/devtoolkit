@@ -127,26 +127,23 @@ export const auth = betterAuth({
     sendOnSignIn: true,
 
     sendVerificationEmail: async ({ user, url }) => {
-      // console.log("[verify] hook called for:", user.email);
-      // console.log("[verify] url:", url);
-
-      // // IMPORTANT: await while debugging
-      // const result = await sendEmailViaQStash({
+      // void sendEmailViaQStash({
       //   email: user.email,
       //   subject: "Verify your email for DevToolkit",
       //   html: verifyEmailHtml(url),
+      // }).catch((err) => {
+      //   console.error("[verify] failed to queue verification email:", err);
       // });
+      console.log("[verify] sendVerificationEmail called for:", user.email);
+      console.log("[verify] verify url:", url);
 
-      // console.log("[verify] qstash publish result:", result);
-
-      // Fire-and-forget, but don’t swallow errors
-      void sendEmailViaQStash({
+      const result = await sendEmailViaQStash({
         email: user.email,
         subject: "Verify your email for DevToolkit",
         html: verifyEmailHtml(url),
-      }).catch((err) => {
-        console.error("[verify] failed to queue verification email:", err);
       });
+
+      console.log("[verify] sendEmailViaQStash result:", result);
     },
   },
   emailAndPassword: {
