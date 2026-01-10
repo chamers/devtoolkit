@@ -160,6 +160,7 @@ export const auth = betterAuth({
 
     // ✅ MUST live here (not at root)
     sendResetPassword: async ({ user, url }) => {
+      // token is available if you ever want a custom URL instead of the provided `url`
       void sendEmailViaQStash({
         email: user.email,
         subject: "Reset your DevToolkit password",
@@ -167,6 +168,10 @@ export const auth = betterAuth({
       }).catch((err) => {
         console.error("[reset] failed to queue reset email:", err);
       });
+    },
+    onPasswordReset: async ({ user }, request) => {
+      // Optional: run logic after a successful reset (audit/logging/etc.)
+      console.log(`[reset] Password reset for ${user.email}`);
     },
   },
 

@@ -25,6 +25,7 @@ import FormSuccess from "../form-success";
 import { SigninInput, SigninSchema } from "@/lib/validation/auth.schema";
 import SignInOauthButton from "../sign-in-oauth-button";
 import { signIn } from "@/lib/auth-client";
+import Link from "next/link";
 
 const SignIn = () => {
   const router = useRouter();
@@ -93,7 +94,7 @@ const SignIn = () => {
                   <Input
                     disabled={loading}
                     type="email"
-                    placeholder="example@gmail.com"
+                    placeholder="example@email.com"
                     {...field}
                   />
                 </FormControl>
@@ -106,7 +107,17 @@ const SignIn = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <div className="flex items-center justify-between">
+                  <FormLabel>Password</FormLabel>
+
+                  <Link
+                    href="/forgot-password"
+                    className="text-xs text-blue-100 hover:text-blue-200 transition-colors"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+
                 <FormControl>
                   <Input
                     disabled={loading}
