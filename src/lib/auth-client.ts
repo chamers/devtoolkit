@@ -7,7 +7,7 @@ import { ac, roles } from "./permissions";
 import { toast } from "sonner";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: "",
   plugins: [inferAdditionalFields<typeof auth>(), adminClient({ ac, roles })],
   fetchOptions: {
     onError: async (ctx) => {
