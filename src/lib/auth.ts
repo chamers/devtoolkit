@@ -142,7 +142,7 @@ export const auth = betterAuth({
         subject: "Verify your email for DevToolkit",
         html: verifyEmailHtml(url),
       });
-
+      console.log("QSTASH_TOKEN present?", !!process.env.QSTASH_TOKEN);
       console.log("[verify] sendEmailViaQStash result:", result);
     },
   },
