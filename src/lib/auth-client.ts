@@ -23,7 +23,12 @@ export const authClient = createAuthClient({
       }
 
       // Optional: log other errors in a less noisy way
-      console.warn("Auth client error:", ctx.error ?? ctx.response);
+      console.warn(
+        "Auth client error:",
+        ctx.response?.status,
+        ctx.request?.url ?? "",
+        ctx.error ?? ctx.response
+      );
     },
   },
 });

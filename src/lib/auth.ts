@@ -127,23 +127,17 @@ export const auth = betterAuth({
     sendOnSignIn: true,
 
     sendVerificationEmail: async ({ user, url }) => {
-      // void sendEmailViaQStash({
-      //   email: user.email,
-      //   subject: "Verify your email for DevToolkit",
-      //   html: verifyEmailHtml(url),
-      // }).catch((err) => {
-      //   console.error("[verify] failed to queue verification email:", err);
-      // });
-      console.log("[verify] sendVerificationEmail called for:", user.email);
-      console.log("[verify] verify url:", url);
-
-      const result = await sendEmailViaQStash({
+      // ✅ Single guard line (matches what was missing in Vercel)
+      if (!process.env.RESEND_API_KEY && !process.env.RESEND_TOKEN) {
+        console.error("[verify] Missing Resend API key/token env var.");
+      }
+      void sendEmailViaQStash({
         email: user.email,
         subject: "Verify your email for DevToolkit",
         html: verifyEmailHtml(url),
+      }).catch((err) => {
+        console.error("[verify] failed to queue verification email:", err);
       });
-      console.log("QSTASH_TOKEN present?", !!process.env.QSTASH_TOKEN);
-      console.log("[verify] sendEmailViaQStash result:", result);
     },
   },
   emailAndPassword: {
