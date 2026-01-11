@@ -131,6 +131,7 @@ export const auth = betterAuth({
       if (!process.env.RESEND_API_KEY && !process.env.RESEND_TOKEN) {
         console.error("[verify] Missing Resend API key/token env var.");
       }
+      console.log("[verify] sendVerificationEmail called for:", user.email);
       void sendEmailViaQStash({
         email: user.email,
         subject: "Verify your email for DevToolkit",
