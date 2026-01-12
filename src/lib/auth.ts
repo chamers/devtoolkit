@@ -132,7 +132,7 @@ export const auth = betterAuth({
         console.error("[verify] Missing Resend API key/token env var.");
       }
       console.log("[verify] sendVerificationEmail called for:", user.email);
-      void sendEmailViaQStash({
+      await sendEmailViaQStash({
         email: user.email,
         subject: "Verify your email for DevToolkit",
         html: verifyEmailHtml(url),
@@ -153,7 +153,7 @@ export const auth = betterAuth({
     // ✅ MUST live here (not at root)
     sendResetPassword: async ({ user, url }) => {
       // token is available if you ever want a custom URL instead of the provided `url`
-      void sendEmailViaQStash({
+      await sendEmailViaQStash({
         email: user.email,
         subject: "Reset your DevToolkit password",
         html: resetPasswordHtml(url),

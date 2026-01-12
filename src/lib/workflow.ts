@@ -24,8 +24,8 @@ export async function sendEmailViaQStash(opts: {
       },
       body: {
         // ✅ match your verified sending domain (subdomain)
-        from: "DevToolkit <no-reply@hello.devtoolkit.tech>",
-        to: [opts.email],
+        from: "no-reply@hello.devtoolkit.tech",
+        to: opts.email,
         subject: opts.subject,
         html: opts.html,
       },
