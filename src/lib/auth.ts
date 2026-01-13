@@ -48,9 +48,7 @@ export const auth = betterAuth({
   // Secondary storage (Upstash Redis)
   // ------------------------
   secondaryStorage: {
-    // must be async, Better Auth expects Promise-like
     get: async (key) => {
-      // Upstash returns null or the stored JSON/string
       return redis.get(key);
     },
     set: async (key, value, ttlSeconds) => {
@@ -68,29 +66,19 @@ export const auth = betterAuth({
   // Rate limiting via Upstash secondary storage
   // ------------------------
   rateLimit: {
-    //enabled: process.env.NODE_ENV === "production",
-    //enabled: !!process.env.UPSTASH_REDIS_REST_URL,
-    enabled: true, // 👈 force ON while debugging
-
-    // global fallback window/max (seconds & requests)
+    enabled: true,
     window: 60,
     max: 100,
-
-    // use our Redis-based secondaryStorage instead of DB
     storage: "secondary-storage",
-
-    // fine-grained per-route rules
     customRules: {
-      // stricter login attempts
       "/sign-in/email": {
-        window: 60, // 1 minute
-        max: 5, // 5 attempts per IP per minute
+        window: 60,
+        max: 5,
       },
       "/sign-up/email": {
         window: 60,
         max: 3,
       },
-      // allow get-session to be freely called (no rate limit)
       "/get-session": false,
     },
   },
@@ -116,21 +104,12 @@ export const auth = betterAuth({
       clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
     },
   },
-  // ✅ ADD THIS: Email verification configuration
+
   emailVerification: {
     sendOnSignUp: true,
-
     autoSignInAfterVerification: true,
-
-    // Optional: if someone tries to sign in without being verified,
-    // Better Auth can send another verification email.
     sendOnSignIn: true,
-
     sendVerificationEmail: async ({ user, url }) => {
-      // ✅ Single guard line (matches what was missing in Vercel)
-      if (!process.env.RESEND_API_KEY && !process.env.RESEND_TOKEN) {
-        console.error("[verify] Missing Resend API key/token env var.");
-      }
       console.log("[verify] sendVerificationEmail called for:", user.email);
       await sendEmailViaQStash({
         email: user.email,
@@ -141,18 +120,14 @@ export const auth = betterAuth({
       });
     },
   },
+
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
     minPasswordLength: 8,
     maxPasswordLength: 20,
-
-    // ✅ MUST live here (not at root)
     requireEmailVerification: true,
-
-    // ✅ MUST live here (not at root)
     sendResetPassword: async ({ user, url }) => {
-      // token is available if you ever want a custom URL instead of the provided `url`
       await sendEmailViaQStash({
         email: user.email,
         subject: "Reset your DevToolkit password",
@@ -162,12 +137,10 @@ export const auth = betterAuth({
       });
     },
     onPasswordReset: async ({ user }, request) => {
-      // Optional: run logic after a successful reset (audit/logging/etc.)
       console.log(`[reset] Password reset for ${user.email}`);
     },
   },
 
-  hooks: {},
   databaseHooks: {
     user: {
       create: {
@@ -181,6 +154,7 @@ export const auth = betterAuth({
       },
     },
   },
+
   user: {
     additionalFields: {
       role: {
@@ -189,10 +163,12 @@ export const auth = betterAuth({
       },
     },
   },
+
   session: {
     expiresIn: 30 * 24 * 60 * 60, // 30 days
-    updateAge: 60 * 60 * 24, // refresh at most once per day
+    updateAge: 60 * 60 * 24, // refresh once per day
   },
+
   account: {
     accountLinking: {
       enabled: false,
@@ -202,7 +178,7 @@ export const auth = betterAuth({
   plugins: [
     admin({
       defaultRole: Role.USER,
-      adminRoles: [Role.ADMIN, Role.MODERATOR, Role.EDITOR], // admin, user
+      adminRoles: [Role.ADMIN, Role.MODERATOR, Role.EDITOR],
       ac,
       roles,
     }),
