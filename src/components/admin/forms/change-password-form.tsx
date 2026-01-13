@@ -122,7 +122,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { changePassword } from "@/lib/auth-client"; // Use the export from your client
+import { changePassword } from "@/lib/auth-client";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 
@@ -130,7 +130,6 @@ const ChangePasswordForm = () => {
   const [isPending, setIsPending] = useState(false);
   const [newPassword, setNewPassword] = useState("");
 
-  // Simple strength calculation
   const strength = useMemo(() => {
     if (!newPassword) return 0;
     let score = 0;
@@ -155,7 +154,7 @@ const ChangePasswordForm = () => {
     const currentPassword = formData.get("currentPassword") as string;
 
     if (strength < 2) {
-      toast.error("Password is too weak");
+      toast.error("Password is too weak. Please include more variety.");
       return;
     }
 
@@ -172,7 +171,6 @@ const ChangePasswordForm = () => {
           setNewPassword("");
         },
         onError: (ctx) => {
-          // Explicitly call the toast, do not return it
           toast.error(ctx.error.message || "Failed to change password");
         },
       },
@@ -187,6 +185,7 @@ const ChangePasswordForm = () => {
           type="password"
           id="currentPassword"
           name="currentPassword"
+          placeholder="Enter your current password" // Added placeholder
           required
         />
       </div>
@@ -196,8 +195,10 @@ const ChangePasswordForm = () => {
         <Input
           type="password"
           id="newPassword"
+          name="newPassword"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
+          placeholder="Enter your new password" // Added placeholder
           required
         />
 
@@ -213,7 +214,7 @@ const ChangePasswordForm = () => {
           ))}
         </div>
         <p className="text-[10px] text-muted-foreground italic">
-          Use 8+ chars with numbers and symbols
+          Minimum 8 characters, include numbers and symbols.
         </p>
       </div>
 
@@ -224,6 +225,13 @@ const ChangePasswordForm = () => {
       >
         {isPending ? "Updating..." : "Change Password"}
       </Button>
+
+      {/* Visual hint for why the button might be "light orange" (disabled) */}
+      {newPassword && strength < 2 && (
+        <p className="text-[10px] text-red-500 text-center">
+          Password too weak to submit
+        </p>
+      )}
     </form>
   );
 };
