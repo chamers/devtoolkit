@@ -64,12 +64,15 @@ export default async function Page() {
       <pre className="text-sm overflow-clip">
         {JSON.stringify(session, null, 2)}
       </pre>
-      <div className="space-y-4 p-4 rounded-b-md border border-t-8 border-blue-600">
-        <h2>Update User</h2>
+      <div className="space-y-4 p-4 rounded-b-md border border-t-8 border-secondary-600">
+        <h3>Update User</h3>
         <UpdateUserForm
           name={session.user.name}
           image={session.user.image ?? ""}
         />
+      </div>
+      <div className="space-y-4 p-4 rounded-b-md border border-t-8 border-secondary-600">
+        <h3>Change Password</h3>
       </div>
     </div>
   );
