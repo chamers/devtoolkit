@@ -41,4 +41,5 @@ export const {
   admin,
   requestPasswordReset, //sends the email
   resetPassword, //resets the password given token and new password
+  updateUser,
 } = authClient;
