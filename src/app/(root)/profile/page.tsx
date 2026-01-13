@@ -1,3 +1,4 @@
+import ChangePasswordForm from "@/components/admin/forms/change-password-form";
 import UpdateUserForm from "@/components/admin/forms/update-user-form";
 import SignOut from "@/components/auth/sign-out";
 import ReturnButton from "@/components/return-button";
@@ -73,6 +74,7 @@ export default async function Page() {
       </div>
       <div className="space-y-4 p-4 rounded-b-md border border-t-8 border-secondary-600">
         <h3>Change Password</h3>
+        <ChangePasswordForm />
       </div>
     </div>
   );
