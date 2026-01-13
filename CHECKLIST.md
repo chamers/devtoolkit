@@ -169,3 +169,18 @@
   - Page / Form / Success
   - Showcase
 - FINISH PART 6
+
+== PART 6 ==
+
+- Show the image
+- Updating user
+  - Change name / image
+  - Update hook
+- Custom sessions
+  - Type inference for plugins workaround
+- PLUGINS - **Magic Link**
+  - Add to client instance
+  - Create UI
+  - Adjust hooks
+- Cookie Cache
+- FINISH PART 7

@@ -46,6 +46,18 @@ export default async function Page() {
         </Button>
       </div>
 
+      {session.user.image ? (
+        <img
+          src={session.user.image}
+          alt="Profile"
+          className="w-16 h-16 rounded-full"
+        />
+      ) : (
+        <div className="size-32 border border-primary rounded-md bg-primary text-primary-foreground flex items-center justify-center">
+          {session.user.name.slice(0, 2)}
+        </div>
+      )}
+
       <pre className="text-sm overflow-clip">
         {JSON.stringify(session, null, 2)}
       </pre>
