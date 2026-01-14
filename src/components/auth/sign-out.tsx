@@ -34,8 +34,10 @@ const SignOut = () => {
             },
             onSuccess: () => {
               toast.success("Signed out successfully. See you next time!");
-              setLoading(false); // explicit for safety
-              router.push("/signin");
+              // 1. Tell Next.js to clear its client-side cache
+              // 2. Redirect the user
+              router.push("/");
+              router.refresh();
             },
             onError: (ctx) => {
               setLoading(false);
