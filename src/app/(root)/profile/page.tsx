@@ -164,7 +164,7 @@ export default async function Page() {
       </div>
 
       {/* Forms Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         <div className="space-y-4 p-4 rounded-md border border-t-8 border-secondary-600 shadow-sm h-full">
           <h3 className="font-bold text-lg">Update User Details</h3>
           <UpdateUserForm

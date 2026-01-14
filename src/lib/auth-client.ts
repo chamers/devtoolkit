@@ -1,14 +1,22 @@
 // src/lib/auth-client.ts
 "use client";
 import { createAuthClient } from "better-auth/react";
-import { inferAdditionalFields, adminClient } from "better-auth/client/plugins";
+import {
+  inferAdditionalFields,
+  adminClient,
+  magicLinkClient,
+} from "better-auth/client/plugins";
 import type { auth } from "./auth";
 import { ac, roles } from "./permissions";
 import { toast } from "sonner";
 
 export const authClient = createAuthClient({
   baseURL: "",
-  plugins: [inferAdditionalFields<typeof auth>(), adminClient({ ac, roles })],
+  plugins: [
+    inferAdditionalFields<typeof auth>(),
+    adminClient({ ac, roles }),
+    magicLinkClient(),
+  ],
   // fetchOptions: {
   //   onError: async (ctx) => {
   //     if (ctx.response?.status === 429) {

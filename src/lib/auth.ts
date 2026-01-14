@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-import { admin } from "better-auth/plugins";
+import { admin, magicLink } from "better-auth/plugins";
 import prisma from "@/db";
 import { ac, roles } from "./permissions";
 import { redis } from "@/lib/redis";
@@ -176,6 +176,16 @@ export const auth = betterAuth({
   },
 
   plugins: [
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        // 2. Use your existing QStash/Resend setup
+        await sendEmailViaQStash({
+          email: email,
+          subject: "Your Magic Link for DevToolkit",
+          html: `Click here to sign in: <a href="${url}">Sign In</a>`,
+        });
+      },
+    }),
     admin({
       defaultRole: Role.USER,
       adminRoles: [Role.ADMIN, Role.MODERATOR, Role.EDITOR],
