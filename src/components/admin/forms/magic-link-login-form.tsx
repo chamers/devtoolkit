@@ -39,6 +39,7 @@ const MagicLinkLoginForm = () => {
         onSuccess: () => {
           toast.success("Magic link sent! Please check your email to sign in.");
           if (ref.current) ref.current.open = false;
+          (event.target as HTMLFormElement).reset();
         },
       },
     });
