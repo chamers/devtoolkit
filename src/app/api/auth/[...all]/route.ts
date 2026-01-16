@@ -9,3 +9,5 @@ export const { POST, GET } = toNextJsHandler(auth);
 // /api/auth/sign-out
 // /api/auth/get-session
 // and more, depending on your auth configuration.
+
+// This route has not been used anywhere, so maybe delete it?
