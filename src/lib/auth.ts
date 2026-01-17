@@ -6,7 +6,7 @@ import prisma from "@/db";
 import { ac, roles } from "./permissions";
 import { redis } from "@/lib/redis";
 import { Role } from "@prisma/client";
-import { sendEmailViaQStash } from "@/lib/workflow";
+import { sendEmailViaQStash, workflowClient } from "@/lib/workflow";
 
 // Small helpers to keep email templates tidy
 function verifyEmailHtml(url: string) {
@@ -144,12 +144,43 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
+        // before: async (user) => {
+        //   const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") || [];
+        //   if (ADMIN_EMAILS.includes(user.email)) {
+        //     return { data: { ...user, role: Role.ADMIN } };
+        //   }
+        //   return {
+        //     data: user,
+        //   };
+        // },
         before: async (user) => {
           const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") || [];
-          if (ADMIN_EMAILS.includes(user.email)) {
-            return { data: { ...user, role: Role.ADMIN } };
+          const role = ADMIN_EMAILS.includes(user.email)
+            ? Role.ADMIN
+            : Role.USER;
+
+          return {
+            data: {
+              ...user,
+              role,
+              // ✅ Ensure they aren't 'dormant' on day one
+              lastActivityDate: new Date(),
+            },
+          };
+        },
+        after: async (user) => {
+          // ✅ Trigger the onboarding workflow
+          try {
+            await workflowClient.trigger({
+              url: `${process.env.NEXT_PUBLIC_APP_URL}/api/workflows/onboarding`,
+              body: {
+                email: user.email,
+                name: user.name,
+              },
+            });
+          } catch (error) {
+            console.error("Workflow trigger failed:", error);
           }
-          return { data: user };
         },
       },
     },

@@ -52,50 +52,87 @@ export const { POST } = serve<InitialData>(async (context) => {
   await context.sleep("wait-for-7-days", 7 * ONE_DAY_IN_MS);
 
   // 3) Ongoing engagement loop
+  //   while (true) {
+  //     const state = await context.run("check-user-state", async () => {
+  //       return getUserState(email);
+  //     });
+
+  //     if (state === "active") {
+  //       await context.run("send-active-newsletter", async () => {
+  //         await sendEmailViaQStash({
+  //           email,
+  //           subject: "DevToolkit updates you’ll like",
+  //           html: `Hi ${name}, great to see you again! 🎉
+  // We’ve added new tools, resources, and improvements since your last visit.`,
+  //         });
+  //       });
+
+  //       // Active users → low noise
+  //       await context.sleep("wait-30-days-active", THIRTY_DAYS_IN_MS);
+  //       continue;
+  //     }
+
+  //     if (state === "slipping") {
+  //       await context.run("send-slipping-nudge", async () => {
+  //         await sendEmailViaQStash({
+  //           email,
+  //           subject: "Need a hand getting started?",
+  //           html: `Hi ${name}, just checking in — want a quick tour of what’s new in DevToolkit?`,
+  //         });
+  //       });
+
+  //       // Slipping users → check back sooner
+  //       await context.sleep("wait-14-days-slipping", 14 * ONE_DAY_IN_MS);
+  //       continue;
+  //     }
+
+  //     // dormant
+  //     await context.run("send-dormant-reengagement", async () => {
+  //       await sendEmailViaQStash({
+  //         email,
+  //         subject: "We saved your spot 👋",
+  //         html: `Hi ${name}, it’s been a while — DevToolkit has grown a lot since your last visit.`,
+  //       });
+  //     });
+
+  //     // Dormant users → minimal frequency
+  //     await context.sleep("wait-30-days-dormant", THIRTY_DAYS_IN_MS);
+  //   }
+  // 3. The Loop
   while (true) {
     const state = await context.run("check-user-state", async () => {
-      return getUserState(email);
+      const user = await prisma.user.findUnique({
+        where: { email },
+        select: { lastActivityDate: true },
+      });
+
+      if (!user?.lastActivityDate) return "dormant";
+
+      const diff = Date.now() - user.lastActivityDate.getTime();
+      const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+      const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
+      if (diff <= SEVEN_DAYS) return "active";
+      if (diff <= THIRTY_DAYS) return "slipping";
+      return "dormant";
     });
 
-    if (state === "active") {
-      await context.run("send-active-newsletter", async () => {
-        await sendEmailViaQStash({
-          email,
-          subject: "DevToolkit updates you’ll like",
-          html: `Hi ${name}, great to see you again! 🎉  
-We’ve added new tools, resources, and improvements since your last visit.`,
-        });
-      });
+    // 4. Send email based on state
+    await context.run("send-periodic-email", async () => {
+      const content = {
+        active: { sub: "Keep it up!", body: "You're doing great..." },
+        slipping: { sub: "We miss you", body: "Need any help?" },
+        dormant: { sub: "Still there?", body: "It's been a while..." },
+      }[state];
 
-      // Active users → low noise
-      await context.sleep("wait-30-days-active", THIRTY_DAYS_IN_MS);
-      continue;
-    }
-
-    if (state === "slipping") {
-      await context.run("send-slipping-nudge", async () => {
-        await sendEmailViaQStash({
-          email,
-          subject: "Need a hand getting started?",
-          html: `Hi ${name}, just checking in — want a quick tour of what’s new in DevToolkit?`,
-        });
-      });
-
-      // Slipping users → check back sooner
-      await context.sleep("wait-14-days-slipping", 14 * ONE_DAY_IN_MS);
-      continue;
-    }
-
-    // dormant
-    await context.run("send-dormant-reengagement", async () => {
       await sendEmailViaQStash({
         email,
-        subject: "We saved your spot 👋",
-        html: `Hi ${name}, it’s been a while — DevToolkit has grown a lot since your last visit.`,
+        subject: content.sub,
+        html: content.body,
       });
     });
 
-    // Dormant users → minimal frequency
-    await context.sleep("wait-30-days-dormant", THIRTY_DAYS_IN_MS);
+    // 5. Wait before checking again (e.g., 14 days)
+    await context.sleep("wait-interval", 14 * 24 * 60 * 60 * 1000);
   }
 });
