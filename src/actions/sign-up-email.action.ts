@@ -3,6 +3,8 @@
 import { auth, ErrorCode } from "@/lib/auth";
 import { APIError } from "better-auth/api";
 import { SignupSchema } from "@/lib/validation/auth.schema";
+import { workflowClient } from "@/lib/workflow";
+import config from "@/lib/config";
 
 export type SignUpResult =
   | { ok: true }
@@ -41,6 +43,22 @@ export async function signUpEmailAction(
         password,
       },
     });
+
+    // If we reach here, user creation was successful
+    // TRIGGER WORKFLOW MANUALLY HERE
+    // try {
+    //   await workflowClient.trigger({
+    //     url: `${config.env.apiEndpoint}/api/workflows/onboarding`,
+    //     body: {
+    //       email: email,
+    //       name: name,
+    //     },
+    //   });
+    //   console.log("Workflow triggered manually from Server Action");
+    // } catch (workflowErr) {
+    //   console.error("Workflow trigger failed:", workflowErr);
+    //   // We don't fail the signup if just the workflow fails
+    // }
 
     return { ok: true };
   } catch (err) {

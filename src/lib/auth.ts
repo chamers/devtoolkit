@@ -172,12 +172,12 @@ export const auth = betterAuth({
         after: async (user) => {
           console.log(
             "Attempting to trigger workflow at:",
-            `${config.env.prodApiEndpoint}/api/workflows/onboarding`
+            `${config.env.apiEndpoint}/api/workflows/onboarding`
           );
           // ✅ Trigger the onboarding workflow
           try {
             await workflowClient.trigger({
-              url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
+              url: `${config.env.apiEndpoint}/api/workflows/onboarding`,
               body: {
                 email: user.email,
                 name: user.name,
