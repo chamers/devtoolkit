@@ -7,6 +7,7 @@ import { ac, roles } from "./permissions";
 import { redis } from "@/lib/redis";
 import { Role } from "@prisma/client";
 import { sendEmailViaQStash, workflowClient } from "@/lib/workflow";
+import config from "@/lib/config";
 
 // Small helpers to keep email templates tidy
 function verifyEmailHtml(url: string) {
@@ -172,7 +173,7 @@ export const auth = betterAuth({
           // ✅ Trigger the onboarding workflow
           try {
             await workflowClient.trigger({
-              url: `${process.env.NEXT_PUBLIC_APP_URL}/api/workflows/onboarding`,
+              url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
               body: {
                 email: user.email,
                 name: user.name,
