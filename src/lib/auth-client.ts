@@ -17,28 +17,7 @@ export const authClient = createAuthClient({
     adminClient({ ac, roles }),
     magicLinkClient(),
   ],
-  // fetchOptions: {
-  //   onError: async (ctx) => {
-  //     if (ctx.response?.status === 429) {
-  //       const retryAfter = ctx.response.headers.get("X-Retry-After") ?? "60";
 
-  //       // ✅ Friendly UI instead of console error
-  //       toast.error(
-  //         `Too many attempts. Please try again in ${retryAfter} seconds.`
-  //       );
-
-  //       return;
-  //     }
-
-  //     // Optional: log other errors in a less noisy way
-  //     console.warn(
-  //       "Auth client error:",
-  //       ctx.response?.status,
-  //       ctx.request?.url ?? "",
-  //       ctx.error ?? ctx.response
-  //     );
-  //   },
-  // },
   fetchOptions: {
     onError: async (ctx) => {
       // 1. Handle Rate Limiting
