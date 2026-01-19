@@ -79,8 +79,10 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
         <nav className="flex flex-1 flex-col gap-2">
           {adminSideBarLinks.map((link) => {
             const isSelected =
-              pathname === link.route ||
-              (link.route !== "/admin" && pathname.startsWith(link.route));
+              (link.route !== "/admin" &&
+                pathname.includes(link.route) &&
+                link.route.length > 1) ||
+              pathname === link.route;
 
             return (
               <Link
