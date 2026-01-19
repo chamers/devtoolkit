@@ -45,20 +45,17 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
   const initialsSource = user?.name ?? user?.email ?? "User";
 
   return (
-    <aside className="sticky left-0 top-0 flex h-screen w-full flex-col justify-between border-r border-gray-200 bg-white px-5 pb-5 pt-8 shadow-sm">
+    <aside className="sticky left-0 top-0 flex h-screen w-72 flex-col justify-between border-r border-gray-200 bg-white px-5 pb-5 pt-8 shadow-sm max-md:hidden">
       <div className="flex flex-col h-full">
         {/* Logo Section */}
-        <div className="mb-10 px-2 flex items-center gap-2">
+        <div className="mb-10 px-2 flex items-center justify-center">
           <Image
             src="/logos/logo.png"
             alt="logo"
-            height={40}
-            width={40}
+            height={200} // Adjusted for better sidebar fit
+            width={200}
             className="object-contain"
           />
-          <h1 className="text-xl font-bold text-blue-900 tracking-tight">
-            DevToolkit
-          </h1>
         </div>
 
         {/* Navigation Links */}
@@ -80,7 +77,7 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
                       : "text-slate-600 hover:bg-blue-50 hover:text-blue-900"
                   )}
                 >
-                  <div className="relative size-5">
+                  <div className="relative size-5 shrink-0">
                     <Image
                       src={link.img}
                       alt={link.text}
@@ -94,7 +91,9 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
                     />
                   </div>
 
-                  <p className="font-medium text-sm">{link.text}</p>
+                  <p className="font-medium text-sm whitespace-nowrap">
+                    {link.text}
+                  </p>
                 </div>
               </Link>
             );
@@ -104,17 +103,17 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
 
       {/* User Footer Profile */}
       <div className="mt-auto flex w-full flex-row items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 p-3 shadow-sm">
-        <Avatar className="size-10 border-2 border-white shadow-sm">
+        <Avatar className="size-9 shrink-0 border-2 border-white shadow-sm">
           <AvatarFallback className="bg-blue-100 text-blue-900 font-semibold text-xs">
             {getInitials(initialsSource)}
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex flex-col truncate max-md:hidden">
+        <div className="flex flex-col truncate">
           <p className="text-sm font-bold text-slate-800 truncate">
             {user?.name ?? "Admin"}
           </p>
-          <p className="text-[11px] font-medium text-slate-500 truncate">
+          <p className="text-[10px] font-medium text-slate-500 truncate">
             {user?.email ?? ""}
           </p>
         </div>
