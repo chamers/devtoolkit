@@ -85,25 +85,27 @@ export const resourceSchema = z
     title: z.string().trim().min(2).max(255),
     designer: z.string().trim().min(2).max(255).nullable().optional(),
 
-    tagLine: z
-      .string()
-      .trim()
-      .min(2)
-      .max(500)
-      .describe("Short marketing tagline for the resource"),
+    tagLine: z.string().trim().min(2).max(500),
 
     mainCategory: mainCategorySchema,
-    category: categoryLevelSchema,
-    subCategory: subCategoryLevelSchema,
+    category: z.string().trim().min(1),
+    subCategory: z.string().trim().min(1),
 
-    rating: ratingSchema,
-    comments: resourceCommentArraySchema.optional(),
+    rating: z.coerce.number().min(0).max(5),
 
-    logoUrl: z.url().trim().nullable().optional(),
-    imgUrls: z.array(z.url().trim()).default([]),
-    descriptions: descriptionArraySchema,
-    tags: tagsSchema,
-    websiteUrl: websiteUrlSchema,
+    logoUrl: z.string().url().trim().nullable().optional(),
+    imgUrls: z.array(z.string().url().trim()).default([]),
+
+    descriptions: z.array(z.string().trim().min(10).max(2000)).min(1).max(10),
+    tags: z
+      .array(z.string().trim().min(1).max(50))
+      .max(50)
+      .refine(
+        (arr) => new Set(arr.map((t) => t.toLowerCase())).size === arr.length,
+        { message: "Tags must be unique (case-insensitive)" }
+      ),
+
+    websiteUrl: z.string().trim().url(),
 
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
@@ -134,6 +136,7 @@ export const resourceCreateSchema = resourceSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  userId: true, // ✅ injected on server
 });
 
 export const resourceUpdateSchema = resourceSchema
