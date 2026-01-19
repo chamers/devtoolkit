@@ -7,32 +7,22 @@ import { usePathname } from "next/navigation";
 import { cn, getInitials } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-const adminSideBarLinks = [
-  {
-    img: "/icons/admin/home.svg",
-    route: "/admin",
-    text: "Home",
-  },
-  {
-    img: "/icons/admin/users.svg",
-    route: "/admin/users",
-    text: "All Users",
-  },
+type AdminSidebarLink = {
+  img: string;
+  route: string;
+  text: string;
+};
+
+const adminSideBarLinks: AdminSidebarLink[] = [
+  { img: "/icons/admin/home.svg", route: "/admin", text: "Home" },
+  { img: "/icons/admin/users.svg", route: "/admin/users", text: "All Users" },
   {
     img: "/icons/admin/book.svg",
     route: "/admin/resources",
     text: "All Resources",
   },
-  {
-    img: "/icons/admin/bookmark.svg",
-    route: "/",
-    text: "Resource Requests",
-  },
-  {
-    img: "/icons/admin/user.svg",
-    route: "/",
-    text: "Account Requests",
-  },
+  { img: "/icons/admin/bookmark.svg", route: "/", text: "Resource Requests" },
+  { img: "/icons/admin/user.svg", route: "/", text: "Account Requests" },
 ];
 
 type AdminUser = {
