@@ -52,20 +52,22 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
           <Image
             src="/logos/logo.png"
             alt="logo"
-            height={200} // Adjusted for better sidebar fit
-            width={200}
+            height={120}
+            width={120}
             className="object-contain"
+            priority
           />
         </div>
 
         {/* Navigation Links */}
         <nav className="flex flex-1 flex-col gap-2">
           {adminSideBarLinks.map((link) => {
+            // Updated isSelected Logic:
+            // 1. Check for exact match (handles the Home/Dashboard link)
+            // 2. Check for sub-paths (handles nested routes like All Users)
             const isSelected =
-              (link.route !== "/admin" &&
-                pathname.includes(link.route) &&
-                link.route.length > 1) ||
-              pathname === link.route;
+              pathname === link.route ||
+              (link.route !== "/admin" && pathname.startsWith(link.route));
 
             return (
               <Link href={link.route} key={link.route} className="group">
@@ -91,7 +93,14 @@ const Sidebar = ({ user }: { user: AdminUser }) => {
                     />
                   </div>
 
-                  <p className="font-medium text-sm whitespace-nowrap">
+                  <p
+                    className={cn(
+                      "font-medium text-sm whitespace-nowrap transition-colors",
+                      isSelected
+                        ? "text-white"
+                        : "text-slate-600 group-hover:text-blue-900"
+                    )}
+                  >
                     {link.text}
                   </p>
                 </div>
