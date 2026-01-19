@@ -10,7 +10,7 @@ export default function Header({ user }: { user: AdminUser }) {
 
   return (
     <header className="mb-5 sm:mb-10">
-      <div className="flex items-start justify-between gap-5 px-4 lg:px-6 lg:flex-row flex-col lg:items-end">
+      <div className="flex items-start justify-between gap-5 px-4 lg:px-6 py-4 lg:py-6 lg:flex-row flex-col lg:items-end">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">
             Welcome, {displayName}

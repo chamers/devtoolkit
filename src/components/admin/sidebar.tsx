@@ -21,7 +21,7 @@ type AdminSidebarLink = {
 };
 
 const adminSideBarLinks: AdminSidebarLink[] = [
-  { img: "/icons/admin/home.svg", route: "/admin", text: "Home" },
+  { img: "/icons/admin/home.svg", route: "/admin/dashboard", text: "Home" },
   { img: "/icons/admin/users.svg", route: "/admin/users", text: "All Users" },
   {
     img: "/icons/admin/book.svg",
