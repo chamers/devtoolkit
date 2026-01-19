@@ -1,11 +1,19 @@
 "use client";
 
+import { cn, getInitials } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-import { cn, getInitials } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { usePathname } from "next/navigation";
+import React from "react";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+
+type AdminUser = {
+  id?: string;
+  name?: string | null;
+  email?: string | null;
+  role?: string | null;
+};
 
 type AdminSidebarLink = {
   img: string;
@@ -21,16 +29,17 @@ const adminSideBarLinks: AdminSidebarLink[] = [
     route: "/admin/resources",
     text: "All Resources",
   },
-  { img: "/icons/admin/bookmark.svg", route: "/", text: "Resource Requests" },
-  { img: "/icons/admin/user.svg", route: "/", text: "Account Requests" },
+  {
+    img: "/icons/admin/bookmark.svg",
+    route: "/admin/requests/resources",
+    text: "Resource Requests",
+  },
+  {
+    img: "/icons/admin.user.svg",
+    route: "/admin/requests/accounts",
+    text: "Account Requests",
+  },
 ];
-
-type AdminUser = {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
-  role?: string | null;
-};
 
 const Sidebar = ({ user }: { user: AdminUser }) => {
   const pathname = usePathname();
