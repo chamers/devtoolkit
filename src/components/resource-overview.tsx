@@ -20,6 +20,7 @@ type Props = Pick<
   | "imgUrls"
   | "websiteUrl"
 >;
+
 export default function ResourceOverview(props: Props) {
   const {
     id,
@@ -33,14 +34,14 @@ export default function ResourceOverview(props: Props) {
     websiteUrl,
   } = props;
 
-  const primaryDescription = descriptions[0] ?? ""; // falls back to empty string if none
+  const primaryDescription = descriptions[0] ?? "";
   const categoryClass = slugifyCategory(category);
 
-  // Combine logoUrl + imgUrls into one array for the slider
-  const allImages = [...(logoUrl ? [logoUrl] : []), ...(imgUrls ?? [])];
+  // ✅ Slider images are ONLY imgUrls now
+  const allImages = imgUrls ?? [];
 
-  // First image is the "logo-like" one
-  const headerImage = allImages[0] ?? null;
+  // ✅ Header image is ONLY logoUrl now
+  const headerImage = logoUrl ?? null;
 
   return (
     <section
@@ -178,7 +179,7 @@ export default function ResourceOverview(props: Props) {
         </div>
       </div>
 
-      {/* Image column */}
+      {/* Image column (only show if there are imgUrls) */}
       {allImages.length > 0 && (
         <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
           <SliderWrapper images={allImages} descriptions={descriptions} />
