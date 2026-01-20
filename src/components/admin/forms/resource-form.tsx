@@ -128,7 +128,11 @@ const ResourceForm = ({
 
       descriptions: resource?.descriptions ?? [""],
 
-      // ✅ renamed
+      // ✅ NEW: logoUrl (single)
+      // keep as "" in form; normalize to null on submit
+      logoUrl: resource?.logoUrl ?? "",
+
+      // ✅ multi images
       imgUrls: resource?.imgUrls ?? [],
 
       websiteUrl: resource?.websiteUrl ?? "",
@@ -197,6 +201,7 @@ const ResourceForm = ({
     control: form.control,
     name: "imgUrls",
   });
+
   const {
     fields: descFields,
     append: appendDesc,
@@ -247,6 +252,10 @@ const ResourceForm = ({
       tagLine: values.tagLine.trim(),
       designer: values.designer?.trim() ?? "",
       descriptions: values.descriptions.map((d) => d.trim()).filter(Boolean),
+
+      // ✅ normalize logoUrl: "" -> null
+      logoUrl: values.logoUrl?.trim() ? values.logoUrl.trim() : null,
+
       imgUrls: values.imgUrls.map((u) => u.trim()).filter(Boolean),
       tags: values.tags.map((t) => t.trim()).filter(Boolean),
     };
@@ -340,7 +349,7 @@ const ResourceForm = ({
           )}
         />
 
-        {/* ✅ NEW tagline (required) */}
+        {/* tagline (required) */}
         <FormField
           control={form.control}
           name="tagLine"
@@ -360,6 +369,82 @@ const ResourceForm = ({
               <FormMessage />
             </FormItem>
           )}
+        />
+
+        {/* ✅ NEW: Logo image (single) */}
+        <FormField
+          control={form.control}
+          name="logoUrl"
+          render={({ field }) => {
+            const current = form.watch("logoUrl");
+            return (
+              <FormItem className="flex flex-col gap-2">
+                <FormLabel>Logo Image (single)</FormLabel>
+
+                <div className="flex items-center gap-2">
+                  <FormControl>
+                    <Input
+                      type="url"
+                      placeholder="https://example.com/logo.png"
+                      {...field}
+                      value={(field.value as string | null | undefined) ?? ""}
+                      className="h-10"
+                    />
+                  </FormControl>
+
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Clear logo"
+                    onClick={() =>
+                      form.setValue("logoUrl", "", {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                    }
+                  >
+                    <X size={16} />
+                  </Button>
+                </div>
+
+                <div className="text-xs text-muted-foreground">
+                  Or upload one logo image:
+                </div>
+
+                <ImageUpload
+                  multiple={false}
+                  maxFiles={1}
+                  onUploaded={(urls: string[]) => {
+                    const first = urls?.[0];
+                    if (!first) return;
+                    form.setValue("logoUrl", first, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                />
+
+                {current ? (
+                  <div className="mt-2 flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={current}
+                      alt="Logo preview"
+                      className="h-12 w-12 rounded border object-contain bg-white"
+                    />
+                    <Badge variant="secondary">Logo preview</Badge>
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-500">
+                    No logo set (optional).
+                  </p>
+                )}
+
+                <FormMessage />
+              </FormItem>
+            );
+          }}
         />
 
         {/* Cascading selects */}
@@ -659,7 +744,7 @@ const ResourceForm = ({
           />
         </div>
 
-        {/* images */}
+        {/* images (multi) */}
         <FormField
           control={form.control}
           name="imgUrls"
