@@ -94,15 +94,30 @@ export default function Slider({
           </div>
         )}
 
-        {/* Descriptions - Now always displayed if descriptions exist and the array is sliced */}
+        {/* Descriptions */}
         {descriptions.length > 0 && (
-          <div className="relative sm:w-[400px] w-[320px] mt-6 lg:mt-5 min-h-[3rem]">
+          <div
+            className="
+      relative
+      sm:w-[400px] w-[320px]
+      mt-6 lg:mt-0
+      min-h-[5rem]
+      px-4
+      grid
+      place-items-center
+      text-center
+    "
+          >
             {descriptions.map((desc, i) => (
               <p
                 key={i}
-                className={`text-center text-neutral-700 dark:text-neutral-300 absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
-                  i === index ? "opacity-100 delay-200" : "opacity-0"
-                }`}
+                className={`
+          col-start-1 row-start-1
+          text-neutral-700 dark:text-neutral-300
+          transition-opacity duration-300
+          leading-relaxed
+          ${i === index ? "opacity-100 delay-200" : "opacity-0"}
+        `}
               >
                 {desc}
               </p>
