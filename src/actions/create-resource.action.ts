@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 
-import { auth } from "@/lib/auth"; // <-- your better-auth server helper
+import { auth } from "@/lib/auth";
 import { resourceCreateSchema } from "@/lib/validation/resource.schema";
 import prisma from "@/db";
 import { headers } from "next/headers";
@@ -32,30 +32,45 @@ export async function createResource(input: unknown) {
 
   const values = parsed.data;
 
-  // 3) Map + create
+  // ✅ Minimal normalization (safe)
+  const title = values.title.trim();
+  const tagLine = values.tagLine.trim();
+
+  const designer = values.designer?.trim() ? values.designer.trim() : null;
+
+  const category = values.category.trim();
+  const subCategory = values.subCategory.trim();
+
+  const descriptions = values.descriptions.map((d) => d.trim()).filter(Boolean);
+
+  const imgUrls = (values.imgUrls ?? []).map((u) => u.trim()).filter(Boolean);
+
+  const tags = (values.tags ?? []).map((t) => t.trim()).filter(Boolean);
+
+  const websiteUrl = values.websiteUrl.trim();
+
   // Optional nicety: if there are images, set logoUrl to first image
-  const imgUrls = values.imgUrls ?? [];
   const logoUrl = values.logoUrl ?? imgUrls[0] ?? null;
 
   try {
     const row = await prisma.resource.create({
       data: {
-        title: values.title,
-        designer: values.designer ?? null,
-        tagLine: values.tagLine,
+        title,
+        designer,
+        tagLine,
 
         mainCategory: values.mainCategory,
-        category: values.category,
-        subCategory: values.subCategory,
+        category,
+        subCategory,
 
         rating: new Prisma.Decimal(values.rating),
 
         logoUrl,
         imgUrls,
-        descriptions: values.descriptions,
-        tags: values.tags ?? [],
+        descriptions,
+        tags,
 
-        websiteUrl: values.websiteUrl,
+        websiteUrl,
 
         pricing: values.pricing,
         projectType: values.projectType,

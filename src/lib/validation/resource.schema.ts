@@ -105,7 +105,8 @@ export const resourceSchema = z
         { message: "Tags must be unique (case-insensitive)" }
       ),
 
-    websiteUrl: z.string().trim().url(),
+    // websiteUrl: z.string().trim().url(),
+    websiteUrl: z.string().trim().url().or(z.literal("")),
 
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),

@@ -6,6 +6,7 @@ import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import useMounted from "@/hooks/useMounted";
 import type { ResourceFull } from "@/lib/types";
+import { updateResourceAction } from "@/actions/update-resource.action";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -70,7 +71,7 @@ function parseTags(input: string): string[] {
 
 interface Props extends Partial<ResourceFull> {
   type?: "create" | "edit";
-  /** Optional: where to go after create/update */
+  resourceId?: string; // ✅ for edit
   redirectTo?: "admin" | "public";
 }
 
@@ -82,6 +83,7 @@ const MAX_DESCRIPTIONS = 5;
 const ResourceForm = ({
   type = "create",
   redirectTo = "admin",
+  resourceId,
   ...resource
 }: Props) => {
   const mounted = useMounted();
@@ -195,7 +197,6 @@ const ResourceForm = ({
     control: form.control,
     name: "imgUrls",
   });
-
   const {
     fields: descFields,
     append: appendDesc,
@@ -242,21 +243,41 @@ const ResourceForm = ({
   const onSubmit = async (values: FormOutput) => {
     const cleaned: FormOutput = {
       ...values,
-      descriptions: values.descriptions.map((d) => d.trim()).filter(Boolean),
-      // (optional) also trim tagline/title
       title: values.title.trim(),
       tagLine: values.tagLine.trim(),
       designer: values.designer?.trim() ?? "",
+      descriptions: values.descriptions.map((d) => d.trim()).filter(Boolean),
+      imgUrls: values.imgUrls.map((u) => u.trim()).filter(Boolean),
+      tags: values.tags.map((t) => t.trim()).filter(Boolean),
     };
 
-    const result = await createResource(cleaned);
+    if (type === "edit") {
+      if (!resource.id && !resourceId) {
+        toast.error("Missing resource id for edit.");
+        return;
+      }
+      const id = resourceId ?? resource.id!;
+      const result = await updateResourceAction({
+        resourceId: id,
+        input: cleaned,
+      });
 
+      if (result.ok) {
+        toast.success("Resource updated successfully!");
+        router.push(`/admin/resources/${id}`);
+        return;
+      }
+
+      toast.error(result.message ?? "Unable to update resource.");
+      return;
+    }
+
+    // create
+    const result = await createResource(cleaned);
     if (result.success) {
       toast.success("Resource created successfully!");
-
       const id = result.data.id;
 
-      // ✅ choose where to go after create
       if (redirectTo === "admin") {
         router.push(`/admin/resources/${id}`);
       } else {
@@ -740,7 +761,15 @@ const ResourceForm = ({
           )}
         />
 
-        <Button type="submit">{type === "edit" ? "Update" : "Submit"}</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting
+            ? type === "edit"
+              ? "Updating..."
+              : "Submitting..."
+            : type === "edit"
+              ? "Update"
+              : "Submit"}
+        </Button>
       </form>
     </Form>
   );
