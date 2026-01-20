@@ -1,19 +1,42 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import ResourcesTable, {
+  type ResourceRow,
+} from "@/components/admin/resources-table";
+import ReturnButton from "@/components/return-button";
+import prisma from "@/db";
 
-const page = () => {
+export default async function Page() {
+  const resources = await prisma.resource.findMany({
+    select: {
+      id: true,
+      title: true,
+      mainCategory: true,
+      category: true,
+      subCategory: true,
+      pricing: true,
+      projectType: true,
+      isFeatured: true,
+      createdAt: true,
+    },
+    orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
+  });
+
+  // Ensures the type matches and dates are Dates
+  const rows: ResourceRow[] = resources;
+
   return (
-    <section className="w-full rounded-2xl bg-white p-7">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2>All Resources</h2>
-        <Button asChild>
-          <Link href="/admin/resources/new">Create a New Resource</Link>
-        </Button>
+    <div className="flex flex-col gap-6 p-4">
+      <div className="w-full flex justify-start">
+        <ReturnButton href="/admin/dashboard" label="Dashboard" />
       </div>
-      <div className="mt-7 w-full overflow-hidden">
-        <p>Table</p>
+
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-semibold">Resources</h1>
+        <p className="text-sm text-slate-500">
+          Manage resources, featured status, and edits.
+        </p>
       </div>
-    </section>
+
+      <ResourcesTable resources={rows} />
+    </div>
   );
-};
-export default page;
+}

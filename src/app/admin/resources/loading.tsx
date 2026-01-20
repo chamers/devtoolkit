@@ -1,0 +1,22 @@
+export default function Loading() {
+  return (
+    <div className="flex flex-col gap-6 p-4">
+      <div className="h-10 w-32 rounded bg-slate-200 animate-pulse" />
+
+      <div className="flex flex-col gap-2">
+        <div className="h-7 w-40 rounded bg-slate-200 animate-pulse" />
+        <div className="h-4 w-72 rounded bg-slate-200 animate-pulse" />
+      </div>
+
+      <div className="w-full overflow-x-auto">
+        <div className="min-w-full space-y-2">
+          <div className="h-10 rounded bg-slate-200 animate-pulse" />
+          <div className="h-10 rounded bg-slate-200 animate-pulse" />
+          <div className="h-10 rounded bg-slate-200 animate-pulse" />
+          <div className="h-10 rounded bg-slate-200 animate-pulse" />
+          <div className="h-10 rounded bg-slate-200 animate-pulse" />
+        </div>
+      </div>
+    </div>
+  );
+}
