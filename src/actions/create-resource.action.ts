@@ -49,8 +49,7 @@ export async function createResource(input: unknown) {
 
   const websiteUrl = values.websiteUrl.trim();
 
-  // Optional nicety: if there are images, set logoUrl to first image
-  const logoUrl = values.logoUrl ?? imgUrls[0] ?? null;
+  const logoUrl = values.logoUrl?.trim() ? values.logoUrl.trim() : null;
 
   try {
     const row = await prisma.resource.create({

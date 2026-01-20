@@ -26,11 +26,9 @@ const ResourceCardMini: React.FC<Props> = ({ resource }) => {
   } = resource;
 
   // PRIMARY IMAGE LOGIC
+  // PRIMARY IMAGE LOGIC (logo only)
   const primaryImg =
-    (typeof logoUrl === "string" && logoUrl.trim().length > 0
-      ? logoUrl
-      : imgUrls.find((u) => typeof u === "string" && u.trim().length > 0)) ??
-    null;
+    typeof logoUrl === "string" && logoUrl.trim().length > 0 ? logoUrl : null;
 
   // DESCRIPTION SNIPPET
   const snippet = descriptions[0] ?? "";

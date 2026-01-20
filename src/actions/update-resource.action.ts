@@ -71,14 +71,13 @@ export async function updateResourceAction({
     const nextWebsiteUrl =
       values.websiteUrl !== undefined ? values.websiteUrl.trim() : undefined;
 
-    // Optional convenience: if imgUrls changed and logoUrl wasn't set explicitly,
-    // keep logoUrl as first image.
+    // ✅ Keep logoUrl separate from imgUrls (no fallback)
     const nextLogoUrl =
       values.logoUrl !== undefined
-        ? values.logoUrl
-        : nextImgUrls
-          ? (nextImgUrls[0] ?? null)
-          : undefined;
+        ? values.logoUrl?.trim()
+          ? values.logoUrl.trim()
+          : null
+        : undefined;
 
     await prisma.resource.update({
       where: { id: resourceId },
