@@ -11,6 +11,8 @@ export const TAXONOMY: Record<
   MainCategory,
   Record<string, readonly string[]>
 > = {
+  /* ================= DEVELOPMENT ================= */
+
   [MainCategory.DEVELOPMENT]: {
     Frontend: [
       "HTML",
@@ -56,6 +58,8 @@ export const TAXONOMY: Record<
     "Data & Analytics Eng": ["ETL / ELT", "Data Warehouses", "BI / Dashboards"],
   },
 
+  /* ================= DESIGN ================= */
+
   [MainCategory.DESIGN]: {
     "UI/UX Design": [
       "Wireframing",
@@ -73,6 +77,8 @@ export const TAXONOMY: Record<
     "3D / Motion": ["3D Modeling", "Motion Design", "Rendering Tools"],
   },
 
+  /* ================= ARCHITECTURE / ENGINEERING ================= */
+
   [MainCategory.ARCHITECTURE_ENGINEERING]: {
     "CAD / BIM": ["CAD Suites", "Open Source CAD", "BIM Tools"],
     Visualization: [
@@ -82,6 +88,8 @@ export const TAXONOMY: Record<
     ],
     "Project Management": ["Collaboration", "Blueprint Repositories"],
   },
+
+  /* ================= CONTENT CREATION ================= */
 
   [MainCategory.CONTENT_CREATION]: {
     Copywriting: [
@@ -96,6 +104,8 @@ export const TAXONOMY: Record<
     ],
     "Blogging / SEO": ["CMS Tools", "Headless CMS", "Keyword Research"],
   },
+
+  /* ================= MARKETING & ANALYTICS ================= */
 
   [MainCategory.MARKETING_ANALYTICS]: {
     "SEO & Analytics": [
@@ -116,6 +126,8 @@ export const TAXONOMY: Record<
     Automation: ["Workflow Automation", "Integrations", "iPaaS"],
     Research: ["Surveys", "User Research", "Market Intelligence"],
   },
+
+  /* ================= VIDEO & AUDIO ================= */
 
   [MainCategory.VIDEO_AUDIO]: {
     "Video Editing": [
@@ -140,6 +152,8 @@ export const TAXONOMY: Record<
     Assets: ["Stock Footage", "Music & SFX", "Transitions / Overlays", "Foley"],
   },
 
+  /* ================= PRODUCTIVITY ================= */
+
   [MainCategory.PRODUCTIVITY]: {
     "Knowledge Management": ["Notes", "Wikis", "PKM"],
     "Project Management": ["Kanban", "Roadmapping", "Time Tracking"],
@@ -148,6 +162,8 @@ export const TAXONOMY: Record<
     "Browsing & Research": ["Web Clippers", "Archivers"],
     "Writing Aids": ["Spellcheck", "Summarizers", "Paraphrasers"],
   },
+
+  /* ================= EDUCATION ================= */
 
   [MainCategory.EDUCATION_ELEARNING]: {
     "Course Platforms": ["LMS", "MOOCs"],
@@ -158,14 +174,140 @@ export const TAXONOMY: Record<
     "Tutoring & AI Assistants": ["Study Aids", "AI Tutors"],
   },
 
-  // For the remaining enums, you can start minimal and grow over time:
-  [MainCategory.SECURITY]: {},
-  [MainCategory.UTILITIES]: {},
-  [MainCategory.FINANCE]: {},
-  [MainCategory.HEALTH_WELLNESS]: {},
-  [MainCategory.GAMING]: {},
-  [MainCategory.CLOUD_INFRASTRUCTURE]: {},
-  [MainCategory.OTHERS]: {},
+  /* ================= SECURITY ================= */
+
+  [MainCategory.SECURITY]: {
+    "AppSec & DevSecOps": [
+      "SAST / DAST",
+      "Dependency / SBOM Scanning",
+      "Secrets Scanning",
+      "Secure CI/CD",
+      "Threat Modeling",
+    ],
+    "Identity & Access": [
+      "SSO / OIDC",
+      "Password Managers",
+      "MFA / Passkeys",
+      "RBAC / ABAC",
+    ],
+    "Network Security": [
+      "Firewalls",
+      "WAF",
+      "VPN / Zero Trust",
+      "DDoS Protection",
+    ],
+    "Cloud Security": ["CSPM", "CWPP", "Key Management", "Policy as Code"],
+    "Monitoring & Response": [
+      "SIEM",
+      "SOAR",
+      "Incident Response",
+      "Threat Intelligence",
+    ],
+    "Privacy & Compliance": [
+      "GDPR Tools",
+      "DLP",
+      "Consent Management",
+      "Risk Management",
+    ],
+  },
+
+  /* ================= UTILITIES ================= */
+
+  [MainCategory.UTILITIES]: {
+    "File & Storage": [
+      "Compression / Archiving",
+      "File Transfer",
+      "Backup & Sync",
+      "Encryption Tools",
+    ],
+    "PDF & Documents": ["PDF Editors", "PDF Converters", "OCR", "eSignatures"],
+    "Media Utilities": [
+      "Image Compression",
+      "Format Conversion",
+      "Background Removal",
+      "Metadata Tools",
+    ],
+    "Developer Utilities": [
+      "API Clients",
+      "Regex Tools",
+      "JSON / YAML Tools",
+      "Code Formatters",
+      "CLI Tools",
+    ],
+    "System & Performance": [
+      "System Monitoring",
+      "Process Managers",
+      "Network Diagnostics",
+    ],
+    "Browser Utilities": [
+      "Ad Blockers",
+      "Tab Managers",
+      "Read-it-later",
+      "Translation Tools",
+    ],
+  },
+
+  /* ================= FINANCE ================= */
+
+  [MainCategory.FINANCE]: {
+    "Accounting & Bookkeeping": [
+      "Invoicing",
+      "Expenses",
+      "Payroll",
+      "VAT / Tax",
+    ],
+    "Personal Finance": ["Budgeting", "Subscriptions", "Net Worth Tracking"],
+    "Business Finance": ["Cash Flow", "Forecasting", "Billing", "Reporting"],
+    Payments: ["Payment Gateways", "Checkout", "Fraud Prevention"],
+    Investing: ["Portfolio Tracking", "Market Data", "Crypto Tools"],
+    "Tax & Compliance": ["Self Assessment", "Corporation Tax", "AML / KYC"],
+  },
+
+  /* ================= HEALTH & WELLNESS ================= */
+
+  [MainCategory.HEALTH_WELLNESS]: {
+    Fitness: ["Workout Plans", "Strength Training", "Wearables"],
+    Nutrition: ["Meal Planning", "Calorie Tracking", "Recipes"],
+    "Mental Wellbeing": ["Meditation", "Journaling", "Stress Management"],
+    Sleep: ["Sleep Tracking", "Sleep Coaching", "Smart Alarms"],
+    Medical: ["Telehealth", "Medication Reminders", "Health Records"],
+  },
+
+  /* ================= GAMING ================= */
+
+  [MainCategory.GAMING]: {
+    "Game Development": ["Engines", "Asset Pipelines", "Testing / QA"],
+    Streaming: ["Streaming Software", "Overlays", "Chat Tools"],
+    Communities: ["Voice Chat", "Guild / Clan Tools", "Moderation"],
+    Performance: ["FPS Monitoring", "Graphics Optimization"],
+    Utilities: ["Launchers", "Mods", "Game Trackers"],
+  },
+
+  /* ================= CLOUD INFRASTRUCTURE ================= */
+
+  [MainCategory.CLOUD_INFRASTRUCTURE]: {
+    Providers: ["AWS", "Azure", "Google Cloud", "DigitalOcean", "Cloudflare"],
+    Compute: ["VMs", "Containers", "Kubernetes", "Serverless"],
+    Storage: ["Object Storage", "Block Storage", "Backups", "CDN"],
+    Networking: ["VPC", "Load Balancers", "DNS", "API Gateways"],
+    Observability: ["Logging", "Metrics", "Tracing", "Alerting"],
+    "Infrastructure as Code": ["Terraform", "Pulumi", "CloudFormation"],
+    Security: ["IAM", "Secrets Management", "Compliance", "Cost Controls"],
+  },
+
+  /* ================= OTHERS ================= */
+
+  [MainCategory.OTHERS]: {
+    Communication: ["Email", "Team Chat", "Video Conferencing", "Async Video"],
+    "Business Operations": ["CRM", "HR / Hiring", "Legal", "Contracts"],
+    "E-commerce": ["Storefronts", "Shipping", "Returns", "Reviews"],
+    "AI Assistants": [
+      "General Assistants",
+      "Meeting Assistants",
+      "Support Bots",
+    ],
+    Miscellaneous: ["Templates", "Directories", "Tool Collections", "Other"],
+  },
 };
 
 /* ========= Types ========= */
