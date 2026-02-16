@@ -215,7 +215,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import MainNavLinks from "./main-nav-links";
-import ThemeToggleMode from "./theme-toggle-mode";
+import ThemeToggleMode from "./nav/theme-toggle-mode";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
@@ -254,14 +254,14 @@ const Header = () => {
   const profileHref = !isLoggedIn
     ? "/signin"
     : role === "ADMIN"
-    ? "admin/dashboard"
-    : "/my-profile";
+      ? "admin/dashboard"
+      : "/my-profile";
 
   const profileLabel = !isLoggedIn
     ? "Sign in"
     : role === "ADMIN"
-    ? "Admin dashboard"
-    : "My profile";
+      ? "Admin dashboard"
+      : "My profile";
 
   const displayName =
     session?.user?.name ??

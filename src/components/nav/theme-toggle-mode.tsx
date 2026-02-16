@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { FaMoon, FaSun } from "react-icons/fa";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import useMounted from "@/hooks/useMounted";
 
 export default function ThemeToggleMode() {

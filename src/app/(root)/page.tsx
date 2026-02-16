@@ -1,10 +1,12 @@
-import ThemeToggleMode from "@/components/theme-toggle-mode";
-import { Button } from "@/components/ui/button";
-
 const LandingPage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
-      <ThemeToggleMode />
+      <p className="m-20">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure
+        distinctio accusantium sed aliquam ipsam vero laboriosam deleniti nisi,
+        doloribus in harum cupiditate, nemo consequuntur velit, magnam voluptas
+        illo molestiae voluptatibus.
+      </p>
     </div>
   );
 };
