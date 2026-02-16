@@ -5,30 +5,30 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { Button } from "./ui/button";
 import useMounted from "@/hooks/useMounted";
 
-const ThemeToggleMode = () => {
-  const { resolvedTheme, theme, setTheme } = useTheme();
+export default function ThemeToggleMode() {
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
-
-  if (!mounted) return <Button variant="outline" disabled={true}></Button>;
 
   const isDark = resolvedTheme === "dark";
 
   return (
     <Button
-      variant="outline"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      title={`Switch to ${isDark ? "light" : "dark"} mode`}
+      variant="link"
+      size="icon"
+      disabled={!mounted}
+      onClick={() => mounted && setTheme(isDark ? "light" : "dark")}
+      aria-label={
+        mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : "Theme toggle"
+      }
+      title={
+        mounted ? `Switch to ${isDark ? "light" : "dark"} mode` : "Theme toggle"
+      }
+      className="hover:text-primary"
     >
-      {isDark ? (
-        <FaSun className="hover:cursor-pointer hover:text-primary" />
-      ) : (
-        <FaMoon className="hover:cursor-pointer hover:text-primary" />
-      )}
+      {isDark ? <FaSun aria-hidden /> : <FaMoon aria-hidden />}
     </Button>
   );
-};
-
-export default ThemeToggleMode;
+}
 
 // "use client";
 

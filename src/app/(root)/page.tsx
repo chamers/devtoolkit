@@ -1,9 +1,10 @@
+import ThemeToggleMode from "@/components/theme-toggle-mode";
 import { Button } from "@/components/ui/button";
 
 const LandingPage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
-      <Button>Click Me</Button>
+      <ThemeToggleMode />
     </div>
   );
 };
