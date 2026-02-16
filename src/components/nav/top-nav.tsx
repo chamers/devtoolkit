@@ -27,8 +27,8 @@ const TopNav = () => {
               src="/logos/logo.png"
               alt="DevToolkit"
               className="block dark:hidden h-auto w-auto"
-              width={50}
-              height={50}
+              width={70}
+              height={70}
             />
 
             {/* Dark mode logo */}
@@ -36,8 +36,8 @@ const TopNav = () => {
               src="/logos/logo-dark.png"
               alt="DevToolkit (dark)"
               className="hidden dark:block h-auto w-auto"
-              width={50}
-              height={50}
+              width={70}
+              height={70}
             />
           </Link>
         </MenubarMenu>
