@@ -17,6 +17,15 @@ import ThemeToggleMode from "./theme-toggle-mode";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
+import MainNavLinks from "../main-nav-links";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+} from "@/components/ui/sheet";
+import { Button } from "../ui/button";
+import { Menu } from "lucide-react";
 
 const TopNav = () => {
   const { data: session, isPending } = useSession();
@@ -75,15 +84,7 @@ const TopNav = () => {
       </div>
       <div className="flex grow items-center justify-end gap-1">
         <MenubarMenu>
-          <MenubarTrigger className="text-base font-normal">
-            Resources
-          </MenubarTrigger>
-          <MenubarTrigger className="text-base font-normal">
-            About
-          </MenubarTrigger>
-          <MenubarTrigger className="text-base font-normal">
-            Contact
-          </MenubarTrigger>
+          <MainNavLinks />
         </MenubarMenu>
 
         <MenubarMenu>
@@ -101,6 +102,70 @@ const TopNav = () => {
         <MenubarMenu>
           <ThemeToggleMode />
         </MenubarMenu>
+      </div>
+      {/* Right: mobile hamburger */}
+      <div className="ml-auto flex md:hidden items-center gap-2">
+        <ThemeToggleMode />
+
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" aria-label="Open menu">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+
+          <SheetContent side="right" className="w-80">
+            <SheetHeader>
+              <div className="flex items-center justify-between">
+                <Link href="/" className="flex items-center gap-2">
+                  <Image
+                    src="/logos/logo.png"
+                    alt="DevToolkit"
+                    className="block dark:hidden h-8 w-auto"
+                    width={200}
+                    height={40}
+                  />
+                  <Image
+                    src="/logos/logo-dark.png"
+                    alt="DevToolkit (dark)"
+                    className="hidden dark:block h-8 w-auto"
+                    width={200}
+                    height={40}
+                  />
+                </Link>
+              </div>
+            </SheetHeader>
+
+            <nav className="mt-6 flex flex-col gap-3">
+              <Link className="text-base" href="/resources">
+                Resources
+              </Link>
+              <Link className="text-base" href="/about">
+                About
+              </Link>
+              <Link className="text-base" href="/contact">
+                Contact
+              </Link>
+
+              <div className="mt-4 border-t pt-4">
+                <Link href={profileHref} className="flex items-center gap-3">
+                  <Avatar>
+                    <AvatarFallback className="bg-amber-100 font-medium">
+                      {isPending ? "…" : initials}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">{profileLabel}</span>
+                    <span className="text-xs opacity-70">
+                      {isLoggedIn ? displayName : "Access your account"}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            </nav>
+          </SheetContent>
+        </Sheet>
       </div>
     </Menubar>
   );
