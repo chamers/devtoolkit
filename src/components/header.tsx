@@ -44,7 +44,7 @@ const Header = () => {
   const profileHref = !isLoggedIn
     ? "/signin"
     : role === "ADMIN"
-      ? "admin/dashboard"
+      ? "/publicadmin/dashboard"
       : "/my-profile";
 
   const profileLabel = !isLoggedIn
@@ -72,10 +72,7 @@ const Header = () => {
       >
         <div
           className="
-      mx-auto
-      flex h-14 items-center justify-between gap-3
-      px-4 sm:px-6 lg:px-8
-      max-w-screen-xl
+      page-container flex h-14 items-center justify-between gap-3
     "
         >
           {/* LOGO */}
@@ -87,18 +84,18 @@ const Header = () => {
               <Image
                 src="/logos/logo.png"
                 alt="DevToolkit"
-                className="block dark:hidden h-auto w-auto"
-                width={520}
-                height={80}
+                className="block dark:hidden h-8 w-auto"
+                width={200}
+                height={32}
               />
 
               {/* Dark mode logo */}
               <Image
                 src="/logos/logo-dark.png"
                 alt="DevToolkit (dark)"
-                className="hidden dark:block h-auto w-auto"
-                width={520}
-                height={80}
+                className="hidden dark:block h-8 w-auto"
+                width={200}
+                height={32}
               />
             </Link>
           </div>

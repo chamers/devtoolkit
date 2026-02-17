@@ -3,7 +3,6 @@ import prisma from "@/db";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { after } from "next/server";
-import { FaCheckCircle } from "react-icons/fa";
 
 const LandingPageLayout = async ({
   children,
@@ -41,16 +40,10 @@ const LandingPageLayout = async ({
   }
 
   return (
-    <main className="flex flex-col items-center w-full">
-      {/* HERO SECTION */}
-      <section>
-        {/* Header */}
-        <Header />
-
-        {/* Hero Content */}
-        {children}
-      </section>
-    </main>
+    <div className="min-h-screen w-full">
+      <Header />
+      <main className="page-container">{children}</main>
+    </div>
   );
 };
 
