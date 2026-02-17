@@ -44,7 +44,7 @@ const Header = () => {
   const profileHref = !isLoggedIn
     ? "/signin"
     : role === "ADMIN"
-      ? "/publicadmin/dashboard"
+      ? "/admin/dashboard"
       : "/my-profile";
 
   const profileLabel = !isLoggedIn
