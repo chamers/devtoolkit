@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Menubar,
   MenubarContent,
@@ -26,7 +28,7 @@ const TopNav = () => {
   const profileHref = !isLoggedIn
     ? "/signin"
     : role === "ADMIN"
-      ? "admin/dashboard"
+      ? "/admin/dashboard"
       : "/my-profile";
 
   const profileLabel = !isLoggedIn
