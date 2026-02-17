@@ -1,12 +1,12 @@
+import GetStartedButton from "@/components/get-started-button";
+
 const LandingPage = () => {
   return (
     <div className="flex justify-center items-center h-screen">
-      <p className="m-20">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure
-        distinctio accusantium sed aliquam ipsam vero laboriosam deleniti nisi,
-        doloribus in harum cupiditate, nemo consequuntur velit, magnam voluptas
-        illo molestiae voluptatibus.
-      </p>
+      <div className="flex justify-center gap-8 flex-col items-center">
+        <h1>Welcome to DevToolkit</h1>
+        <GetStartedButton />
+      </div>
     </div>
   );
 };
