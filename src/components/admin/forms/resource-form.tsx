@@ -861,7 +861,6 @@
 // };
 
 // export default ResourceForm;
-
 "use client";
 
 import * as React from "react";
@@ -1014,13 +1013,6 @@ const ResourceForm = ({
     const cats = CATEGORY_OPTIONS_BY_MAIN[watchedMain] ?? [];
     const nextCat = cats[0] ?? "";
     form.setValue("category", nextCat, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-    const subs = (SUBCATEGORY_OPTIONS_BY_MAIN_AND_CAT[watchedMain]?.[nextCat] ??
-      []) as readonly string[] | undefined;
-    const nextSub = subs?.[0] ?? "";
-    form.setValue("subCategory", nextSub, {
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -1288,18 +1280,16 @@ const ResourceForm = ({
           </div>
         </div>
 
-        {/* SECTION 3: CONTENT */}
-        <div className="space-y-6">
+        {/* SECTION 3: CONTENT & RATING (Stacked) */}
+        <div className="space-y-8">
           <FormField
             control={form.control}
             name="descriptions"
             render={() => (
               <FormItem className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Descriptions ({descFields.length}/{MAX_DESCRIPTIONS})
-                  </FormLabel>
-                </div>
+                <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Descriptions ({descFields.length}/{MAX_DESCRIPTIONS})
+                </FormLabel>
                 <div className="space-y-3">
                   {descFields.map((f, idx) => (
                     <div
@@ -1311,14 +1301,14 @@ const ResourceForm = ({
                           placeholder="Add a detailed description paragraph..."
                           rows={3}
                           {...form.register(`descriptions.${idx}` as const)}
-                          className="bg-slate-50/50 focus:bg-white"
+                          className="bg-slate-50/50 focus:bg-white transition-all"
                         />
                       </FormControl>
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="mt-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100"
+                        className="mt-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={() => removeDesc(idx)}
                       >
                         <Trash2 size={16} />
@@ -1341,7 +1331,7 @@ const ResourceForm = ({
             )}
           />
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="space-y-6">
             <FormItem>
               <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Tags (Comma Separated)
@@ -1366,6 +1356,7 @@ const ResourceForm = ({
                 ))}
               </div>
             </FormItem>
+
             <FormField
               control={form.control}
               name="rating"
@@ -1378,94 +1369,193 @@ const ResourceForm = ({
                     <Input
                       type="number"
                       step={0.5}
+                      min={0}
+                      max={5}
                       {...field}
                       onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                      className="bg-slate-50/50"
+                      className="bg-slate-50/50 max-w-[200px]"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        {/* SECTION 4: ASSETS & LINKS */}
-        <div className="space-y-8 rounded-xl border border-slate-200 p-6 dark:border-slate-800">
+        {/* SECTION 4: MEDIA ASSETS (Logo and Gallery Stacked) */}
+        <div className="space-y-10 rounded-xl border border-slate-200 p-8 dark:border-slate-800 bg-white/50 dark:bg-slate-900/10">
           <div className="flex items-center gap-2">
             <ImageIcon className="size-5 text-slate-400" />
-            <h3 className="text-lg font-bold tracking-tight">Media & Links</h3>
+            <h3 className="text-lg font-bold tracking-tight">Media Assets</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <FormLabel className="text-sm font-semibold">
-                Logo Image
-              </FormLabel>
-              <ImageUpload
-                multiple={false}
-                maxFiles={1}
-                onUploaded={(urls) =>
-                  form.setValue("logoUrl", urls[0], { shouldDirty: true })
-                }
-              />
-              {form.watch("logoUrl") && (
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border">
-                  <img
-                    src={form.watch("logoUrl")}
-                    className="size-10 rounded object-contain bg-white"
-                    alt="logo"
+          {/* Logo Field (Restored URL + Upload) */}
+          <FormField
+            control={form.control}
+            name="logoUrl"
+            render={({ field }) => {
+              const current = form.watch("logoUrl");
+              return (
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-sm font-semibold">
+                    Logo Image (Single)
+                  </FormLabel>
+                  <div className="flex items-center gap-2">
+                    <FormControl>
+                      <Input
+                        type="url"
+                        placeholder="https://example.com/logo.png"
+                        {...field}
+                        value={(field.value as string | null | undefined) ?? ""}
+                        className="bg-white dark:bg-slate-950"
+                      />
+                    </FormControl>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() =>
+                        form.setValue("logoUrl", "", {
+                          shouldDirty: true,
+                          shouldValidate: true,
+                        })
+                      }
+                    >
+                      <X size={16} />
+                    </Button>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">
+                    Or upload a file:
+                  </p>
+                  <ImageUpload
+                    multiple={false}
+                    maxFiles={1}
+                    onUploaded={(urls) =>
+                      form.setValue("logoUrl", urls[0], {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                    }
                   />
-                  <span className="text-xs text-slate-500 truncate flex-1">
-                    {form.watch("logoUrl")}
-                  </span>
+                  {current && (
+                    <div className="mt-2 flex items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-md border shadow-sm w-fit">
+                      <img
+                        src={current}
+                        alt="Logo preview"
+                        className="size-12 rounded border object-contain bg-white"
+                      />
+                      <Badge variant="secondary">Logo preview</Badge>
+                    </div>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+
+          <Separator className="opacity-50" />
+
+          {/* Gallery Field (Restored URL + Upload) */}
+          <FormField
+            control={form.control}
+            name="imgUrls"
+            render={() => (
+              <FormItem className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-sm font-semibold">
+                    Resource Gallery Images ({imgFields.length}/{MAX_IMAGES})
+                  </FormLabel>
+                </div>
+
+                {/* Manual URL Inputs */}
+                <div className="space-y-2">
+                  {imgFields.map((f, idx) => (
+                    <div key={f.id} className="flex items-center gap-2">
+                      <FormControl>
+                        <Input
+                          type="url"
+                          placeholder={`https://example.com/image-${idx + 1}.png`}
+                          {...form.register(`imgUrls.${idx}` as const)}
+                          className="bg-white dark:bg-slate-950"
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeImg(idx)}
+                      >
+                        <X size={16} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3">
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => form.setValue("logoUrl", "")}
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() =>
+                      imgFields.length < MAX_IMAGES && appendImg("")
+                    }
                   >
-                    <X size={14} />
+                    Add URL Row
                   </Button>
                 </div>
-              )}
-            </div>
 
-            <div className="space-y-4">
-              <FormLabel className="text-sm font-semibold">
-                Gallery Images ({imgFields.length}/{MAX_IMAGES})
-              </FormLabel>
-              <ImageUpload
-                multiple
-                maxFiles={remainingSlots}
-                onUploaded={appendImgUrls}
-              />
-              <div className="flex flex-wrap gap-2">
-                {form.watch("imgUrls").map((u, i) => (
-                  <div key={i} className="relative group size-12">
-                    <img
-                      src={u}
-                      className="size-full rounded object-cover border"
-                      alt="gallery"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImg(i)}
-                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X size={10} />
-                    </button>
+                {/* Upload Component */}
+                <div className="pt-2">
+                  <p className="text-[11px] text-muted-foreground mb-2">
+                    Or upload multiple files:
+                  </p>
+                  <ImageUpload
+                    multiple
+                    maxFiles={Math.max(0, remainingSlots)}
+                    onUploaded={appendImgUrls}
+                  />
+                </div>
+
+                {/* Gallery Previews */}
+                {form.watch("imgUrls")?.length > 0 && (
+                  <div className="flex flex-wrap gap-3 p-4 bg-slate-50 dark:bg-slate-950/40 rounded-lg border border-dashed">
+                    {form.watch("imgUrls").map((u, i) => (
+                      <div key={i} className="relative group size-16">
+                        <img
+                          src={u}
+                          className="size-full rounded object-cover border shadow-sm"
+                          alt="gallery preview"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImg(i)}
+                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X size={10} />
+                        </button>
+                        <div className="absolute -bottom-1 -right-1 bg-slate-800 text-white text-[8px] px-1 rounded-sm">
+                          {i + 1}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
+        {/* SECTION 5: EXTERNAL LINKS & SETTINGS */}
+        <div className="space-y-8">
           <FormField
             control={form.control}
             name="websiteUrl"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
-                  <Globe className="size-3" /> Website URL
+                  <Globe className="size-3" /> External Website URL
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -1478,112 +1568,119 @@ const ResourceForm = ({
               </FormItem>
             )}
           />
-        </div>
 
-        {/* SECTION 5: METADATA & SETTINGS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="pricing"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Pricing Model
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-slate-50/50">
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PRICING_OPTIONS.map((o) => (
-                        <SelectItem key={o} value={o}>
-                          {o}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="projectType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Project Type
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-slate-50/50">
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PROJECT_TYPE_OPTIONS.map((o) => (
-                        <SelectItem key={o} value={o}>
-                          {o}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="isMobileFriendly"
-              render={({ field }) => (
-                <FormItem className="flex items-center justify-between rounded-lg border p-3">
-                  <div className="space-y-0.5">
-                    <FormLabel>Mobile Friendly</FormLabel>
-                  </div>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isFeatured"
-              render={({ field }) => (
-                <FormItem className="flex items-center justify-between rounded-lg border p-3 border-amber-200 bg-amber-50/20 dark:border-amber-900/30">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-amber-700 dark:text-amber-400">
-                      Featured Resource
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="pricing"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Pricing Model
                     </FormLabel>
-                  </div>
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="bg-slate-50/50">
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {PRICING_OPTIONS.map((o) => (
+                          <SelectItem key={o} value={o}>
+                            {o}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="projectType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Project Type
+                    </FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="bg-slate-50/50">
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {PROJECT_TYPE_OPTIONS.map((o) => (
+                          <SelectItem key={o} value={o}>
+                            {o}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="isMobileFriendly"
+                render={({ field }) => (
+                  <FormItem className="flex items-center justify-between rounded-lg border p-3 bg-white dark:bg-slate-900 shadow-sm transition-all">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-sm font-medium">
+                        Mobile Friendly
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                render={({ field }) => (
+                  <FormItem className="flex items-center justify-between rounded-lg border p-3 border-indigo-200 bg-indigo-50/20 dark:border-indigo-900/30 shadow-sm transition-all">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-sm font-semibold text-indigo-700 dark:text-indigo-400">
+                        Featured Resource
+                      </FormLabel>
+                    </div>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 border-t pt-8">
-          <Button variant="ghost" type="button" onClick={() => router.back()}>
+        {/* SUBMIT ACTIONS */}
+        <div className="flex items-center justify-end gap-4 border-t pt-10">
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={() => router.back()}
+            className="px-8"
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             size="lg"
             disabled={form.formState.isSubmitting}
-            className="min-w-[160px] bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 dark:shadow-none transition-all"
+            className="min-w-[180px] bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200 dark:shadow-none transition-all"
           >
             {form.formState.isSubmitting ? (
               "Processing..."
