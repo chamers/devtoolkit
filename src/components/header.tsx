@@ -109,7 +109,7 @@ const Header = () => {
               <Avatar>
                 {/* If you later have user images: */}
                 {/* <AvatarImage src={session?.user?.image ?? undefined} /> */}
-                <AvatarFallback className="bg-amber-100 font-medium">
+                <AvatarFallback className="bg-linear-to-br from-rose-500/20 via-fuchsia-500/15 to-sky-500/20 text-slate-900 dark:text-slate-50 font-semibold ring-1 ring-slate-200/70 dark:ring-slate-700/60">
                   {isPending ? "…" : initials}
                 </AvatarFallback>
               </Avatar>

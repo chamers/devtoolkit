@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,11 +15,13 @@ const MainNavLinks = ({
   variant = "desktop",
 }: MainNavLinksProps) => {
   const pathname = usePathname();
+
   const links = [
     { href: "/resources", label: "Resources", icon: FolderOpenDot },
     { href: "/about", label: "About", icon: Sparkles },
     { href: "/contact", label: "Contact", icon: Mail },
   ];
+
   const baseClasses =
     variant === "desktop"
       ? "text-base capitalize font-medium text-muted-foreground transition hover:text-[var(--soft-amber)]"
@@ -25,13 +29,11 @@ const MainNavLinks = ({
 
   const activeClasses =
     variant === "desktop"
-      ? "cursor-default text-primary/70"
+      ? "text-primary"
       : "bg-slate-100/80 dark:bg-slate-800/80";
 
   const iconBase = "shrink-0 transition-colors duration-200";
-
   const iconHover = "group-hover:text-[var(--soft-amber)]";
-
   const iconActive = "text-[var(--soft-amber)]";
 
   return (
@@ -53,7 +55,19 @@ const MainNavLinks = ({
               aria-current={isActive ? "page" : undefined}
               className={cn(
                 baseClasses,
-                "group flex items-center gap-2", // ✅ group so icon reacts
+                "group relative flex items-center gap-2",
+
+                // BBC-style underline (desktop only)
+                variant === "desktop" && [
+                  "after:absolute after:-bottom-1 after:left-0 after:w-full after:rounded-full",
+                  "after:bg-[var(--soft-amber)]",
+                  "after:origin-left after:scale-x-0",
+                  "after:transition-transform after:duration-200 after:ease-out",
+                  "hover:after:scale-x-100",
+                  isActive && "after:scale-x-100",
+                  isActive ? "after:h-[3px]" : "after:h-[2px]",
+                ],
+
                 isActive && activeClasses,
               )}
             >
@@ -70,17 +84,7 @@ const MainNavLinks = ({
                   ],
                 )}
               />
-              <span className="relative">
-                {link.label}
-
-                {/* subtle active underline that animates in */}
-                <span
-                  className={cn(
-                    "pointer-events-none absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-[var(--soft-amber)] transition-transform duration-200",
-                    isActive && "scale-x-100",
-                  )}
-                />
-              </span>
+              {link.label}
             </Link>
           </li>
         );
@@ -88,4 +92,5 @@ const MainNavLinks = ({
     </ul>
   );
 };
+
 export default MainNavLinks;
