@@ -9,7 +9,7 @@ export default function Header({ user }: { user: AdminUser }) {
   const displayName = user?.name ?? user?.email ?? "Admin";
 
   return (
-    <header className="mb-4 sm:mb-6">
+    <header className="mb-2 sm:mb-4">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-4 px-4 lg:px-6 py-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">
