@@ -55,10 +55,10 @@ const MainNavLinks = ({
               aria-current={isActive ? "page" : undefined}
               className={cn(
                 baseClasses,
-                "group relative flex items-center gap-2",
-
-                // BBC-style underline (desktop only)
+                "group relative inline-flex items-center gap-2", // inline-flex helps underline fit link width
                 variant === "desktop" && [
+                  // ✅ IMPORTANT: content makes ::after exist
+                  "after:content-['']",
                   "after:absolute after:-bottom-1 after:left-0 after:w-full after:rounded-full",
                   "after:bg-[var(--soft-amber)]",
                   "after:origin-left after:scale-x-0",
@@ -67,7 +67,6 @@ const MainNavLinks = ({
                   isActive && "after:scale-x-100",
                   isActive ? "after:h-[3px]" : "after:h-[2px]",
                 ],
-
                 isActive && activeClasses,
               )}
             >
