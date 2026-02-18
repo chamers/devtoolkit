@@ -9,8 +9,8 @@ export default function Header({ user }: { user: AdminUser }) {
   const displayName = user?.name ?? user?.email ?? "Admin";
 
   return (
-    <header className="mb-5 sm:mb-10">
-      <div className="flex items-start justify-between gap-5 px-4 lg:px-6 py-4 lg:py-6 lg:flex-row flex-col lg:items-end">
+    <header className="mb-4 sm:mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 sm:gap-4 px-4 lg:px-6 py-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">
             Welcome, {displayName}
@@ -20,7 +20,6 @@ export default function Header({ user }: { user: AdminUser }) {
           </p>
         </div>
 
-        {/* Placeholder for future search / actions */}
         <div className="text-sm text-slate-500">Search</div>
       </div>
     </header>
