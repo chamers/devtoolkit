@@ -60,9 +60,10 @@ const MainNavLinks = ({
                   // ✅ IMPORTANT: content makes ::after exist
                   "after:content-['']",
                   "after:absolute after:-bottom-1 after:left-0 after:w-full after:rounded-full",
-                  "after:bg-[var(--soft-amber)]",
+                  "after:bg-amber-500",
                   "after:origin-left after:scale-x-0",
                   "after:transition-transform after:duration-200 after:ease-out",
+                  "after:z-10",
                   "hover:after:scale-x-100",
                   isActive && "after:scale-x-100",
                   isActive ? "after:h-[3px]" : "after:h-[2px]",
