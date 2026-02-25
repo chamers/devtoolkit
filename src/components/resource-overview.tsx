@@ -1,9 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import { StarRating } from "./star-rating";
 import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Separator } from "./ui/separator";
 import { SiBmcsoftware } from "react-icons/si";
-import { FiTrendingUp, FiBookOpen } from "react-icons/fi";
-import Image from "next/image";
+import { FiTrendingUp, FiBookOpen, FiUser, FiTag } from "react-icons/fi";
 import SliderWrapper from "./slider-wrapper";
 import { slugifyCategory } from "@/lib/utils";
 import { ResourceFull } from "@/lib/validation/resource.schema";
@@ -36,156 +39,147 @@ export default function ResourceOverview(props: Props) {
 
   const primaryDescription = descriptions[0] ?? "";
   const categoryClass = slugifyCategory(category);
-
-  // ✅ slider uses ONLY imgUrls now
-  const allImages = imgUrls ?? [];
-
-  // ✅ header uses ONLY logoUrl now
   const headerImage =
     typeof logoUrl === "string" && logoUrl.trim().length > 0 ? logoUrl : null;
 
   return (
-    <section
-      className={`
-        flex flex-1 flex-col items-start gap-6
-        md:flex-row md:items-center md:justify-between
-        bg-${categoryClass}
-        p-6 rounded-lg shadow-xl
-      `}
+    <Card
+      className={`w-full overflow-hidden border-none shadow-2xl bg-${categoryClass}/10 backdrop-blur-md`}
     >
-      {/* Text content column */}
-      <div className="flex flex-col gap-3">
-        <div className="container mx-auto px-6 py-2 md:py-5 lg:py-10 xl:py-15">
-          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 xl:gap-16">
-            <div className="flex-1 space-y-6 lg:space-y-7">
-              <div className="space-y-4 lg:space-y-5">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-900 text-amber-400">
-                    FEATURED
-                  </span>
-                  <h2 className="flex items-center gap-1 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-neutral-900 text-amber-400 font-medium text-sm backdrop-blu-sm border border-neutral-800/50">
-                    <FiTrendingUp />
-                    Next Generation Design System
-                  </h2>
-                </div>
-
-                {/* Logo + Title */}
-                <div className="flex items-center gap-4">
-                  {headerImage && (
-                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 shadow-md flex-shrink-0 bg-white">
-                      <Image
-                        src={headerImage}
-                        alt={`${title} logo`}
-                        fill
-                        className="object-contain p-2 sm:p-3"
-                        sizes="80px"
-                        priority
-                      />
-                    </div>
-                  )}
-
-                  <h1 className="grow min-w-0">
-                    <span className="bg-clip-text text-transparent bg-linear-to-r from-orange-sys-light-prim via-amber-400 to-amber-600">
-                      {title}
-                    </span>
-                  </h1>
-                </div>
-
-                <p className="font-handwriting text-neutral-700 dark:text-dark-foreground-60 sm:text-xl md:text-2xl lg:text-3xl">
-                  {primaryDescription}
-                </p>
-
-                <div className="flex gap-3 items-center">
-                  <div className="h-px bg-neutral-300 dark:bg-neutral-700 w-12" />
-                  <p className="font-extralight">
-                    By:{" "}
-                    <span className="font-semibold text-teal-dark">
-                      {designer ?? "Unknown creator"}
-                    </span>
-                  </p>
-                  <p className="font-extralight">
-                    Category:{" "}
-                    <span className="font-semibold text-teal-dark">
-                      {category}
-                    </span>
-                  </p>
-                  <div className="h-px bg-neutral-300 dark:bg-neutral-700 w-12" />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <StarRating rating={rating} />
-                  <span>({rating}/5)</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Link href={`/resources/${id}`}>
-                  <Button className="flex items-center">
-                    <SiBmcsoftware className="mr-2" />
-                    View resource
-                  </Button>
-                </Link>
-
-                <Button variant="outline" asChild className="flex items-center">
-                  <a
-                    href={websiteUrl ? websiteUrl : "#"}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <FiBookOpen className="mr-2" />
-                    documentation
-                  </a>
-                </Button>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-5 sm:items-center pt-6 lg:pt-7 border-t border-neutral-200 dark:border-neutral-800">
-                <div className="flex -space-x-3">
-                  <Image
-                    src="https://ik.imagekit.io/2yaqi8azs/randomuser-men1.jpg?updatedAt=1761480139450"
-                    alt="User Avatar"
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-neutral-200 dark:border-neutral-900 object-cover"
-                  />
-                  <Image
-                    src="https://ik.imagekit.io/2yaqi8azs/randomuser-woman1.jpg?updatedAt=1761480139492"
-                    alt="User Avatar"
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-neutral-200 dark:border-neutral-900 object-cover"
-                  />
-                  <Image
-                    src="https://ik.imagekit.io/2yaqi8azs/randomuser-men2.jpg?updatedAt=1761480139494"
-                    alt="User Avatar"
-                    width={36}
-                    height={36}
-                    className="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-neutral-200 dark:border-neutral-900 object-cover"
-                  />
-                  <span className="flex items-center justify-center w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-neutral-200 dark:border-neutral-900 object-cover text-xs font-medium bg-orange-sys-light-prim dark:bg-pink-sys-dark-prim text-white dark:text-neutral-900">
-                    +5K
-                  </span>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Trusted by{" "}
-                    <span className="font-semibold text-neutral-900 dark:text-neutral-300">
-                      5,000+
-                    </span>{" "}
-                    developers worldwide
-                  </p>
-                </div>
-              </div>
+      {/* 1. Full Width Title & Tagline Section */}
+      <CardHeader className="space-y-6 pb-8">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <Badge className="bg-indigo-600 hover:bg-indigo-700 text-white border-none px-3 py-1 text-[10px] tracking-widest font-bold">
+              FEATURED
+            </Badge>
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/5 dark:bg-slate-100/10 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-slate-800">
+              <FiTrendingUp className="text-amber-500 size-3" />
+              Next Generation Design System
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Image column (slider) */}
-      {allImages.length > 0 ? (
-        <div className="hidden md:flex md:flex-col md:flex-1 md:justify-start relative rounded-2xl shadow-2xl dark:shadow-[-20px_0_30px_-10px_rgba(255,165,0,0.4)] border border-neutral-200 dark:border-neutral-800 p-4 lg:p-5 xl:p-6">
-          <SliderWrapper images={allImages} descriptions={descriptions} />
+          <div className="flex items-center gap-5">
+            {headerImage && (
+              <div className="relative size-16 sm:size-20 rounded-2xl overflow-hidden border bg-white shadow-sm flex-shrink-0 p-2">
+                <Image
+                  src={headerImage}
+                  alt={`${title} logo`}
+                  fill
+                  className="object-contain"
+                  sizes="80px"
+                  priority
+                />
+              </div>
+            )}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400">
+                {title}
+              </span>
+            </h1>
+          </div>
+
+          <p className="max-w-4xl text-lg md:text-xl lg:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+            {primaryDescription}
+          </p>
         </div>
-      ) : null}
-    </section>
+      </CardHeader>
+
+      {/* 2. Full Width Slider Section */}
+      <CardContent className="px-6 space-y-8">
+        {imgUrls.length > 0 && (
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 overflow-hidden">
+            <SliderWrapper images={imgUrls} descriptions={descriptions} />
+          </div>
+        )}
+
+        {/* 3. Author & Category Info Row */}
+        <div className="flex flex-wrap items-center gap-4 py-4">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border shadow-sm">
+            <FiUser className="text-indigo-500 size-4" />
+            <span className="text-xs text-slate-500">By</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white">
+              {designer ?? "Unknown creator"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border shadow-sm">
+            <FiTag className="text-teal-500 size-4" />
+            <span className="text-xs text-slate-500">Category</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white">
+              {category}
+            </span>
+          </div>
+
+          <div className="hidden sm:block flex-1">
+            <Separator className="bg-slate-200 dark:bg-slate-800" />
+          </div>
+        </div>
+      </CardContent>
+
+      {/* 4. Rating & Action Buttons Row */}
+      <CardFooter className="flex flex-col md:flex-row items-center justify-between gap-6 px-6 pb-10">
+        <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-900/50 px-5 py-3 rounded-2xl border shadow-inner">
+          <StarRating rating={rating} />
+          <span className="text-lg font-bold text-slate-700 dark:text-slate-300">
+            {rating}{" "}
+            <span className="text-sm text-slate-400 font-normal">/ 5</span>
+          </span>
+        </div>
+
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <Link href={`/resources/${id}`} className="flex-1 md:flex-none">
+            <Button
+              size="lg"
+              className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 rounded-xl h-14 px-8 text-base font-bold transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-slate-200 dark:shadow-none"
+            >
+              <SiBmcsoftware className="mr-2 size-5" />
+              View resource
+            </Button>
+          </Link>
+
+          <Button
+            variant="outline"
+            size="lg"
+            asChild
+            className="flex-1 md:flex-none rounded-xl h-14 px-8 text-base font-bold border-2 transition-all hover:bg-slate-50 dark:hover:bg-slate-900 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <a href={websiteUrl || "#"} target="_blank" rel="noreferrer">
+              <FiBookOpen className="mr-2 size-5" />
+              Documentation
+            </a>
+          </Button>
+        </div>
+      </CardFooter>
+
+      {/* Social Trust Bar */}
+      <div className="bg-slate-900/[0.03] dark:bg-slate-100/[0.03] py-4 px-6 flex items-center gap-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex -space-x-3">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="relative size-8 rounded-full border-2 border-white dark:border-slate-900 overflow-hidden bg-slate-200"
+            >
+              <Image
+                src={`https://ik.imagekit.io/2yaqi8azs/randomuser-${i % 2 === 0 ? "woman" : "men"}${i}.jpg`}
+                alt="user"
+                fill
+                className="object-cover"
+              />
+            </div>
+          ))}
+          <div className="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-indigo-600 text-[10px] font-bold text-white flex items-center justify-center">
+            +5K
+          </div>
+        </div>
+        <p className="text-[11px] text-slate-500 font-medium">
+          Trusted by{" "}
+          <span className="text-slate-900 dark:text-slate-200 font-bold">
+            5,000+
+          </span>{" "}
+          developers worldwide
+        </p>
+      </div>
+    </Card>
   );
 }
