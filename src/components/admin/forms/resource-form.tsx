@@ -1193,7 +1193,7 @@ const ResourceForm = ({
             <Tag className="size-5 text-slate-400" />
             <h3 className="text-lg font-bold tracking-tight">Classification</h3>
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="mainCategory"
