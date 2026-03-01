@@ -93,14 +93,18 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { requireApproved } from "@/lib/require-approved";
 
 export default async function Page() {
-  const headersList = await headers();
-  const session = await auth.api.getSession({
-    headers: headersList,
-  });
+  // const headersList = await headers();
+  // const session = await auth.api.getSession({
+  //   headers: headersList,
+  // });
 
-  if (!session) redirect("/signin");
+  // if (!session) redirect("/signin");
+
+  const session = await requireApproved();
+  const headersList = await headers();
 
   const FULL_RESOURCE_ACCESS = await auth.api.userHasPermission({
     headers: headersList,

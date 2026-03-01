@@ -1,12 +1,11 @@
 "use server";
 
 import prisma from "@/db";
-import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { Prisma } from "@prisma/client";
 import { resourceUpdateSchema } from "@/lib/validation/resource.schema";
+import { requireAdmin } from "@/lib/require-admin";
 
 export type UpdateResourceResult =
   | { ok: true; data: { id: string } }
@@ -19,20 +18,20 @@ export async function updateResourceAction({
   resourceId: string;
   input: unknown;
 }): Promise<UpdateResourceResult> {
-  const headersInstance = await headers();
-  const session = await auth.api.getSession({ headers: headersInstance });
-
-  if (!session) return { ok: false, message: "Unauthorized" };
-  if (session.user.role !== "ADMIN") return { ok: false, message: "Forbidden" };
-
-  const parsed = resourceUpdateSchema.safeParse(input);
-  if (!parsed.success) {
-    return { ok: false, message: parsed.error.flatten().formErrors.join("; ") };
-  }
-
-  const values = parsed.data;
-
   try {
+    // 🔐 Approved + Admin
+    await requireAdmin();
+
+    const parsed = resourceUpdateSchema.safeParse(input);
+    if (!parsed.success) {
+      return {
+        ok: false,
+        message: parsed.error.flatten().formErrors.join("; "),
+      };
+    }
+
+    const values = parsed.data;
+
     // ✅ Minimal normalization (safe)
     const nextImgUrls =
       values.imgUrls !== undefined
@@ -131,6 +130,7 @@ export async function updateResourceAction({
     return { ok: true, data: { id: resourceId } };
   } catch (err) {
     if (isRedirectError(err)) throw err;
+
     console.error("Update resource error:", err);
     return {
       ok: false,

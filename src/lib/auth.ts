@@ -172,8 +172,9 @@ export const auth = betterAuth({
         after: async (user) => {
           console.log(
             "Attempting to trigger workflow at:",
-            `${config.env.apiEndpoint}/api/workflows/onboarding`
+            `${config.env.apiEndpoint}/api/workflows/onboarding`,
           );
+
           // ✅ Trigger the onboarding workflow
           try {
             await workflowClient.trigger({
@@ -186,6 +187,27 @@ export const auth = betterAuth({
           } catch (error) {
             console.error("Workflow trigger failed:", error);
           }
+
+          // ✅ Notify admins: new user pending approval
+          const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(";") || [];
+          if (ADMIN_EMAILS.length > 0) {
+            await Promise.all(
+              ADMIN_EMAILS.map((email) =>
+                sendEmailViaQStash({
+                  email,
+                  subject: "New user pending approval (DevToolkit)",
+                  html: `
+            <div style="font-family: ui-sans-serif, system-ui, -apple-system; line-height: 1.5;">
+              <p>New signup: <strong>${user.email}</strong></p>
+              <p>Review in admin: <strong>/admin/approvals</strong></p>
+            </div>
+          `,
+                }),
+              ),
+            ).catch((err) => {
+              console.error("[approval] failed to notify admins:", err);
+            });
+          }
         },
       },
     },
@@ -195,6 +217,18 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: ["USER", "ADMIN", "MODERATOR", "EDITOR", "VIEWER"],
+        input: false,
+      },
+      status: {
+        type: [
+          "PENDING",
+          "ACTIVE",
+          "SUSPENDED",
+          "DELETED",
+          "ARCHIVED",
+          "APPROVED",
+          "REJECTED",
+        ],
         input: false,
       },
     },

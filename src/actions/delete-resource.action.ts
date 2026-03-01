@@ -1,10 +1,9 @@
 "use server";
 
 import prisma from "@/db";
-import { auth } from "@/lib/auth";
+import { requireAdmin } from "@/lib/require-admin";
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { headers } from "next/headers";
 
 export type DeleteResourceResult =
   | { ok: true }
@@ -15,53 +14,44 @@ export async function deleteResourceAction({
 }: {
   resourceId: string;
 }): Promise<DeleteResourceResult> {
-  const headersInstance = await headers();
-  const session = await auth.api.getSession({ headers: headersInstance });
-
-  if (!session) {
-    return { ok: false, message: "Unauthorized" };
-  }
-
-  if (session.user.role !== "ADMIN") {
-    return { ok: false, message: "Forbidden" };
-  }
-
   try {
-    const target = await prisma.resource.findUnique({
+    // 🔐 Approved + Admin
+    await requireAdmin();
+
+    if (!resourceId) return { ok: false, message: "Missing resourceId" };
+
+    // Ensure it exists (optional but gives nicer errors)
+    const existing = await prisma.resource.findUnique({
       where: { id: resourceId },
-      select: { id: true, isFeatured: true },
+      select: { id: true },
     });
 
-    if (!target) {
+    if (!existing) {
       return { ok: false, message: "Resource not found" };
-    }
-
-    // Mirror your "only delete USER" style safety rule:
-    if (target.isFeatured) {
-      return {
-        ok: false,
-        message: "You can't delete a featured resource. Unfeature it first.",
-      };
     }
 
     await prisma.resource.delete({
       where: { id: resourceId },
     });
 
-    // Revalidate list + anything public that depends on resources
-    revalidatePath("/admin/resources");
+    // Revalidate pages that show resources
     revalidatePath("/resources");
+    revalidatePath("/admin/resources");
+
+    // Revalidate routes related to this resource (safe even if they don't exist)
+    revalidatePath(`/resources/${resourceId}`);
+    revalidatePath(`/admin/resources/${resourceId}`);
+    revalidatePath(`/admin/resources/${resourceId}/edit`);
 
     return { ok: true };
   } catch (err) {
     if (isRedirectError(err)) throw err;
 
-    console.error("Delete resource error:", err);
+    console.error("deleteResourceAction error:", err);
 
-    if (err instanceof Error) {
-      return { ok: false, message: err.message };
-    }
-
-    return { ok: false, message: "Internal server error" };
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Internal server error",
+    };
   }
 }

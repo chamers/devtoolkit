@@ -3,10 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 
-import { auth } from "@/lib/auth";
 import { resourceCreateSchema } from "@/lib/validation/resource.schema";
 import prisma from "@/db";
-import { headers } from "next/headers";
+import { requireAdmin } from "@/lib/require-admin";
 
 function failure(error: string) {
   return { success: false as const, error };
@@ -16,13 +15,9 @@ function success<T>(data: T) {
 }
 
 export async function createResource(input: unknown) {
-  // 1) AuthZ (admin-only)
-  const headersInstance = await headers();
-  const session = await auth.api.getSession({ headers: headersInstance });
-  const user = session?.user;
-
-  if (!user) return failure("Not authenticated");
-  if (user.role !== "ADMIN") return failure("Not authorized");
+  // 🔐 Must be approved AND admin
+  const session = await requireAdmin();
+  const user = session.user;
 
   // 2) Validate input
   const parsed = resourceCreateSchema.safeParse(input);

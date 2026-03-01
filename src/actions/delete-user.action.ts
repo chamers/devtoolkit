@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/require-admin";
 
 export type DeleteUserResult = { ok: true } | { ok: false; message: string };
 
@@ -15,21 +16,12 @@ export async function deleteUserAction({
 }: {
   userId: string;
 }): Promise<DeleteUserResult> {
-  const headersInstance = await headers();
-  const session = await auth.api.getSession({ headers: headersInstance });
-
-  // Same as dashboard: must be signed in
-  if (!session) {
-    return { ok: false, message: "Unauthorized" };
-  }
-
-  // Same as dashboard: only ADMIN can use the admin UI
-  // (session.user.role is the string from the session: "ADMIN", "USER", etc.)
-  if (session.user.role !== "ADMIN") {
-    return { ok: false, message: "Forbidden" };
-  }
-
   try {
+    // 🔐 Approved + Admin
+    const session = await requireAdmin();
+
+    if (!userId) return { ok: false, message: "Missing userId" };
+
     // Extra safety: don't allow deleting non-USER roles
     const target = await prisma.user.findUnique({
       where: { id: userId },
@@ -47,6 +39,8 @@ export async function deleteUserAction({
       };
     }
 
+    const headersInstance = await headers();
+
     // ✅ Use Better Auth Admin plugin to hard-delete the user
     await auth.api.removeUser({
       body: { userId },
@@ -61,11 +55,11 @@ export async function deleteUserAction({
     }
 
     revalidatePath("/admin/dashboard");
+    revalidatePath("/admin/users");
+
     return { ok: true };
   } catch (err) {
-    if (isRedirectError(err)) {
-      throw err;
-    }
+    if (isRedirectError(err)) throw err;
 
     console.error("Delete user error:", err);
 

@@ -1,3 +1,4 @@
+// This middleware cookie checks if the user is authenticated before allowing access to protected routes.
 import { getSessionCookie } from "better-auth/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
